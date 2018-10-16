@@ -1,4 +1,4 @@
-# 1 "mcc_generated_files/interrupt_manager.c"
+# 1 "modules/receiver/receiver.c"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 288 "<built-in>" 3
@@ -6,13 +6,131 @@
 # 1 "<built-in>" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
-# 1 "mcc_generated_files/interrupt_manager.c" 2
-# 49 "mcc_generated_files/interrupt_manager.c"
-# 1 "mcc_generated_files/interrupt_manager.h" 1
-# 49 "mcc_generated_files/interrupt_manager.c" 2
+# 1 "modules/receiver/receiver.c" 2
+# 1 "modules/receiver/../../config.h" 1
+# 11 "modules/receiver/../../config.h"
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 1 3
 
-# 1 "mcc_generated_files/mcc.h" 1
-# 49 "mcc_generated_files/mcc.h"
+
+
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\musl_xc8.h" 1 3
+# 4 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 2 3
+# 22 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 3
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 1 3
+# 135 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 3
+typedef unsigned long uintptr_t;
+# 150 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 3
+typedef long intptr_t;
+# 166 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 3
+typedef signed char int8_t;
+
+
+
+
+typedef short int16_t;
+
+
+
+
+typedef long int32_t;
+# 189 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 3
+typedef int32_t intmax_t;
+
+
+
+
+
+
+
+typedef unsigned char uint8_t;
+
+
+
+
+typedef unsigned short uint16_t;
+
+
+
+
+typedef unsigned long uint32_t;
+# 225 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 3
+typedef uint32_t uintmax_t;
+# 22 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 2 3
+
+
+typedef int8_t int_fast8_t;
+
+
+
+
+typedef int8_t int_least8_t;
+typedef int16_t int_least16_t;
+typedef int32_t int_least32_t;
+
+
+
+
+typedef uint8_t uint_fast8_t;
+
+
+
+
+typedef uint8_t uint_least8_t;
+typedef uint16_t uint_least16_t;
+typedef uint32_t uint_least32_t;
+# 131 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 3
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/stdint.h" 1 3
+typedef int32_t int_fast16_t;
+typedef int32_t int_fast32_t;
+typedef uint32_t uint_fast16_t;
+typedef uint32_t uint_fast32_t;
+# 131 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 2 3
+# 11 "modules/receiver/../../config.h" 2
+# 1 "modules/receiver/receiver.c" 2
+
+# 1 "modules/receiver/receiver-primary.h" 1
+# 20 "modules/receiver/receiver-primary.h"
+typedef uint8_t Event;
+typedef uint8_t CircBuffArr[255U];
+typedef uint8_t FrameBuffData[100U];
+
+
+typedef enum {
+    off,
+}State;
+
+
+typedef struct {
+    unsigned int circBuffOverflown :1;
+    unsigned int circBuffOverPop :1;
+    unsigned int frameBuffOverflow :1;
+    unsigned int uart_overrun :1;
+}Errors;
+
+
+typedef struct {
+    uint8_t head;
+    uint8_t tail;
+    CircBuffArr buff;
+}CircBuff;
+
+typedef struct {
+    uint8_t size;
+    FrameBuffData data;
+    unsigned int lokced : 1;
+}FrameBuff;
+
+typedef struct {
+    Event ev;
+    State st;
+    Errors err;
+    CircBuff cb;
+    FrameBuff frBuff;
+}SelfData;
+# 2 "modules/receiver/receiver.c" 2
+
+# 1 "modules/receiver/receiver.h" 1
+# 11 "modules/receiver/receiver.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 1 3
 # 18 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -26,17 +144,7 @@ extern double __fpnormalize(double);
 
 
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdlib.h" 1 3
-
-
-
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\musl_xc8.h" 1 3
-# 4 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdlib.h" 2 3
-
-
-
-
-
-
+# 10 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdlib.h" 3
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\features.h" 1 3
 # 10 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdlib.h" 2 3
 # 21 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdlib.h" 3
@@ -10490,172 +10598,118 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 # 27 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 2 3
-# 49 "mcc_generated_files/mcc.h" 2
-
-# 1 "mcc_generated_files/device_config.h" 1
-# 50 "mcc_generated_files/mcc.h" 2
-
-# 1 "mcc_generated_files/pin_manager.h" 1
-# 116 "mcc_generated_files/pin_manager.h"
-void PIN_MANAGER_Initialize (void);
-# 128 "mcc_generated_files/pin_manager.h"
-void PIN_MANAGER_IOC(void);
-# 51 "mcc_generated_files/mcc.h" 2
-
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 1 3
-# 22 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 3
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 1 3
-# 135 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 3
-typedef unsigned long uintptr_t;
-# 150 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 3
-typedef long intptr_t;
-# 166 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 3
-typedef signed char int8_t;
+# 11 "modules/receiver/receiver.h" 2
 
 
 
 
-typedef short int16_t;
+void receiver_init(void);
+void receiver_push(uint8_t data);
+uint8_t receiver_pop(void);
+uint8_t receiver_getCircBuffFilledDataSize(void);
+uint8_t receiver_task(void);
+void receiver_incrTail(void);
+void receiver_push2FrameBuff(uint8_t data);
+# 3 "modules/receiver/receiver.c" 2
+
+# 1 "modules/receiver/../parser/parser.h" 1
+# 11 "modules/receiver/../parser/parser.h"
+void parser_analyse(uint8_t * data, uint8_t size);
+# 4 "modules/receiver/receiver.c" 2
 
 
 
-
-typedef long int32_t;
-# 189 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 3
-typedef int32_t intmax_t;
+volatile static SelfData receiver_self;
 
 
+uint8_t receiver_task(void){
+    uint8_t data;
+    data = ( (receiver_self.cb.buff)[(receiver_self.cb.tail)] );
+    while(receiver_getCircBuffFilledDataSize() > 0) {
+         data = ( (receiver_self.cb.buff)[(receiver_self.cb.tail)] );
+        if(data != 0x0D && data != 0x0A ) {
+            receiver_push2FrameBuff(data);
 
-
-
-
-
-typedef unsigned char uint8_t;
-
-
-
-
-typedef unsigned short uint16_t;
-
-
-
-
-typedef unsigned long uint32_t;
-# 225 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/alltypes.h" 3
-typedef uint32_t uintmax_t;
-# 22 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 2 3
-
-
-typedef int8_t int_fast8_t;
-
-
-
-
-typedef int8_t int_least8_t;
-typedef int16_t int_least16_t;
-typedef int32_t int_least32_t;
-
-
-
-
-typedef uint8_t uint_fast8_t;
-
-
-
-
-typedef uint8_t uint_least8_t;
-typedef uint16_t uint_least16_t;
-typedef uint32_t uint_least32_t;
-# 131 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 3
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\bits/stdint.h" 1 3
-typedef int32_t int_fast16_t;
-typedef int32_t int_fast32_t;
-typedef uint32_t uint_fast16_t;
-typedef uint32_t uint_fast32_t;
-# 131 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 2 3
-# 52 "mcc_generated_files/mcc.h" 2
-
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdbool.h" 1 3
-# 53 "mcc_generated_files/mcc.h" 2
-
-
-# 1 "mcc_generated_files/tmr1.h" 1
-# 100 "mcc_generated_files/tmr1.h"
-void TMR1_Initialize(void);
-# 129 "mcc_generated_files/tmr1.h"
-void TMR1_StartTimer(void);
-# 161 "mcc_generated_files/tmr1.h"
-void TMR1_StopTimer(void);
-# 196 "mcc_generated_files/tmr1.h"
-uint16_t TMR1_ReadTimer(void);
-# 235 "mcc_generated_files/tmr1.h"
-void TMR1_WriteTimer(uint16_t timerVal);
-# 271 "mcc_generated_files/tmr1.h"
-void TMR1_Reload(void);
-# 310 "mcc_generated_files/tmr1.h"
-void TMR1_StartSinglePulseAcquisition(void);
-# 349 "mcc_generated_files/tmr1.h"
-uint8_t TMR1_CheckGateValueStatus(void);
-# 367 "mcc_generated_files/tmr1.h"
-void TMR1_ISR(void);
-# 385 "mcc_generated_files/tmr1.h"
- void TMR1_SetInterruptHandler(void (* InterruptHandler)(void));
-# 403 "mcc_generated_files/tmr1.h"
-extern void (*TMR1_InterruptHandler)(void);
-# 421 "mcc_generated_files/tmr1.h"
-void TMR1_DefaultInterruptHandler(void);
-# 55 "mcc_generated_files/mcc.h" 2
-
-# 1 "mcc_generated_files/eusart.h" 1
-# 85 "mcc_generated_files/eusart.h"
-void (*EUSART_TxDefaultInterruptHandler)(void);
-void (*EUSART_RxDefaultInterruptHandler)(void);
-# 108 "mcc_generated_files/eusart.h"
-void EUSART_Initialize(void);
-# 321 "mcc_generated_files/eusart.h"
-void EUSART_Transmit_ISR(void);
-# 342 "mcc_generated_files/eusart.h"
-void EUSART_Receive_ISR(void);
-# 362 "mcc_generated_files/eusart.h"
-void EUSART_SetTxInterruptHandler(void (* interruptHandler)(void));
-# 382 "mcc_generated_files/eusart.h"
-void EUSART_SetRxInterruptHandler(void (* interruptHandler)(void));
-# 56 "mcc_generated_files/mcc.h" 2
-# 71 "mcc_generated_files/mcc.h"
-void SYSTEM_Initialize(void);
-# 84 "mcc_generated_files/mcc.h"
-void OSCILLATOR_Initialize(void);
-# 96 "mcc_generated_files/mcc.h"
-void WDT_Initialize(void);
-# 108 "mcc_generated_files/mcc.h"
-void PMD_Initialize(void);
-# 50 "mcc_generated_files/interrupt_manager.c" 2
-
-
-void __attribute__((picinterrupt(""))) INTERRUPT_InterruptManager (void)
-{
-
-    if(INTCONbits.PEIE == 1)
-    {
-        if(PIE1bits.TXIE == 1 && PIR1bits.TXIF == 1)
-        {
-            EUSART_TxDefaultInterruptHandler();
+        } else {
+            parser_analyse((uint8_t *)receiver_self.frBuff.data, ((receiver_self.frBuff).size));
         }
-        else if(PIE1bits.RCIE == 1 && PIR1bits.RCIF == 1)
-        {
-            EUSART_RxDefaultInterruptHandler();
-        }
-        else if(PIE1bits.TMR1IE == 1 && PIR1bits.TMR1IF == 1)
-        {
-            TMR1_ISR();
-        }
-        else
-        {
-
-        }
+         receiver_incrTail();
     }
-    else
-    {
+    return 1;
 
+}
+
+
+void receiver_init(){
+    (receiver_self.cb.head) = 0;
+    (receiver_self.cb.tail)= 0;
+}
+
+
+void receiver_push(uint8_t data){
+
+
+    if((receiver_self.cb.head) == (receiver_self.cb.tail)){
+        do{ (receiver_self.err).circBuffOverflown = 1; }while(0);
+    }
+
+
+    (receiver_self.cb.buff)[(receiver_self.cb.head)] = data;
+    (receiver_self.cb.head)++;
+
+    if( (receiver_self.cb.head) >= sizeof((receiver_self.cb.buff)) ) {
+        (receiver_self.cb.head) = 0;
+    }
+}
+
+
+uint8_t receiver_pop(void){
+    uint8_t data;
+
+
+    if((receiver_self.cb.tail) == (receiver_self.cb.head) ) {
+
+        do{ (receiver_self.err).circBuffOverPop = 1; }while(0);
+
+        return 0xFF;
+    }
+
+    data = (receiver_self.cb.buff)[(receiver_self.cb.tail)];
+    (receiver_self.cb.tail)++;
+
+    if((receiver_self.cb.tail) >= sizeof((receiver_self.cb.buff))){
+        (receiver_self.cb.tail)= 0;
+    }
+
+
+    return data;
+}
+
+uint8_t receiver_getCircBuffFilledDataSize() {
+    uint8_t size;
+
+    if( (receiver_self.cb.tail) > (receiver_self.cb.head) ) {
+        size = (receiver_self.cb.head) + sizeof((receiver_self.cb.buff)) - (receiver_self.cb.tail);
+    } else {
+        size = (receiver_self.cb.head) - (receiver_self.cb.tail);
+    }
+
+    return size;
+}
+
+void receiver_incrTail(){
+
+    if((receiver_self.cb.tail) >= sizeof((receiver_self.cb.buff))){
+        (receiver_self.cb.tail)= 0;
+    } else {
+        (receiver_self.cb.tail)++;
+    }
+
+}
+
+void receiver_push2FrameBuff(uint8_t data){
+    ((receiver_self.frBuff).data)[((receiver_self.frBuff).size)++] = data;
+    if(((receiver_self.frBuff).size) > sizeof(((receiver_self.frBuff).data))){
+        do{ (receiver_self.err).frameBuffOverflow = 1; }while(0);
     }
 }

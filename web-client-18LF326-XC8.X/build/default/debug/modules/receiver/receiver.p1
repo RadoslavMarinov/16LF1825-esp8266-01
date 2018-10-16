@@ -1,44 +1,36 @@
 Version 4.0 HI-TECH Software Intermediate Code
-[v F6321 `(v ~T0 @X0 0 tf ]
-[v F6323 `(v ~T0 @X0 0 tf ]
-[t ~ __interrupt . k ]
-[t T1 __interrupt ]
-"357 C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 357:     struct {
-[s S31 :1 `uc 1 :5 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S31 . INTEDG . PEIE GIE ]
-"356
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 356: typedef union {
-[u S30 `S31 1 ]
-[n S30 . . ]
-"364
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 364: extern volatile INTCONbits_t INTCONbits __attribute__((address(0x00B)));
-[v _INTCONbits `VS30 ~T0 @X0 0 e@11 ]
-"1633
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 1633:     struct {
-[s S90 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S90 . TMR1IE TMR2IE BCL1IE SSP1IE TXIE RCIE ADIE TMR1GIE ]
-"1632
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 1632: typedef union {
-[u S89 `S90 1 ]
-[n S89 . . ]
-"1644
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 1644: extern volatile PIE1bits_t PIE1bits __attribute__((address(0x091)));
-[v _PIE1bits `VS89 ~T0 @X0 0 e@145 ]
-"523
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 523:     struct {
-[s S39 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S39 . TMR1IF TMR2IF BCL1IF SSP1IF TXIF RCIF ADIF TMR1GIF ]
-"522
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 522: typedef union {
-[u S38 `S39 1 ]
-[n S38 . . ]
-"534
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 534: extern volatile PIR1bits_t PIR1bits __attribute__((address(0x011)));
-[v _PIR1bits `VS38 ~T0 @X0 0 e@17 ]
-"367 mcc_generated_files/tmr1.h
-[; ;mcc_generated_files/tmr1.h: 367: void TMR1_ISR(void);
-[v _TMR1_ISR `(v ~T0 @X0 0 ef ]
+"7 modules/receiver/receiver.c
+[; ;modules/receiver/receiver.c: 7: volatile static SelfData receiver_self;
+[c E27 0 .. ]
+[n E27 . off  ]
+"30 modules/receiver/receiver-primary.h
+[; ;modules/receiver/receiver-primary.h: 30: typedef struct {
+[s S1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S1 . circBuffOverflown circBuffOverPop frameBuffOverflow uart_overrun ]
+"38
+[; ;modules/receiver/receiver-primary.h: 38: typedef struct {
+[s S2 `uc 1 `uc 1 `uc -> 255 `i ]
+[n S2 . head tail buff ]
+"44
+[; ;modules/receiver/receiver-primary.h: 44: typedef struct {
+[s S3 `uc 1 `uc -> 100 `i :1 `uc 1 ]
+[n S3 . size data lokced ]
+"50
+[; ;modules/receiver/receiver-primary.h: 50: typedef struct {
+[s S4 `uc 1 `E27 1 `S1 1 `S2 1 `S3 1 ]
+[n S4 . ev st err cb frBuff ]
+"21 modules/receiver/receiver.h
+[; ;modules/receiver/receiver.h: 21: void receiver_push2FrameBuff(uint8_t data);
+[v _receiver_push2FrameBuff `(v ~T0 @X0 0 ef1`uc ]
+"11 modules/receiver/../parser/parser.h
+[; ;modules/receiver/../parser/parser.h: 11: void parser_analyse(uint8_t * data, uint8_t size);
+[v _parser_analyse `(v ~T0 @X0 0 ef2`*uc`uc ]
+"20 modules/receiver/receiver.h
+[; ;modules/receiver/receiver.h: 20: void receiver_incrTail(void);
+[v _receiver_incrTail `(v ~T0 @X0 0 ef ]
+"18
+[; ;modules/receiver/receiver.h: 18: uint8_t receiver_getCircBuffFilledDataSize(void);
+[v _receiver_getCircBuffFilledDataSize `(uc ~T0 @X0 0 ef ]
 "54 C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h
 [; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 54: __asm("INDF0 equ 00h");
 [; <" INDF0 equ 00h ;# ">
@@ -1044,95 +1036,273 @@ Version 4.0 HI-TECH Software Intermediate Code
 "18757
 [; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 18757: __asm("TOSH equ 0FEFh");
 [; <" TOSH equ 0FEFh ;# ">
-"85 mcc_generated_files/eusart.h
-[; ;mcc_generated_files/eusart.h: 85: void (*EUSART_TxDefaultInterruptHandler)(void);
-[v _EUSART_TxDefaultInterruptHandler `*F6321 ~T0 @X0 1 e ]
-"86
-[; ;mcc_generated_files/eusart.h: 86: void (*EUSART_RxDefaultInterruptHandler)(void);
-[v _EUSART_RxDefaultInterruptHandler `*F6323 ~T0 @X0 1 e ]
-[v $root$_INTERRUPT_InterruptManager `(v ~T0 @X0 0 e ]
-"52 mcc_generated_files/interrupt_manager.c
-[; ;mcc_generated_files/interrupt_manager.c: 52: void __attribute__((picinterrupt(""))) INTERRUPT_InterruptManager (void)
-[v _INTERRUPT_InterruptManager `(v ~T1 @X0 1 ef ]
-"53
-[; ;mcc_generated_files/interrupt_manager.c: 53: {
+"7 modules/receiver/receiver.c
+[; ;modules/receiver/receiver.c: 7: volatile static SelfData receiver_self;
+[v _receiver_self `VS4 ~T0 @X0 1 s ]
+"10
+[; ;modules/receiver/receiver.c: 10: uint8_t receiver_task(void){
+[v _receiver_task `(uc ~T0 @X0 1 ef ]
 {
-[e :U _INTERRUPT_InterruptManager ]
+[e :U _receiver_task ]
 [f ]
+"11
+[; ;modules/receiver/receiver.c: 11:     uint8_t data;
+[v _data `uc ~T0 @X0 1 a ]
+"12
+[; ;modules/receiver/receiver.c: 12:     data = ( (receiver_self.cb.buff)[(receiver_self.cb.tail)] );
+[e = _data *U + &U . . _receiver_self 3 2 * -> . . _receiver_self 3 1 `ux -> -> # *U &U . . _receiver_self 3 2 `ui `ux ]
+"13
+[; ;modules/receiver/receiver.c: 13:     while(receiver_getCircBuffFilledDataSize() > 0) {
+[e $U 926  ]
+[e :U 927 ]
+{
+"14
+[; ;modules/receiver/receiver.c: 14:          data = ( (receiver_self.cb.buff)[(receiver_self.cb.tail)] );
+[e = _data *U + &U . . _receiver_self 3 2 * -> . . _receiver_self 3 1 `ux -> -> # *U &U . . _receiver_self 3 2 `ui `ux ]
+"15
+[; ;modules/receiver/receiver.c: 15:         if(data != 0x0D && data != 0x0A ) {
+[e $ ! && != -> _data `i -> 13 `i != -> _data `i -> 10 `i 929  ]
+{
+"16
+[; ;modules/receiver/receiver.c: 16:             receiver_push2FrameBuff(data);
+[e ( _receiver_push2FrameBuff (1 _data ]
+"18
+[; ;modules/receiver/receiver.c: 18:         } else {
+}
+[e $U 930  ]
+[e :U 929 ]
+{
+"19
+[; ;modules/receiver/receiver.c: 19:             parser_analyse((uint8_t *)receiver_self.frBuff.data, ((receiver_self.frBuff).size));
+[e ( _parser_analyse (2 , -> &U . . _receiver_self 4 1 `*uc . . _receiver_self 4 0 ]
+"20
+[; ;modules/receiver/receiver.c: 20:         }
+}
+[e :U 930 ]
+"21
+[; ;modules/receiver/receiver.c: 21:          receiver_incrTail();
+[e ( _receiver_incrTail ..  ]
+"22
+[; ;modules/receiver/receiver.c: 22:     }
+}
+[e :U 926 ]
+"13
+[; ;modules/receiver/receiver.c: 13:     while(receiver_getCircBuffFilledDataSize() > 0) {
+[e $ > -> ( _receiver_getCircBuffFilledDataSize ..  `i -> 0 `i 927  ]
+[e :U 928 ]
+"23
+[; ;modules/receiver/receiver.c: 23:     return 1;
+[e ) -> -> 1 `i `uc ]
+[e $UE 925  ]
+"25
+[; ;modules/receiver/receiver.c: 25: }
+[e :UE 925 ]
+}
+"28
+[; ;modules/receiver/receiver.c: 28: void receiver_init(){
+[v _receiver_init `(v ~T0 @X0 1 ef ]
+{
+[e :U _receiver_init ]
+[f ]
+"29
+[; ;modules/receiver/receiver.c: 29:     (receiver_self.cb.head) = 0;
+[e = . . _receiver_self 3 0 -> -> 0 `i `uc ]
+"30
+[; ;modules/receiver/receiver.c: 30:     (receiver_self.cb.tail)= 0;
+[e = . . _receiver_self 3 1 -> -> 0 `i `uc ]
+"31
+[; ;modules/receiver/receiver.c: 31: }
+[e :UE 931 ]
+}
+"34
+[; ;modules/receiver/receiver.c: 34: void receiver_push(uint8_t data){
+[v _receiver_push `(v ~T0 @X0 1 ef1`uc ]
+{
+[e :U _receiver_push ]
+[v _data `uc ~T0 @X0 1 r1 ]
+[f ]
+"37
+[; ;modules/receiver/receiver.c: 37:     if((receiver_self.cb.head) == (receiver_self.cb.tail)){
+[e $ ! == -> . . _receiver_self 3 0 `i -> . . _receiver_self 3 1 `i 933  ]
+{
+"38
+[; ;modules/receiver/receiver.c: 38:         do{ (receiver_self.err).circBuffOverflown = 1; }while(0);
+[e :U 936 ]
+{
+[e = . . _receiver_self 2 0 -> -> 1 `i `uc ]
+}
+[e :U 935 ]
+"39
+[; ;modules/receiver/receiver.c: 39:     }
+}
+[e :U 933 ]
+"42
+[; ;modules/receiver/receiver.c: 42:     (receiver_self.cb.buff)[(receiver_self.cb.head)] = data;
+[e = *U + &U . . _receiver_self 3 2 * -> . . _receiver_self 3 0 `ux -> -> # *U &U . . _receiver_self 3 2 `ui `ux _data ]
+"43
+[; ;modules/receiver/receiver.c: 43:     (receiver_self.cb.head)++;
+[e ++ . . _receiver_self 3 0 -> -> 1 `i `Vuc ]
+"45
+[; ;modules/receiver/receiver.c: 45:     if( (receiver_self.cb.head) >= sizeof((receiver_self.cb.buff)) ) {
+[e $ ! >= -> . . _receiver_self 3 0 `ui * -> # *U &U . . _receiver_self 3 2 `ui -> -> 255 `i `ui 937  ]
+{
+"46
+[; ;modules/receiver/receiver.c: 46:         (receiver_self.cb.head) = 0;
+[e = . . _receiver_self 3 0 -> -> 0 `i `uc ]
+"47
+[; ;modules/receiver/receiver.c: 47:     }
+}
+[e :U 937 ]
+"48
+[; ;modules/receiver/receiver.c: 48: }
+[e :UE 932 ]
+}
+"51
+[; ;modules/receiver/receiver.c: 51: uint8_t receiver_pop(void){
+[v _receiver_pop `(uc ~T0 @X0 1 ef ]
+{
+[e :U _receiver_pop ]
+[f ]
+"52
+[; ;modules/receiver/receiver.c: 52:     uint8_t data;
+[v _data `uc ~T0 @X0 1 a ]
 "55
-[; ;mcc_generated_files/interrupt_manager.c: 55:     if(INTCONbits.PEIE == 1)
-[e $ ! == -> . . _INTCONbits 0 2 `i -> 1 `i 922  ]
-"56
-[; ;mcc_generated_files/interrupt_manager.c: 56:     {
+[; ;modules/receiver/receiver.c: 55:     if((receiver_self.cb.tail) == (receiver_self.cb.head) ) {
+[e $ ! == -> . . _receiver_self 3 1 `i -> . . _receiver_self 3 0 `i 939  ]
 {
 "57
-[; ;mcc_generated_files/interrupt_manager.c: 57:         if(PIE1bits.TXIE == 1 && PIR1bits.TXIF == 1)
-[e $ ! && == -> . . _PIE1bits 0 4 `i -> 1 `i == -> . . _PIR1bits 0 4 `i -> 1 `i 923  ]
-"58
-[; ;mcc_generated_files/interrupt_manager.c: 58:         {
+[; ;modules/receiver/receiver.c: 57:         do{ (receiver_self.err).circBuffOverPop = 1; }while(0);
+[e :U 942 ]
 {
+[e = . . _receiver_self 2 1 -> -> 1 `i `uc ]
+}
+[e :U 941 ]
 "59
-[; ;mcc_generated_files/interrupt_manager.c: 59:             EUSART_TxDefaultInterruptHandler();
-[e ( *U _EUSART_TxDefaultInterruptHandler ..  ]
+[; ;modules/receiver/receiver.c: 59:         return 0xFF;
+[e ) -> -> 255 `i `uc ]
+[e $UE 938  ]
 "60
-[; ;mcc_generated_files/interrupt_manager.c: 60:         }
+[; ;modules/receiver/receiver.c: 60:     }
 }
-[e $U 924  ]
-"61
-[; ;mcc_generated_files/interrupt_manager.c: 61:         else if(PIE1bits.RCIE == 1 && PIR1bits.RCIF == 1)
-[e :U 923 ]
-[e $ ! && == -> . . _PIE1bits 0 5 `i -> 1 `i == -> . . _PIR1bits 0 5 `i -> 1 `i 925  ]
+[e :U 939 ]
 "62
-[; ;mcc_generated_files/interrupt_manager.c: 62:         {
-{
+[; ;modules/receiver/receiver.c: 62:     data = (receiver_self.cb.buff)[(receiver_self.cb.tail)];
+[e = _data *U + &U . . _receiver_self 3 2 * -> . . _receiver_self 3 1 `ux -> -> # *U &U . . _receiver_self 3 2 `ui `ux ]
 "63
-[; ;mcc_generated_files/interrupt_manager.c: 63:             EUSART_RxDefaultInterruptHandler();
-[e ( *U _EUSART_RxDefaultInterruptHandler ..  ]
-"64
-[; ;mcc_generated_files/interrupt_manager.c: 64:         }
-}
-[e $U 926  ]
+[; ;modules/receiver/receiver.c: 63:     (receiver_self.cb.tail)++;
+[e ++ . . _receiver_self 3 1 -> -> 1 `i `Vuc ]
 "65
-[; ;mcc_generated_files/interrupt_manager.c: 65:         else if(PIE1bits.TMR1IE == 1 && PIR1bits.TMR1IF == 1)
-[e :U 925 ]
-[e $ ! && == -> . . _PIE1bits 0 0 `i -> 1 `i == -> . . _PIR1bits 0 0 `i -> 1 `i 927  ]
+[; ;modules/receiver/receiver.c: 65:     if((receiver_self.cb.tail) >= sizeof((receiver_self.cb.buff))){
+[e $ ! >= -> . . _receiver_self 3 1 `ui * -> # *U &U . . _receiver_self 3 2 `ui -> -> 255 `i `ui 943  ]
+{
 "66
-[; ;mcc_generated_files/interrupt_manager.c: 66:         {
-{
+[; ;modules/receiver/receiver.c: 66:         (receiver_self.cb.tail)= 0;
+[e = . . _receiver_self 3 1 -> -> 0 `i `uc ]
 "67
-[; ;mcc_generated_files/interrupt_manager.c: 67:             TMR1_ISR();
-[e ( _TMR1_ISR ..  ]
-"68
-[; ;mcc_generated_files/interrupt_manager.c: 68:         }
+[; ;modules/receiver/receiver.c: 67:     }
 }
-[e $U 928  ]
-"69
-[; ;mcc_generated_files/interrupt_manager.c: 69:         else
-[e :U 927 ]
+[e :U 943 ]
 "70
-[; ;mcc_generated_files/interrupt_manager.c: 70:         {
-{
-"72
-[; ;mcc_generated_files/interrupt_manager.c: 72:         }
+[; ;modules/receiver/receiver.c: 70:     return data;
+[e ) _data ]
+[e $UE 938  ]
+"71
+[; ;modules/receiver/receiver.c: 71: }
+[e :UE 938 ]
 }
-[e :U 928 ]
-[e :U 926 ]
-[e :U 924 ]
 "73
-[; ;mcc_generated_files/interrupt_manager.c: 73:     }
-}
-[e $U 929  ]
+[; ;modules/receiver/receiver.c: 73: uint8_t receiver_getCircBuffFilledDataSize() {
+[v _receiver_getCircBuffFilledDataSize `(uc ~T0 @X0 1 ef ]
+{
+[e :U _receiver_getCircBuffFilledDataSize ]
+[f ]
 "74
-[; ;mcc_generated_files/interrupt_manager.c: 74:     else
-[e :U 922 ]
-"75
-[; ;mcc_generated_files/interrupt_manager.c: 75:     {
+[; ;modules/receiver/receiver.c: 74:     uint8_t size;
+[v _size `uc ~T0 @X0 1 a ]
+"76
+[; ;modules/receiver/receiver.c: 76:     if( (receiver_self.cb.tail) > (receiver_self.cb.head) ) {
+[e $ ! > -> . . _receiver_self 3 1 `i -> . . _receiver_self 3 0 `i 945  ]
 {
 "77
-[; ;mcc_generated_files/interrupt_manager.c: 77:     }
-}
-[e :U 929 ]
+[; ;modules/receiver/receiver.c: 77:         size = (receiver_self.cb.head) + sizeof((receiver_self.cb.buff)) - (receiver_self.cb.tail);
+[e = _size -> - + -> . . _receiver_self 3 0 `ui * -> # *U &U . . _receiver_self 3 2 `ui -> -> 255 `i `ui -> . . _receiver_self 3 1 `ui `uc ]
 "78
-[; ;mcc_generated_files/interrupt_manager.c: 78: }
-[e :UE 921 ]
+[; ;modules/receiver/receiver.c: 78:     } else {
+}
+[e $U 946  ]
+[e :U 945 ]
+{
+"79
+[; ;modules/receiver/receiver.c: 79:         size = (receiver_self.cb.head) - (receiver_self.cb.tail);
+[e = _size -> - -> . . _receiver_self 3 0 `i -> . . _receiver_self 3 1 `i `uc ]
+"80
+[; ;modules/receiver/receiver.c: 80:     }
+}
+[e :U 946 ]
+"82
+[; ;modules/receiver/receiver.c: 82:     return size;
+[e ) _size ]
+[e $UE 944  ]
+"83
+[; ;modules/receiver/receiver.c: 83: }
+[e :UE 944 ]
+}
+"85
+[; ;modules/receiver/receiver.c: 85: void receiver_incrTail(){
+[v _receiver_incrTail `(v ~T0 @X0 1 ef ]
+{
+[e :U _receiver_incrTail ]
+[f ]
+"87
+[; ;modules/receiver/receiver.c: 87:     if((receiver_self.cb.tail) >= sizeof((receiver_self.cb.buff))){
+[e $ ! >= -> . . _receiver_self 3 1 `ui * -> # *U &U . . _receiver_self 3 2 `ui -> -> 255 `i `ui 948  ]
+{
+"88
+[; ;modules/receiver/receiver.c: 88:         (receiver_self.cb.tail)= 0;
+[e = . . _receiver_self 3 1 -> -> 0 `i `uc ]
+"89
+[; ;modules/receiver/receiver.c: 89:     } else {
+}
+[e $U 949  ]
+[e :U 948 ]
+{
+"90
+[; ;modules/receiver/receiver.c: 90:         (receiver_self.cb.tail)++;
+[e ++ . . _receiver_self 3 1 -> -> 1 `i `Vuc ]
+"91
+[; ;modules/receiver/receiver.c: 91:     }
+}
+[e :U 949 ]
+"93
+[; ;modules/receiver/receiver.c: 93: }
+[e :UE 947 ]
+}
+"95
+[; ;modules/receiver/receiver.c: 95: void receiver_push2FrameBuff(uint8_t data){
+[v _receiver_push2FrameBuff `(v ~T0 @X0 1 ef1`uc ]
+{
+[e :U _receiver_push2FrameBuff ]
+[v _data `uc ~T0 @X0 1 r1 ]
+[f ]
+"96
+[; ;modules/receiver/receiver.c: 96:     ((receiver_self.frBuff).data)[((receiver_self.frBuff).size)++] = data;
+[e = *U + &U . . _receiver_self 4 1 * -> ++ . . _receiver_self 4 0 -> -> 1 `i `Vuc `ux -> -> # *U &U . . _receiver_self 4 1 `ui `ux _data ]
+"97
+[; ;modules/receiver/receiver.c: 97:     if(((receiver_self.frBuff).size) > sizeof(((receiver_self.frBuff).data))){
+[e $ ! > -> . . _receiver_self 4 0 `ui * -> # *U &U . . _receiver_self 4 1 `ui -> -> 100 `i `ui 951  ]
+{
+"98
+[; ;modules/receiver/receiver.c: 98:         do{ (receiver_self.err).frameBuffOverflow = 1; }while(0);
+[e :U 954 ]
+{
+[e = . . _receiver_self 2 2 -> -> 1 `i `uc ]
+}
+[e :U 953 ]
+"99
+[; ;modules/receiver/receiver.c: 99:     }
+}
+[e :U 951 ]
+"100
+[; ;modules/receiver/receiver.c: 100: }
+[e :UE 950 ]
 }

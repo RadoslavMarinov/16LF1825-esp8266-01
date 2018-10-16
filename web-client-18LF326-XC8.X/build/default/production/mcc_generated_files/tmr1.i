@@ -1,4 +1,4 @@
-# 1 "mcc_generated_files/interrupt_manager.c"
+# 1 "mcc_generated_files/tmr1.c"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 288 "<built-in>" 3
@@ -6,13 +6,8 @@
 # 1 "<built-in>" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
-# 1 "mcc_generated_files/interrupt_manager.c" 2
-# 49 "mcc_generated_files/interrupt_manager.c"
-# 1 "mcc_generated_files/interrupt_manager.h" 1
-# 49 "mcc_generated_files/interrupt_manager.c" 2
-
-# 1 "mcc_generated_files/mcc.h" 1
-# 49 "mcc_generated_files/mcc.h"
+# 1 "mcc_generated_files/tmr1.c" 2
+# 51 "mcc_generated_files/tmr1.c"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 1 3
 # 18 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -10490,17 +10485,12 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 # 27 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 2 3
-# 49 "mcc_generated_files/mcc.h" 2
+# 51 "mcc_generated_files/tmr1.c" 2
 
-# 1 "mcc_generated_files/device_config.h" 1
-# 50 "mcc_generated_files/mcc.h" 2
-
-# 1 "mcc_generated_files/pin_manager.h" 1
-# 116 "mcc_generated_files/pin_manager.h"
-void PIN_MANAGER_Initialize (void);
-# 128 "mcc_generated_files/pin_manager.h"
-void PIN_MANAGER_IOC(void);
-# 51 "mcc_generated_files/mcc.h" 2
+# 1 "mcc_generated_files/tmr1.h" 1
+# 54 "mcc_generated_files/tmr1.h"
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdbool.h" 1 3
+# 54 "mcc_generated_files/tmr1.h" 2
 
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 1 3
 # 22 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 3
@@ -10573,13 +10563,7 @@ typedef int32_t int_fast32_t;
 typedef uint32_t uint_fast16_t;
 typedef uint32_t uint_fast32_t;
 # 131 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 2 3
-# 52 "mcc_generated_files/mcc.h" 2
-
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdbool.h" 1 3
-# 53 "mcc_generated_files/mcc.h" 2
-
-
-# 1 "mcc_generated_files/tmr1.h" 1
+# 55 "mcc_generated_files/tmr1.h" 2
 # 100 "mcc_generated_files/tmr1.h"
 void TMR1_Initialize(void);
 # 129 "mcc_generated_files/tmr1.h"
@@ -10604,58 +10588,131 @@ void TMR1_ISR(void);
 extern void (*TMR1_InterruptHandler)(void);
 # 421 "mcc_generated_files/tmr1.h"
 void TMR1_DefaultInterruptHandler(void);
-# 55 "mcc_generated_files/mcc.h" 2
-
-# 1 "mcc_generated_files/eusart.h" 1
-# 85 "mcc_generated_files/eusart.h"
-void (*EUSART_TxDefaultInterruptHandler)(void);
-void (*EUSART_RxDefaultInterruptHandler)(void);
-# 108 "mcc_generated_files/eusart.h"
-void EUSART_Initialize(void);
-# 321 "mcc_generated_files/eusart.h"
-void EUSART_Transmit_ISR(void);
-# 342 "mcc_generated_files/eusart.h"
-void EUSART_Receive_ISR(void);
-# 362 "mcc_generated_files/eusart.h"
-void EUSART_SetTxInterruptHandler(void (* interruptHandler)(void));
-# 382 "mcc_generated_files/eusart.h"
-void EUSART_SetRxInterruptHandler(void (* interruptHandler)(void));
-# 56 "mcc_generated_files/mcc.h" 2
-# 71 "mcc_generated_files/mcc.h"
-void SYSTEM_Initialize(void);
-# 84 "mcc_generated_files/mcc.h"
-void OSCILLATOR_Initialize(void);
-# 96 "mcc_generated_files/mcc.h"
-void WDT_Initialize(void);
-# 108 "mcc_generated_files/mcc.h"
-void PMD_Initialize(void);
-# 50 "mcc_generated_files/interrupt_manager.c" 2
+# 52 "mcc_generated_files/tmr1.c" 2
 
 
-void __attribute__((picinterrupt(""))) INTERRUPT_InterruptManager (void)
+
+
+
+volatile uint16_t timer1ReloadVal;
+void (*TMR1_InterruptHandler)(void);
+
+
+
+
+
+void TMR1_Initialize(void)
 {
 
-    if(INTCONbits.PEIE == 1)
-    {
-        if(PIE1bits.TXIE == 1 && PIR1bits.TXIF == 1)
-        {
-            EUSART_TxDefaultInterruptHandler();
-        }
-        else if(PIE1bits.RCIE == 1 && PIR1bits.RCIF == 1)
-        {
-            EUSART_RxDefaultInterruptHandler();
-        }
-        else if(PIE1bits.TMR1IE == 1 && PIR1bits.TMR1IF == 1)
-        {
-            TMR1_ISR();
-        }
-        else
-        {
 
-        }
+
+    T1GCON = 0x00;
+
+
+    TMR1H = 0x63;
+
+
+    TMR1L = 0xC0;
+
+
+    timer1ReloadVal=(uint16_t)((TMR1H << 8) | TMR1L);
+
+
+    PIR1bits.TMR1IF = 0;
+
+
+    PIE1bits.TMR1IE = 1;
+
+
+    TMR1_SetInterruptHandler(TMR1_DefaultInterruptHandler);
+
+
+    T1CON = 0x11;
+}
+
+void TMR1_StartTimer(void)
+{
+
+    T1CONbits.TMR1ON = 1;
+}
+
+void TMR1_StopTimer(void)
+{
+
+    T1CONbits.TMR1ON = 0;
+}
+
+uint16_t TMR1_ReadTimer(void)
+{
+    uint16_t readVal;
+    uint8_t readValHigh;
+    uint8_t readValLow;
+
+
+    readValLow = TMR1L;
+    readValHigh = TMR1H;
+
+    readVal = ((uint16_t)readValHigh << 8) | readValLow;
+
+    return readVal;
+}
+
+void TMR1_WriteTimer(uint16_t timerVal)
+{
+    if (T1CONbits.T1SYNC == 1)
+    {
+
+        T1CONbits.TMR1ON = 0;
+
+
+        TMR1H = (timerVal >> 8);
+        TMR1L = timerVal;
+
+
+        T1CONbits.TMR1ON =1;
     }
     else
     {
 
+        TMR1H = (timerVal >> 8);
+        TMR1L = timerVal;
     }
+}
+
+void TMR1_Reload(void)
+{
+    TMR1_WriteTimer(timer1ReloadVal);
+}
+
+void TMR1_StartSinglePulseAcquisition(void)
+{
+    T1GCONbits.T1GGO_nDONE = 1;
+}
+
+uint8_t TMR1_CheckGateValueStatus(void)
+{
+    return (T1GCONbits.T1GVAL);
+}
+
+void TMR1_ISR(void)
+{
+
+
+    PIR1bits.TMR1IF = 0;
+    TMR1_WriteTimer(timer1ReloadVal);
+
+    if(TMR1_InterruptHandler)
+    {
+        TMR1_InterruptHandler();
+    }
+}
+
+
+void TMR1_SetInterruptHandler(void (* InterruptHandler)(void)){
+    TMR1_InterruptHandler = InterruptHandler;
+}
+
+void TMR1_DefaultInterruptHandler(void){
+
+
 }
