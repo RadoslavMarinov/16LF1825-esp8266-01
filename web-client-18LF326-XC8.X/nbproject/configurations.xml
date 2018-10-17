@@ -43,6 +43,11 @@
           <itemPath>modules/receiver/receiver-primary.h</itemPath>
           <itemPath>modules/receiver/receiver.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="transmitter" displayName="transmitter" projectFiles="true">
+          <itemPath>modules/transmitter/transmitter-primary.h</itemPath>
+          <itemPath>modules/transmitter/transmitter.c</itemPath>
+          <itemPath>modules/transmitter/transmitter.h</itemPath>
+        </logicalFolder>
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>config.h</itemPath>
@@ -178,6 +183,7 @@
                   value="Press to browse for a specific firmware version"/>
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

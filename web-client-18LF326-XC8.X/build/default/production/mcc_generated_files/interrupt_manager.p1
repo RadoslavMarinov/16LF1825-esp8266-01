@@ -1,6 +1,6 @@
 Version 4.0 HI-TECH Software Intermediate Code
-[v F6321 `(v ~T0 @X0 0 tf ]
-[v F6323 `(v ~T0 @X0 0 tf ]
+[v F6324 `(v ~T0 @X0 0 tf ]
+[v F6326 `(v ~T0 @X0 0 tf ]
 [t ~ __interrupt . k ]
 [t T1 __interrupt ]
 "357 C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h
@@ -36,8 +36,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 "534
 [; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 534: extern volatile PIR1bits_t PIR1bits __attribute__((address(0x011)));
 [v _PIR1bits `VS38 ~T0 @X0 0 e@17 ]
-"367 mcc_generated_files/tmr1.h
-[; ;mcc_generated_files/tmr1.h: 367: void TMR1_ISR(void);
+"371 mcc_generated_files/tmr1.h
+[; ;mcc_generated_files/tmr1.h: 371: void TMR1_ISR(void);
 [v _TMR1_ISR `(v ~T0 @X0 0 ef ]
 "54 C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h
 [; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 54: __asm("INDF0 equ 00h");
@@ -1046,10 +1046,10 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; <" TOSH equ 0FEFh ;# ">
 "85 mcc_generated_files/eusart.h
 [; ;mcc_generated_files/eusart.h: 85: void (*EUSART_TxDefaultInterruptHandler)(void);
-[v _EUSART_TxDefaultInterruptHandler `*F6321 ~T0 @X0 1 e ]
+[v _EUSART_TxDefaultInterruptHandler `*F6324 ~T0 @X0 1 e ]
 "86
 [; ;mcc_generated_files/eusart.h: 86: void (*EUSART_RxDefaultInterruptHandler)(void);
-[v _EUSART_RxDefaultInterruptHandler `*F6323 ~T0 @X0 1 e ]
+[v _EUSART_RxDefaultInterruptHandler `*F6326 ~T0 @X0 1 e ]
 [v $root$_INTERRUPT_InterruptManager `(v ~T0 @X0 0 e ]
 "52 mcc_generated_files/interrupt_manager.c
 [; ;mcc_generated_files/interrupt_manager.c: 52: void __attribute__((picinterrupt(""))) INTERRUPT_InterruptManager (void)

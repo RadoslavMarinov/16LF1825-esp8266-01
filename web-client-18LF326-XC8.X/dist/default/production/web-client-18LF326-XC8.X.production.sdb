@@ -4,8 +4,13 @@
 [d chip 16LF18326 ]
 [d frameptr 6 ]
 "7 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/receiver/receiver.c
-[e E27 . `uc
+[e E6304 . `uc
 off 0
+]
+"5 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/transmitter/transmitter.c
+[e E6301 . `uc
+stReady 0
+stBusy 1
 ]
 "10 C:\Program Files\Microchip\xc8\v2.00\pic\sources\c99\common\sprcadd.c
 [v ___fladd __fladd `(d  1 e 4 0 ]
@@ -15,9 +20,9 @@ off 0
 [v ___eecpymem __eecpymem `(v  1 e 1 0 ]
 "39
 [v ___memcpyee __memcpyee `(v  1 e 1 0 ]
-"50 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\main.c
+"9 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\main.c
 [v _main main `(v  1 e 1 0 ]
-"80
+"38
 [v _main_init main_init `(v  1 e 1 0 ]
 "61 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/eusart.c
 [v _EUSART_Initialize EUSART_Initialize `(v  1 e 1 0 ]
@@ -41,30 +46,34 @@ off 0
 [v _PMD_Initialize PMD_Initialize `(v  1 e 1 0 ]
 "57 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/pin_manager.c
 [v _PIN_MANAGER_Initialize PIN_MANAGER_Initialize `(v  1 e 1 0 ]
-"64 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/tmr1.c
-[v _TMR1_Initialize TMR1_Initialize `(v  1 e 1 0 ]
-"120
-[v _TMR1_WriteTimer TMR1_WriteTimer `(v  1 e 1 0 ]
-"157
+"67 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/tmr1.c
+[v _timer1_getTicks timer1_getTicks `(us  1 e 2 0 ]
+"76
 [v _TMR1_ISR TMR1_ISR `(v  1 e 1 0 ]
-"171
+"91
+[v _TMR1_Initialize TMR1_Initialize `(v  1 e 1 0 ]
+"147
+[v _TMR1_WriteTimer TMR1_WriteTimer `(v  1 e 1 0 ]
+"185
 [v _TMR1_SetInterruptHandler TMR1_SetInterruptHandler `(v  1 e 1 0 ]
-"175
+"189
 [v _TMR1_DefaultInterruptHandler TMR1_DefaultInterruptHandler `(v  1 e 1 0 ]
 "6 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/parser/parser.c
 [v _parser_analyse parser_analyse `(v  1 e 1 0 ]
 "10 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/receiver/receiver.c
 [v _receiver_task receiver_task `(uc  1 e 1 0 ]
-"28
-[v _receiver_init receiver_init `(v  1 e 1 0 ]
 "34
+[v _receiver_init receiver_init `(v  1 e 1 0 ]
+"40
 [v _receiver_push receiver_push `(v  1 e 1 0 ]
-"73
+"79
 [v _receiver_getCircBuffFilledDataSize receiver_getCircBuffFilledDataSize `(uc  1 e 1 0 ]
-"85
+"91
 [v _receiver_incrTail receiver_incrTail `(v  1 e 1 0 ]
-"95
+"101
 [v _receiver_push2FrameBuff receiver_push2FrameBuff `(v  1 e 1 0 ]
+"7 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/transmitter/transmitter.c
+[v _transmitter_init transmitter_init `(v  1 e 1 0 ]
 "85 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X/mcc_generated_files/eusart.h
 [v _EUSART_TxDefaultInterruptHandler EUSART_TxDefaultInterruptHandler `*.37(v  1 e 2 0 ]
 "86
@@ -95,7 +104,7 @@ off 0
 [v _TMR1H TMR1H `VEuc  1 e 1 @26 ]
 "1246
 [v _T1CON T1CON `VEuc  1 e 1 @27 ]
-[s S269 . 1 `uc 1 TMR1ON 1 0 :1:0 
+[s S275 . 1 `uc 1 TMR1ON 1 0 :1:0 
 `uc 1 . 1 0 :1:1 
 `uc 1 T1SYNC 1 0 :1:2 
 `uc 1 T1SOSC 1 0 :1:3 
@@ -103,30 +112,16 @@ off 0
 `uc 1 TMR1CS 1 0 :2:6 
 ]
 "1268
-[s S276 . 1 `uc 1 . 1 0 :4:0 
+[s S282 . 1 `uc 1 . 1 0 :4:0 
 `uc 1 T1CKPS0 1 0 :1:4 
 `uc 1 T1CKPS1 1 0 :1:5 
 `uc 1 TMR1CS0 1 0 :1:6 
 `uc 1 TMR1CS1 1 0 :1:7 
 ]
-[u S282 . 1 `S269 1 . 1 0 `S276 1 . 1 0 ]
-[v _T1CONbits T1CONbits `VES282  1 e 1 @27 ]
+[u S288 . 1 `S275 1 . 1 0 `S282 1 . 1 0 ]
+[v _T1CONbits T1CONbits `VES288  1 e 1 @27 ]
 "1318
 [v _T1GCON T1GCON `VEuc  1 e 1 @28 ]
-[s S299 . 1 `uc 1 T1GSS 1 0 :2:0 
-`uc 1 T1GVAL 1 0 :1:2 
-`uc 1 T1GGO_nDONE 1 0 :1:3 
-`uc 1 T1GSPM 1 0 :1:4 
-`uc 1 T1GTM 1 0 :1:5 
-`uc 1 T1GPOL 1 0 :1:6 
-`uc 1 TMR1GE 1 0 :1:7 
-]
-"1338
-[s S307 . 1 `uc 1 T1GSS0 1 0 :1:0 
-`uc 1 T1GSS1 1 0 :1:1 
-]
-[u S310 . 1 `S299 1 . 1 0 `S307 1 . 1 0 ]
-[v _T1GCONbits T1GCONbits `VES310  1 e 1 @28 ]
 "1499
 [v _TRISA TRISA `VEuc  1 e 1 @140 ]
 "1544
@@ -149,7 +144,7 @@ off 0
 [v _LATA LATA `VEuc  1 e 1 @268 ]
 "2236
 [v _LATC LATC `VEuc  1 e 1 @270 ]
-[s S448 . 1 `uc 1 LATC0 1 0 :1:0 
+[s S433 . 1 `uc 1 LATC0 1 0 :1:0 
 `uc 1 LATC1 1 0 :1:1 
 `uc 1 LATC2 1 0 :1:2 
 `uc 1 LATC3 1 0 :1:3 
@@ -157,8 +152,8 @@ off 0
 `uc 1 LATC5 1 0 :1:5 
 ]
 "2251
-[u S455 . 1 `S448 1 . 1 0 ]
-[v _LATCbits LATCbits `VES455  1 e 1 @270 ]
+[u S440 . 1 `S433 1 . 1 0 ]
+[v _LATCbits LATCbits `VES440  1 e 1 @270 ]
 "2779
 [v _ANSELA ANSELA `VEuc  1 e 1 @396 ]
 "2824
@@ -217,73 +212,88 @@ off 0
 [v _RC4PPS RC4PPS `VEuc  1 e 1 @3748 ]
 "21265
 [v _PLLR PLLR `VEb  1 e 0 @18656 ]
-"57 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/tmr1.c
+"58 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/tmr1.c
 [v _timer1ReloadVal timer1ReloadVal `VEus  1 e 2 0 ]
-"58
+"59
 [v _TMR1_InterruptHandler TMR1_InterruptHandler `*.37(v  1 e 2 0 ]
-[s S370 . 1 `uc 1 circBuffOverflown 1 0 :1:0 
+"65
+[v _ticks ticks `us  1 s 2 ticks ]
+[s S334 . 1 `uc 1 circBuffOverflown 1 0 :1:0 
 `uc 1 circBuffOverPop 1 0 :1:1 
 `uc 1 frameBuffOverflow 1 0 :1:2 
 `uc 1 uart_overrun 1 0 :1:3 
 ]
 "7 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/receiver/receiver.c
-[s S375 . 257 `uc 1 head 1 0 `uc 1 tail 1 1 `[255]uc 1 buff 255 2 ]
-[s S379 . 102 `uc 1 size 1 0 `[100]uc 1 data 100 1 `uc 1 lokced 1 101 :1:0 
+[s S339 . 257 `uc 1 head 1 0 `uc 1 tail 1 1 `[255]uc 1 buff 255 2 ]
+[s S343 . 102 `uc 1 size 1 0 `[100]uc 1 data 100 1 `uc 1 lokced 1 101 :1:0 
 ]
-[s S383 . 362 `uc 1 ev 1 0 `E27 1 st 1 1 `S370 1 err 1 2 `S375 1 cb 257 3 `S379 1 frBuff 102 260 ]
-[v _receiver_self receiver_self `VES383  1 s 362 receiver_self ]
-"50 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\main.c
+[s S347 . 362 `uc 1 ev 1 0 `E6304 1 st 1 1 `S334 1 err 1 2 `S339 1 cb 257 3 `S343 1 frBuff 102 260 ]
+[v _receiver_self receiver_self `VES347  1 s 362 receiver_self ]
+[s S398 . 1 `E6301 1 state 1 0 ]
+"5 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/transmitter/transmitter.c
+[v _transmitter_self transmitter_self `VES398  1 s 1 transmitter_self ]
+"9 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\main.c
 [v _main main `(v  1 e 1 0 ]
 {
-"52
-[v main@a a `ul  1 a 4 18 ]
-"53
-[v main@c c `uc  1 a 1 17 ]
-"78
+"12
+[v main@old old `us  1 a 2 17 ]
+"36
+} 0
+"67 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/tmr1.c
+[v _timer1_getTicks timer1_getTicks `(us  1 e 2 0 ]
+{
+"69
 } 0
 "10 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/receiver/receiver.c
 [v _receiver_task receiver_task `(uc  1 e 1 0 ]
 {
 "11
 [v receiver_task@data data `uc  1 a 1 12 ]
-"25
+"12
+[v receiver_task@frStarted frStarted `uc  1 s 1 frStarted ]
+"31
 } 0
-"95
+"101
 [v _receiver_push2FrameBuff receiver_push2FrameBuff `(v  1 e 1 0 ]
 {
 [v receiver_push2FrameBuff@data data `uc  1 a 1 wreg ]
 [v receiver_push2FrameBuff@data data `uc  1 a 1 wreg ]
 [v receiver_push2FrameBuff@data data `uc  1 a 1 6 ]
-"100
+"106
 } 0
-"85
+"91
 [v _receiver_incrTail receiver_incrTail `(v  1 e 1 0 ]
 {
-"93
+"99
 } 0
-"73
+"79
 [v _receiver_getCircBuffFilledDataSize receiver_getCircBuffFilledDataSize `(uc  1 e 1 0 ]
 {
-"74
+"80
 [v receiver_getCircBuffFilledDataSize@size size `uc  1 a 1 1 ]
-"83
+"89
 } 0
 "6 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/parser/parser.c
 [v _parser_analyse parser_analyse `(v  1 e 1 0 ]
 {
 [v parser_analyse@data data `*.39uc  1 p 2 0 ]
 [v parser_analyse@size size `uc  1 p 1 2 ]
-"10
+"8
 } 0
-"80 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\main.c
+"38 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\main.c
 [v _main_init main_init `(v  1 e 1 0 ]
 {
-"82
+"42
 } 0
-"28 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/receiver/receiver.c
+"7 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/transmitter/transmitter.c
+[v _transmitter_init transmitter_init `(v  1 e 1 0 ]
+{
+"10
+} 0
+"34 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/receiver/receiver.c
 [v _receiver_init receiver_init `(v  1 e 1 0 ]
 {
-"31
+"37
 } 0
 "50 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/mcc.c
 [v _SYSTEM_Initialize SYSTEM_Initialize `(v  1 e 1 0 ]
@@ -295,16 +305,16 @@ off 0
 {
 "83
 } 0
-"64 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/tmr1.c
+"91 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/tmr1.c
 [v _TMR1_Initialize TMR1_Initialize `(v  1 e 1 0 ]
 {
-"91
+"118
 } 0
-"171
+"185
 [v _TMR1_SetInterruptHandler TMR1_SetInterruptHandler `(v  1 e 1 0 ]
 {
 [v TMR1_SetInterruptHandler@InterruptHandler InterruptHandler `*.37(v  1 p 2 0 ]
-"173
+"187
 } 0
 "85 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/mcc.c
 [v _PMD_Initialize PMD_Initialize `(v  1 e 1 0 ]
@@ -343,21 +353,21 @@ off 0
 {
 "78
 } 0
-"157 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/tmr1.c
+"76 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/tmr1.c
 [v _TMR1_ISR TMR1_ISR `(v  1 e 1 0 ]
 {
-"168
+"88
 } 0
-"120
+"147
 [v _TMR1_WriteTimer TMR1_WriteTimer `(v  1 e 1 0 ]
 {
 [v TMR1_WriteTimer@timerVal timerVal `us  1 p 2 0 ]
-"140
+"167
 } 0
-"175
+"189
 [v _TMR1_DefaultInterruptHandler TMR1_DefaultInterruptHandler `(v  1 e 1 0 ]
 {
-"178
+"192
 } 0
 "93 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\mcc_generated_files/eusart.c
 [v _EUSART_Transmit_ISR EUSART_Transmit_ISR `(v  1 e 1 0 ]
@@ -369,12 +379,12 @@ off 0
 {
 "104
 } 0
-"34 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/receiver/receiver.c
+"40 D:\Projects\iot-esp-web\uc\web-client-18LF326-XC8.X\modules/receiver/receiver.c
 [v _receiver_push receiver_push `(v  1 e 1 0 ]
 {
 [v receiver_push@data data `uc  1 a 1 wreg ]
 [v receiver_push@data data `uc  1 a 1 wreg ]
-"37
+"43
 [v receiver_push@data data `uc  1 a 1 6 ]
-"48
+"54
 } 0

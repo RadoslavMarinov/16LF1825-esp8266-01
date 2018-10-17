@@ -60,6 +60,10 @@
 
 #endif
 
+        
+
+uint16_t timer1_getTicks(void);
+void timer1_setTicks(uint16_t tks);
 
 /**
   Section: TMR1 APIs

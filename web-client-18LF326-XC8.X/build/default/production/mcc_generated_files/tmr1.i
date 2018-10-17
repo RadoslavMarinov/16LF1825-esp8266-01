@@ -10564,31 +10564,41 @@ typedef uint32_t uint_fast16_t;
 typedef uint32_t uint_fast32_t;
 # 131 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 2 3
 # 55 "mcc_generated_files/tmr1.h" 2
-# 100 "mcc_generated_files/tmr1.h"
+# 65 "mcc_generated_files/tmr1.h"
+uint16_t timer1_getTicks(void);
+void timer1_setTicks(uint16_t tks);
+# 104 "mcc_generated_files/tmr1.h"
 void TMR1_Initialize(void);
-# 129 "mcc_generated_files/tmr1.h"
+# 133 "mcc_generated_files/tmr1.h"
 void TMR1_StartTimer(void);
-# 161 "mcc_generated_files/tmr1.h"
+# 165 "mcc_generated_files/tmr1.h"
 void TMR1_StopTimer(void);
-# 196 "mcc_generated_files/tmr1.h"
+# 200 "mcc_generated_files/tmr1.h"
 uint16_t TMR1_ReadTimer(void);
-# 235 "mcc_generated_files/tmr1.h"
+# 239 "mcc_generated_files/tmr1.h"
 void TMR1_WriteTimer(uint16_t timerVal);
-# 271 "mcc_generated_files/tmr1.h"
+# 275 "mcc_generated_files/tmr1.h"
 void TMR1_Reload(void);
-# 310 "mcc_generated_files/tmr1.h"
+# 314 "mcc_generated_files/tmr1.h"
 void TMR1_StartSinglePulseAcquisition(void);
-# 349 "mcc_generated_files/tmr1.h"
+# 353 "mcc_generated_files/tmr1.h"
 uint8_t TMR1_CheckGateValueStatus(void);
-# 367 "mcc_generated_files/tmr1.h"
+# 371 "mcc_generated_files/tmr1.h"
 void TMR1_ISR(void);
-# 385 "mcc_generated_files/tmr1.h"
+# 389 "mcc_generated_files/tmr1.h"
  void TMR1_SetInterruptHandler(void (* InterruptHandler)(void));
-# 403 "mcc_generated_files/tmr1.h"
+# 407 "mcc_generated_files/tmr1.h"
 extern void (*TMR1_InterruptHandler)(void);
-# 421 "mcc_generated_files/tmr1.h"
+# 425 "mcc_generated_files/tmr1.h"
 void TMR1_DefaultInterruptHandler(void);
 # 52 "mcc_generated_files/tmr1.c" 2
+
+# 1 "mcc_generated_files/pin_manager.h" 1
+# 116 "mcc_generated_files/pin_manager.h"
+void PIN_MANAGER_Initialize (void);
+# 128 "mcc_generated_files/pin_manager.h"
+void PIN_MANAGER_IOC(void);
+# 53 "mcc_generated_files/tmr1.c" 2
 
 
 
@@ -10599,6 +10609,32 @@ void (*TMR1_InterruptHandler)(void);
 
 
 
+
+
+static uint16_t ticks;
+
+uint16_t timer1_getTicks(void){
+    return ticks;
+}
+
+
+
+
+
+
+void TMR1_ISR(void)
+{
+    ticks++;
+
+
+    PIR1bits.TMR1IF = 0;
+    TMR1_WriteTimer(timer1ReloadVal);
+
+    if(TMR1_InterruptHandler)
+    {
+        TMR1_InterruptHandler();
+    }
+}
 
 
 void TMR1_Initialize(void)
@@ -10629,34 +10665,7 @@ void TMR1_Initialize(void)
 
     T1CON = 0x11;
 }
-
-void TMR1_StartTimer(void)
-{
-
-    T1CONbits.TMR1ON = 1;
-}
-
-void TMR1_StopTimer(void)
-{
-
-    T1CONbits.TMR1ON = 0;
-}
-
-uint16_t TMR1_ReadTimer(void)
-{
-    uint16_t readVal;
-    uint8_t readValHigh;
-    uint8_t readValLow;
-
-
-    readValLow = TMR1L;
-    readValHigh = TMR1H;
-
-    readVal = ((uint16_t)readValHigh << 8) | readValLow;
-
-    return readVal;
-}
-
+# 147 "mcc_generated_files/tmr1.c"
 void TMR1_WriteTimer(uint16_t timerVal)
 {
     if (T1CONbits.T1SYNC == 1)
@@ -10678,36 +10687,7 @@ void TMR1_WriteTimer(uint16_t timerVal)
         TMR1L = timerVal;
     }
 }
-
-void TMR1_Reload(void)
-{
-    TMR1_WriteTimer(timer1ReloadVal);
-}
-
-void TMR1_StartSinglePulseAcquisition(void)
-{
-    T1GCONbits.T1GGO_nDONE = 1;
-}
-
-uint8_t TMR1_CheckGateValueStatus(void)
-{
-    return (T1GCONbits.T1GVAL);
-}
-
-void TMR1_ISR(void)
-{
-
-
-    PIR1bits.TMR1IF = 0;
-    TMR1_WriteTimer(timer1ReloadVal);
-
-    if(TMR1_InterruptHandler)
-    {
-        TMR1_InterruptHandler();
-    }
-}
-
-
+# 185 "mcc_generated_files/tmr1.c"
 void TMR1_SetInterruptHandler(void (* InterruptHandler)(void)){
     TMR1_InterruptHandler = InterruptHandler;
 }

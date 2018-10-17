@@ -86,51 +86,7 @@ typedef uint32_t uint_fast16_t;
 typedef uint32_t uint_fast32_t;
 # 131 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 2 3
 # 11 "modules/receiver/../../config.h" 2
-# 1 "modules/receiver/receiver.c" 2
 
-# 1 "modules/receiver/receiver-primary.h" 1
-# 20 "modules/receiver/receiver-primary.h"
-typedef uint8_t Event;
-typedef uint8_t CircBuffArr[255U];
-typedef uint8_t FrameBuffData[100U];
-
-
-typedef enum {
-    off,
-}State;
-
-
-typedef struct {
-    unsigned int circBuffOverflown :1;
-    unsigned int circBuffOverPop :1;
-    unsigned int frameBuffOverflow :1;
-    unsigned int uart_overrun :1;
-}Errors;
-
-
-typedef struct {
-    uint8_t head;
-    uint8_t tail;
-    CircBuffArr buff;
-}CircBuff;
-
-typedef struct {
-    uint8_t size;
-    FrameBuffData data;
-    unsigned int lokced : 1;
-}FrameBuff;
-
-typedef struct {
-    Event ev;
-    State st;
-    Errors err;
-    CircBuff cb;
-    FrameBuff frBuff;
-}SelfData;
-# 2 "modules/receiver/receiver.c" 2
-
-# 1 "modules/receiver/receiver.h" 1
-# 11 "modules/receiver/receiver.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 1 3
 # 18 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -10598,11 +10554,55 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 # 27 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 2 3
-# 11 "modules/receiver/receiver.h" 2
+# 12 "modules/receiver/../../config.h" 2
+
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdbool.h" 1 3
+# 13 "modules/receiver/../../config.h" 2
+# 1 "modules/receiver/receiver.c" 2
+
+# 1 "modules/receiver/receiver-primary.h" 1
+# 20 "modules/receiver/receiver-primary.h"
+typedef uint8_t Event;
+typedef uint8_t CircBuffArr[255U];
+typedef uint8_t FrameBuffData[100U];
 
 
+typedef enum {
+    off,
+}State;
 
 
+typedef struct {
+    unsigned int circBuffOverflown :1;
+    unsigned int circBuffOverPop :1;
+    unsigned int frameBuffOverflow :1;
+    unsigned int uart_overrun :1;
+}Errors;
+
+
+typedef struct {
+    uint8_t head;
+    uint8_t tail;
+    CircBuffArr buff;
+}CircBuff;
+
+typedef struct {
+    uint8_t size;
+    FrameBuffData data;
+    unsigned int lokced : 1;
+}FrameBuff;
+
+typedef struct {
+    Event ev;
+    State st;
+    Errors err;
+    CircBuff cb;
+    FrameBuff frBuff;
+}SelfData;
+# 2 "modules/receiver/receiver.c" 2
+
+# 1 "modules/receiver/receiver.h" 1
+# 15 "modules/receiver/receiver.h"
 void receiver_init(void);
 void receiver_push(uint8_t data);
 uint8_t receiver_pop(void);
@@ -10624,19 +10624,25 @@ volatile static SelfData receiver_self;
 
 uint8_t receiver_task(void){
     uint8_t data;
-    data = ( (receiver_self.cb.buff)[(receiver_self.cb.tail)] );
+    static uint8_t frStarted = 0;
     while(receiver_getCircBuffFilledDataSize() > 0) {
-         data = ( (receiver_self.cb.buff)[(receiver_self.cb.tail)] );
-        if(data != 0x0D && data != 0x0A ) {
-            receiver_push2FrameBuff(data);
 
+        data = ( (receiver_self.cb.buff)[(receiver_self.cb.tail)] );
+
+        if( data == 0x0D || data == 0x0A ){
+            if(frStarted){
+                parser_analyse((uint8_t *)receiver_self.frBuff.data, ((receiver_self.frBuff).size));
+                frStarted = 0;
+            }
+             receiver_incrTail();
+             continue;
         } else {
-            parser_analyse((uint8_t *)receiver_self.frBuff.data, ((receiver_self.frBuff).size));
+            receiver_push2FrameBuff(data);
+            receiver_incrTail();
+            frStarted = 1;
         }
-         receiver_incrTail();
     }
     return 1;
-
 }
 
 
@@ -10661,30 +10667,7 @@ void receiver_push(uint8_t data){
         (receiver_self.cb.head) = 0;
     }
 }
-
-
-uint8_t receiver_pop(void){
-    uint8_t data;
-
-
-    if((receiver_self.cb.tail) == (receiver_self.cb.head) ) {
-
-        do{ (receiver_self.err).circBuffOverPop = 1; }while(0);
-
-        return 0xFF;
-    }
-
-    data = (receiver_self.cb.buff)[(receiver_self.cb.tail)];
-    (receiver_self.cb.tail)++;
-
-    if((receiver_self.cb.tail) >= sizeof((receiver_self.cb.buff))){
-        (receiver_self.cb.tail)= 0;
-    }
-
-
-    return data;
-}
-
+# 79 "modules/receiver/receiver.c"
 uint8_t receiver_getCircBuffFilledDataSize() {
     uint8_t size;
 

@@ -1,20 +1,13 @@
 Version 4.0 HI-TECH Software Intermediate Code
-[v F6321 `(v ~T0 @X0 0 tf ]
-[v F6323 `(v ~T0 @X0 0 tf ]
-[t ~ __interrupt . k ]
-[t T1 __interrupt ]
-"357 C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 357:     struct {
-[s S31 :1 `uc 1 :5 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S31 . INTEDG . PEIE GIE ]
-"356
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 356: typedef union {
-[u S30 `S31 1 ]
-[n S30 . . ]
-"364
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 364: extern volatile INTCONbits_t INTCONbits __attribute__((address(0x00B)));
-[v _INTCONbits `VS30 ~T0 @X0 0 e@11 ]
-"1633
+"5 modules/transmitter/transmitter.c
+[; ;modules/transmitter/transmitter.c: 5: volatile static Transmitter_Self transmitter_self;
+[c E6301 0 1 .. ]
+[n E6301 . stReady stBusy  ]
+"16 modules/transmitter/transmitter-primary.h
+[; ;modules/transmitter/transmitter-primary.h: 16: typedef struct{
+[s S921 `E6301 1 ]
+[n S921 . state ]
+"1633 C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h
 [; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 1633:     struct {
 [s S90 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S90 . TMR1IE TMR2IE BCL1IE SSP1IE TXIE RCIE ADIE TMR1GIE ]
@@ -25,20 +18,6 @@ Version 4.0 HI-TECH Software Intermediate Code
 "1644
 [; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 1644: extern volatile PIE1bits_t PIE1bits __attribute__((address(0x091)));
 [v _PIE1bits `VS89 ~T0 @X0 0 e@145 ]
-"523
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 523:     struct {
-[s S39 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S39 . TMR1IF TMR2IF BCL1IF SSP1IF TXIF RCIF ADIF TMR1GIF ]
-"522
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 522: typedef union {
-[u S38 `S39 1 ]
-[n S38 . . ]
-"534
-[; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 534: extern volatile PIR1bits_t PIR1bits __attribute__((address(0x011)));
-[v _PIR1bits `VS38 ~T0 @X0 0 e@17 ]
-"367 mcc_generated_files/tmr1.h
-[; ;mcc_generated_files/tmr1.h: 367: void TMR1_ISR(void);
-[v _TMR1_ISR `(v ~T0 @X0 0 ef ]
 "54 C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h
 [; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 54: __asm("INDF0 equ 00h");
 [; <" INDF0 equ 00h ;# ">
@@ -1044,95 +1023,60 @@ Version 4.0 HI-TECH Software Intermediate Code
 "18757
 [; ;C:\Program Files\Microchip\xc8\v2.00\pic\include\pic16lf18326.h: 18757: __asm("TOSH equ 0FEFh");
 [; <" TOSH equ 0FEFh ;# ">
-"85 mcc_generated_files/eusart.h
-[; ;mcc_generated_files/eusart.h: 85: void (*EUSART_TxDefaultInterruptHandler)(void);
-[v _EUSART_TxDefaultInterruptHandler `*F6321 ~T0 @X0 1 e ]
-"86
-[; ;mcc_generated_files/eusart.h: 86: void (*EUSART_RxDefaultInterruptHandler)(void);
-[v _EUSART_RxDefaultInterruptHandler `*F6323 ~T0 @X0 1 e ]
-[v $root$_INTERRUPT_InterruptManager `(v ~T0 @X0 0 e ]
-"52 mcc_generated_files/interrupt_manager.c
-[; ;mcc_generated_files/interrupt_manager.c: 52: void __attribute__((picinterrupt(""))) INTERRUPT_InterruptManager (void)
-[v _INTERRUPT_InterruptManager `(v ~T1 @X0 1 ef ]
-"53
-[; ;mcc_generated_files/interrupt_manager.c: 53: {
+"5 modules/transmitter/transmitter.c
+[; ;modules/transmitter/transmitter.c: 5: volatile static Transmitter_Self transmitter_self;
+[v _transmitter_self `VS921 ~T0 @X0 1 s ]
+"7
+[; ;modules/transmitter/transmitter.c: 7: void transmitter_init(void){
+[v _transmitter_init `(v ~T0 @X0 1 ef ]
 {
-[e :U _INTERRUPT_InterruptManager ]
+[e :U _transmitter_init ]
 [f ]
-"55
-[; ;mcc_generated_files/interrupt_manager.c: 55:     if(INTCONbits.PEIE == 1)
-[e $ ! == -> . . _INTCONbits 0 2 `i -> 1 `i 922  ]
-"56
-[; ;mcc_generated_files/interrupt_manager.c: 56:     {
-{
-"57
-[; ;mcc_generated_files/interrupt_manager.c: 57:         if(PIE1bits.TXIE == 1 && PIR1bits.TXIF == 1)
-[e $ ! && == -> . . _PIE1bits 0 4 `i -> 1 `i == -> . . _PIR1bits 0 4 `i -> 1 `i 923  ]
-"58
-[; ;mcc_generated_files/interrupt_manager.c: 58:         {
-{
-"59
-[; ;mcc_generated_files/interrupt_manager.c: 59:             EUSART_TxDefaultInterruptHandler();
-[e ( *U _EUSART_TxDefaultInterruptHandler ..  ]
-"60
-[; ;mcc_generated_files/interrupt_manager.c: 60:         }
-}
-[e $U 924  ]
-"61
-[; ;mcc_generated_files/interrupt_manager.c: 61:         else if(PIE1bits.RCIE == 1 && PIR1bits.RCIF == 1)
-[e :U 923 ]
-[e $ ! && == -> . . _PIE1bits 0 5 `i -> 1 `i == -> . . _PIR1bits 0 5 `i -> 1 `i 925  ]
-"62
-[; ;mcc_generated_files/interrupt_manager.c: 62:         {
-{
-"63
-[; ;mcc_generated_files/interrupt_manager.c: 63:             EUSART_RxDefaultInterruptHandler();
-[e ( *U _EUSART_RxDefaultInterruptHandler ..  ]
-"64
-[; ;mcc_generated_files/interrupt_manager.c: 64:         }
-}
-[e $U 926  ]
-"65
-[; ;mcc_generated_files/interrupt_manager.c: 65:         else if(PIE1bits.TMR1IE == 1 && PIR1bits.TMR1IF == 1)
+"8
+[; ;modules/transmitter/transmitter.c: 8:     do{ transmitter_self.state = (stReady); }while(0);
 [e :U 925 ]
-[e $ ! && == -> . . _PIE1bits 0 0 `i -> 1 `i == -> . . _PIR1bits 0 0 `i -> 1 `i 927  ]
-"66
-[; ;mcc_generated_files/interrupt_manager.c: 66:         {
 {
-"67
-[; ;mcc_generated_files/interrupt_manager.c: 67:             TMR1_ISR();
-[e ( _TMR1_ISR ..  ]
-"68
-[; ;mcc_generated_files/interrupt_manager.c: 68:         }
+[e = . _transmitter_self 0 -> . `E6301 0 `E6301 ]
+}
+[e :U 924 ]
+"10
+[; ;modules/transmitter/transmitter.c: 10: }
+[e :UE 922 ]
+}
+"12
+[; ;modules/transmitter/transmitter.c: 12: uint8_t transmitter_send(uint8_t * data, uint8_t length){
+[v _transmitter_send `(uc ~T0 @X0 1 ef2`*uc`uc ]
+{
+[e :U _transmitter_send ]
+[v _data `*uc ~T0 @X0 1 r1 ]
+[v _length `uc ~T0 @X0 1 r2 ]
+[f ]
+"15
+[; ;modules/transmitter/transmitter.c: 15:     PIE1bits.TXIE = 1;
+[e = . . _PIE1bits 0 4 -> -> 1 `i `uc ]
+"16
+[; ;modules/transmitter/transmitter.c: 16:     if((stReady == transmitter_self.state ? 1 : 0 )){
+[e $ ! != ? == -> . `E6301 0 `ui -> . _transmitter_self 0 `ui : -> 1 `i -> 0 `i -> 0 `i 927  ]
+{
+"17
+[; ;modules/transmitter/transmitter.c: 17:         return 1;
+[e ) -> -> 1 `i `uc ]
+[e $UE 926  ]
+"18
+[; ;modules/transmitter/transmitter.c: 18:     } else {
 }
 [e $U 928  ]
-"69
-[; ;mcc_generated_files/interrupt_manager.c: 69:         else
 [e :U 927 ]
-"70
-[; ;mcc_generated_files/interrupt_manager.c: 70:         {
 {
-"72
-[; ;mcc_generated_files/interrupt_manager.c: 72:         }
+"19
+[; ;modules/transmitter/transmitter.c: 19:         return 0;
+[e ) -> -> 0 `i `uc ]
+[e $UE 926  ]
+"20
+[; ;modules/transmitter/transmitter.c: 20:     }
 }
 [e :U 928 ]
-[e :U 926 ]
-[e :U 924 ]
-"73
-[; ;mcc_generated_files/interrupt_manager.c: 73:     }
-}
-[e $U 929  ]
-"74
-[; ;mcc_generated_files/interrupt_manager.c: 74:     else
-[e :U 922 ]
-"75
-[; ;mcc_generated_files/interrupt_manager.c: 75:     {
-{
-"77
-[; ;mcc_generated_files/interrupt_manager.c: 77:     }
-}
-[e :U 929 ]
-"78
-[; ;mcc_generated_files/interrupt_manager.c: 78: }
-[e :UE 921 ]
+"21
+[; ;modules/transmitter/transmitter.c: 21: }
+[e :UE 926 ]
 }

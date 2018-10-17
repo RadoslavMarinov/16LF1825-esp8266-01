@@ -9,7 +9,7 @@ volatile static SelfData receiver_self;
 //0x0D:CR ; 0x0A:NL receiver_incrTail
 uint8_t receiver_task(void){
     uint8_t data;
-    static frStarted = 0;
+    static uint8_t frStarted = 0;
     while(receiver_getCircBuffFilledDataSize() > 0) {
         
         data = cBuffGetChar(cBuffTail);
@@ -54,27 +54,27 @@ void receiver_push(uint8_t data){
 }
 
 //HAVE SIDE EFECTS  - CARE WHEN USE !!!!!!!!!!!!!!!!!!!!!
-uint8_t receiver_pop(void){ 
-    uint8_t data;
-    
-    
-    if(cBuffTail == cBuffHead ) {
-        #if defined(UNDER_TEST)
-        SET_err(circBuffOverPop);
-        #endif
-        return 0xFF;
-    }
-    
-    data = cBuff[cBuffTail];
-    cBuffTail++;
-    
-    if(cBuffTail >= sizeof(cBuff)){
-        cBuffTail= 0;
-    }
-    
-    
-    return data;
-}
+//uint8_t receiver_pop(void){ 
+//    uint8_t data;
+//    
+//    
+//    if(cBuffTail == cBuffHead ) {
+//        #if defined(UNDER_TEST)
+//        SET_err(circBuffOverPop);
+//        #endif
+//        return 0xFF;
+//    }
+//    
+//    data = cBuff[cBuffTail];
+//    cBuffTail++;
+//    
+//    if(cBuffTail >= sizeof(cBuff)){
+//        cBuffTail= 0;
+//    }
+//    
+//    
+//    return data;
+//}
 
 uint8_t receiver_getCircBuffFilledDataSize() {
     uint8_t size;

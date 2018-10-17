@@ -50,6 +50,7 @@
 
 #include <xc.h>
 #include "tmr1.h"
+#include "pin_manager.h"
 
 /**
   Section: Global Variables Definitions
@@ -60,6 +61,32 @@ void (*TMR1_InterruptHandler)(void);
 /**
   Section: TMR1 APIs
 */
+
+static uint16_t ticks; 
+
+uint16_t timer1_getTicks(void){
+    return ticks;
+}
+
+//void timer1_setTicks(uint16_t tks){
+//    ticks = tks;
+//}
+
+
+void TMR1_ISR(void)
+{
+    ticks++;
+//    LED_Toggle();
+    // Clear the TMR1 interrupt flag
+    PIR1bits.TMR1IF = 0;
+    TMR1_WriteTimer(timer1ReloadVal);
+
+    if(TMR1_InterruptHandler)
+    {
+        TMR1_InterruptHandler();
+    }
+}
+
 
 void TMR1_Initialize(void)
 {
@@ -90,32 +117,32 @@ void TMR1_Initialize(void)
     T1CON = 0x11;
 }
 
-void TMR1_StartTimer(void)
-{
-    // Start the Timer by writing to TMRxON bit
-    T1CONbits.TMR1ON = 1;
-}
+//void TMR1_StartTimer(void)
+//{
+//    // Start the Timer by writing to TMRxON bit
+//    T1CONbits.TMR1ON = 1;
+//}
 
-void TMR1_StopTimer(void)
-{
-    // Stop the Timer by writing to TMRxON bit
-    T1CONbits.TMR1ON = 0;
-}
+//void TMR1_StopTimer(void)
+//{
+//    // Stop the Timer by writing to TMRxON bit
+//    T1CONbits.TMR1ON = 0;
+//}
 
-uint16_t TMR1_ReadTimer(void)
-{
-    uint16_t readVal;
-    uint8_t readValHigh;
-    uint8_t readValLow;
-    
-	
-    readValLow = TMR1L;
-    readValHigh = TMR1H;
-    
-    readVal = ((uint16_t)readValHigh << 8) | readValLow;
-
-    return readVal;
-}
+//uint16_t TMR1_ReadTimer(void)
+//{
+//    uint16_t readVal;
+//    uint8_t readValHigh;
+//    uint8_t readValLow;
+//    
+//	
+//    readValLow = TMR1L;
+//    readValHigh = TMR1H;
+//    
+//    readVal = ((uint16_t)readValHigh << 8) | readValLow;
+//
+//    return readVal;
+//}
 
 void TMR1_WriteTimer(uint16_t timerVal)
 {
@@ -139,33 +166,20 @@ void TMR1_WriteTimer(uint16_t timerVal)
     }
 }
 
-void TMR1_Reload(void)
-{
-    TMR1_WriteTimer(timer1ReloadVal);
-}
-
-void TMR1_StartSinglePulseAcquisition(void)
-{
-    T1GCONbits.T1GGO_nDONE = 1;
-}
-
-uint8_t TMR1_CheckGateValueStatus(void)
-{
-    return (T1GCONbits.T1GVAL);
-}
-
-void TMR1_ISR(void)
-{
-
-    // Clear the TMR1 interrupt flag
-    PIR1bits.TMR1IF = 0;
-    TMR1_WriteTimer(timer1ReloadVal);
-
-    if(TMR1_InterruptHandler)
-    {
-        TMR1_InterruptHandler();
-    }
-}
+//void TMR1_Reload(void)
+//{
+//    TMR1_WriteTimer(timer1ReloadVal);
+//}
+//
+//void TMR1_StartSinglePulseAcquisition(void)
+//{
+//    T1GCONbits.T1GGO_nDONE = 1;
+//}
+//
+//uint8_t TMR1_CheckGateValueStatus(void)
+//{
+//    return (T1GCONbits.T1GVAL);
+//}
 
 
 void TMR1_SetInterruptHandler(void (* InterruptHandler)(void)){

@@ -7,7 +7,6 @@
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
 # 1 "main.c" 2
-# 44 "main.c"
 # 1 "./config.h" 1
 # 11 "./config.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 1 3
@@ -87,15 +86,7 @@ typedef uint32_t uint_fast16_t;
 typedef uint32_t uint_fast32_t;
 # 131 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdint.h" 2 3
 # 11 "./config.h" 2
-# 44 "main.c" 2
 
-# 1 "./main.h" 1
-
-extern void main_init(void);
-# 45 "main.c" 2
-
-# 1 "./mcc_generated_files/mcc.h" 1
-# 49 "./mcc_generated_files/mcc.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 1 3
 # 18 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -10563,8 +10554,19 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 # 27 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\xc.h" 2 3
-# 49 "./mcc_generated_files/mcc.h" 2
+# 12 "./config.h" 2
 
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdbool.h" 1 3
+# 13 "./config.h" 2
+# 1 "main.c" 2
+
+# 1 "./main.h" 1
+
+extern void main_init(void);
+# 2 "main.c" 2
+
+# 1 "./mcc_generated_files/mcc.h" 1
+# 50 "./mcc_generated_files/mcc.h"
 # 1 "./mcc_generated_files/device_config.h" 1
 # 50 "./mcc_generated_files/mcc.h" 2
 
@@ -10576,36 +10578,37 @@ void PIN_MANAGER_IOC(void);
 # 51 "./mcc_generated_files/mcc.h" 2
 
 
-# 1 "C:\\Program Files\\Microchip\\xc8\\v2.00\\pic\\include\\c99\\stdbool.h" 1 3
-# 53 "./mcc_generated_files/mcc.h" 2
 
 # 1 "./mcc_generated_files/interrupt_manager.h" 1
 # 54 "./mcc_generated_files/mcc.h" 2
 
 # 1 "./mcc_generated_files/tmr1.h" 1
-# 100 "./mcc_generated_files/tmr1.h"
+# 65 "./mcc_generated_files/tmr1.h"
+uint16_t timer1_getTicks(void);
+void timer1_setTicks(uint16_t tks);
+# 104 "./mcc_generated_files/tmr1.h"
 void TMR1_Initialize(void);
-# 129 "./mcc_generated_files/tmr1.h"
+# 133 "./mcc_generated_files/tmr1.h"
 void TMR1_StartTimer(void);
-# 161 "./mcc_generated_files/tmr1.h"
+# 165 "./mcc_generated_files/tmr1.h"
 void TMR1_StopTimer(void);
-# 196 "./mcc_generated_files/tmr1.h"
+# 200 "./mcc_generated_files/tmr1.h"
 uint16_t TMR1_ReadTimer(void);
-# 235 "./mcc_generated_files/tmr1.h"
+# 239 "./mcc_generated_files/tmr1.h"
 void TMR1_WriteTimer(uint16_t timerVal);
-# 271 "./mcc_generated_files/tmr1.h"
+# 275 "./mcc_generated_files/tmr1.h"
 void TMR1_Reload(void);
-# 310 "./mcc_generated_files/tmr1.h"
+# 314 "./mcc_generated_files/tmr1.h"
 void TMR1_StartSinglePulseAcquisition(void);
-# 349 "./mcc_generated_files/tmr1.h"
+# 353 "./mcc_generated_files/tmr1.h"
 uint8_t TMR1_CheckGateValueStatus(void);
-# 367 "./mcc_generated_files/tmr1.h"
+# 371 "./mcc_generated_files/tmr1.h"
 void TMR1_ISR(void);
-# 385 "./mcc_generated_files/tmr1.h"
+# 389 "./mcc_generated_files/tmr1.h"
  void TMR1_SetInterruptHandler(void (* InterruptHandler)(void));
-# 403 "./mcc_generated_files/tmr1.h"
+# 407 "./mcc_generated_files/tmr1.h"
 extern void (*TMR1_InterruptHandler)(void);
-# 421 "./mcc_generated_files/tmr1.h"
+# 425 "./mcc_generated_files/tmr1.h"
 void TMR1_DefaultInterruptHandler(void);
 # 55 "./mcc_generated_files/mcc.h" 2
 
@@ -10632,7 +10635,7 @@ void OSCILLATOR_Initialize(void);
 void WDT_Initialize(void);
 # 108 "./mcc_generated_files/mcc.h"
 void PMD_Initialize(void);
-# 46 "main.c" 2
+# 3 "main.c" 2
 
 # 1 "./modules/receiver/receiver.h" 1
 # 15 "./modules/receiver/receiver.h"
@@ -10643,18 +10646,39 @@ uint8_t receiver_getCircBuffFilledDataSize(void);
 uint8_t receiver_task(void);
 void receiver_incrTail(void);
 void receiver_push2FrameBuff(uint8_t data);
-# 47 "main.c" 2
+# 4 "main.c" 2
 
+# 1 "./modules/transmitter/transmitter.h" 1
+# 11 "./modules/transmitter/transmitter.h"
+void transmitter_init(void);
+# 5 "main.c" 2
+
+# 1 "./modules/communicatior/communicator.h" 1
+# 11 "./modules/communicatior/communicator.h"
+void communicator_init(void);
+# 6 "main.c" 2
+
+# 1 "./modules/transmitter/transmitter-primary.h" 1
+# 11 "./modules/transmitter/transmitter-primary.h"
+typedef enum {
+    stReady,
+    stBusy,
+}Transmitter_State;
+
+typedef struct{
+    Transmitter_State state;
+}Transmitter_Self;
+# 7 "main.c" 2
 
 
 void main(void)
 {
-    uint32_t a = 0;
-    uint8_t c = 1;
     main_init();
+    uint16_t old = 0;
 
 
-    SYSTEM_Initialize();
+
+
     (INTCONbits.GIE = 1);
     (INTCONbits.PEIE = 1);
 
@@ -10662,21 +10686,22 @@ void main(void)
 
     while (1)
     {
+        if(timer1_getTicks() - old > 50 ){
+            do { LATCbits.LATC2 = ~LATCbits.LATC2; } while(0);
+            old = timer1_getTicks();
+            TX1REG = 'R';
+            PIE1bits.TXIE = 1;
+        }
         receiver_task();
-        while(a++ < 100000)
-            ;
-        a = 0;
-        do { LATCbits.LATC2 = 1; } while(0);
-        while(a++ < 100000)
-            ;
-        do { LATCbits.LATC2 = 0; } while(0);
-        a = 0;
-        TX1REG = 'R';
-        PIE1bits.TXIE = 1;
+
+
+
 
     }
 }
 
 void main_init(void){
+    SYSTEM_Initialize();
     receiver_init();
+    transmitter_init();
 }

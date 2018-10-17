@@ -10580,29 +10580,32 @@ typedef uint32_t uint_fast32_t;
 
 
 # 1 "mcc_generated_files/tmr1.h" 1
-# 100 "mcc_generated_files/tmr1.h"
+# 65 "mcc_generated_files/tmr1.h"
+uint16_t timer1_getTicks(void);
+void timer1_setTicks(uint16_t tks);
+# 104 "mcc_generated_files/tmr1.h"
 void TMR1_Initialize(void);
-# 129 "mcc_generated_files/tmr1.h"
+# 133 "mcc_generated_files/tmr1.h"
 void TMR1_StartTimer(void);
-# 161 "mcc_generated_files/tmr1.h"
+# 165 "mcc_generated_files/tmr1.h"
 void TMR1_StopTimer(void);
-# 196 "mcc_generated_files/tmr1.h"
+# 200 "mcc_generated_files/tmr1.h"
 uint16_t TMR1_ReadTimer(void);
-# 235 "mcc_generated_files/tmr1.h"
+# 239 "mcc_generated_files/tmr1.h"
 void TMR1_WriteTimer(uint16_t timerVal);
-# 271 "mcc_generated_files/tmr1.h"
+# 275 "mcc_generated_files/tmr1.h"
 void TMR1_Reload(void);
-# 310 "mcc_generated_files/tmr1.h"
+# 314 "mcc_generated_files/tmr1.h"
 void TMR1_StartSinglePulseAcquisition(void);
-# 349 "mcc_generated_files/tmr1.h"
+# 353 "mcc_generated_files/tmr1.h"
 uint8_t TMR1_CheckGateValueStatus(void);
-# 367 "mcc_generated_files/tmr1.h"
+# 371 "mcc_generated_files/tmr1.h"
 void TMR1_ISR(void);
-# 385 "mcc_generated_files/tmr1.h"
+# 389 "mcc_generated_files/tmr1.h"
  void TMR1_SetInterruptHandler(void (* InterruptHandler)(void));
-# 403 "mcc_generated_files/tmr1.h"
+# 407 "mcc_generated_files/tmr1.h"
 extern void (*TMR1_InterruptHandler)(void);
-# 421 "mcc_generated_files/tmr1.h"
+# 425 "mcc_generated_files/tmr1.h"
 void TMR1_DefaultInterruptHandler(void);
 # 55 "mcc_generated_files/mcc.h" 2
 
