@@ -9,19 +9,25 @@ volatile static SelfData receiver_self;
 //0x0D:CR ; 0x0A:NL receiver_incrTail
 uint8_t receiver_task(void){
     uint8_t data;
-    data = cBuffGetChar(cBuffTail);
+    static frStarted = 0;
     while(receiver_getCircBuffFilledDataSize() > 0) {
-         data = cBuffGetChar(cBuffTail);
-        if(data != 0x0D && data != 0x0A ) {
-            receiver_push2FrameBuff(data);
-            
+        
+        data = cBuffGetChar(cBuffTail);
+
+        if( data == 0x0D || data == 0x0A ){
+            if(frStarted){
+                parser_analyse((uint8_t *)receiver_self.frBuff.data, frBuffSize); 
+                frStarted  = 0;
+            }
+             receiver_incrTail();
+             continue;
         } else {
-            parser_analyse((uint8_t *)receiver_self.frBuff.data, frBuffSize);
+            receiver_push2FrameBuff(data);
+            receiver_incrTail();
+            frStarted = 1;
         }
-         receiver_incrTail();
     }
     return 1;
-    
 }
 
 /* Interfaces */
