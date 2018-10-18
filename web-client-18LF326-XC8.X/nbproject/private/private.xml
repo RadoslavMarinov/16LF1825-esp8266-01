@@ -3,11 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/receiver/receiver.h</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/main.c</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/transmitter/transmitter.c</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/mcc_generated_files/mcc.h</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/transmitter/transmitter.h</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/transmitter/transmitter-primary.h</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/parser.h</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/receiver/receiver-primary.h</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/receiver/receiver.c</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/parser.c</file>
         </group>
     </open-files>
 </project-private>

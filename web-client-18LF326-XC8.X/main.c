@@ -6,26 +6,21 @@
 #include "modules/communicatior/communicator.h"
 #include "modules/transmitter/transmitter-primary.h"
 
+uint8_t arr[] = "RikoooRik";
+
 void main(void)
 {
     main_init();
     uint16_t old = 0;
     
     
-    // initialize the device
-   
-    INTERRUPT_GlobalInterruptEnable();
-    INTERRUPT_PeripheralInterruptEnable();
-
-
+    transmitter_send(arr, sizeof(arr));
 
     while (1)
     {
         if(timer1_getTicks() - old > 50 ){
             LED_Toggle();
             old = timer1_getTicks();
-            TX1REG = 'R';
-            PIE1bits.TXIE = 1;
         }
         receiver_task();
 //        LED_SetHigh();
@@ -38,7 +33,9 @@ void main(void)
 void main_init(void){
     SYSTEM_Initialize();
     receiver_init();
-    transmitter_init();
+    transmitter_init(NULL);
+    INTERRUPT_GlobalInterruptEnable();
+    INTERRUPT_PeripheralInterruptEnable();
 }
 
 /**

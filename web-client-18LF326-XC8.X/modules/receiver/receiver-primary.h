@@ -12,7 +12,7 @@
 
 
 /* Init data structure  */
-#define RECEIVER_CIRC_BUFFER_SIZE 255U
+#define RECEIVER_CIRC_BUFFER_SIZE 512U
 #define RECEIVER_FRAME_BUFF_SIZE 100U
 
 /* Typedefs */
@@ -36,15 +36,15 @@ typedef struct {
 
 // Cic Buffer
 typedef struct {
-    uint8_t head;
-    uint8_t tail;
+    uint16_t head;
+    uint16_t tail;
     CircBuffArr buff;
 }CircBuff;
 
 typedef struct {
-    uint8_t size;
+    uint16_t size;
     FrameBuffData data;
-    unsigned int lokced : 1;
+    unsigned int locked : 1;
 }FrameBuff;
 
 typedef struct {
@@ -68,7 +68,7 @@ typedef struct {
 #define SET_err(err)            do{ CbError.err = 1; }while(0)    
 
 /* FRAME BUFFER*/
-#define FRAME_Buff                  (receiver_self.frBuff)
+#define FRAME_Buff              (receiver_self.frBuff)
 #define frBuffData              (FRAME_Buff.data)
 #define frBuffSize              (FRAME_Buff.size)
 #define frBuffLocked            (FRAME_Buff.locked)
@@ -84,3 +84,4 @@ typedef struct {
 #define DISABLE_TxInterrupt()   do{ PIE1bits.TXIE = 0; }while(0)
 #endif	/* RECEIVER_PRIMARY_H */
 
+static void receiver_resetFrBuff(void);

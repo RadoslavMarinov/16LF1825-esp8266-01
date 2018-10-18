@@ -49,6 +49,7 @@
 */
 #include "eusart.h"
 #include "../modules/receiver/receiver.h"
+#include "../modules/transmitter/transmitter.h"
 
 
 /**
@@ -92,7 +93,8 @@ void EUSART_Initialize(void)
 
 void EUSART_Transmit_ISR(void)
 {
-    PIE1bits.TXIE = 0;
+    transmitter_sendNext();
+//    PIE1bits.TXIE = 0;
 }
 
 void EUSART_Receive_ISR(void)

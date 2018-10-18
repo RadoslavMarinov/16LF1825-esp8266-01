@@ -8,7 +8,11 @@
 #ifndef PARSER_H
 #define	PARSER_H
 
-void parser_analyse(uint8_t * data, uint8_t size);
+/* PARSER CODES RETURNED BY FUNCTION PARSE*/
+#define PARSER_RC_PARSE_msgCompl        0
+#define PARSER_RC_PARSE_msgNotCompl     1
+
+uint8_t parser_analyse(uint8_t * data, uint16_t len);
 
 #endif	/* PARSER_H */
 
