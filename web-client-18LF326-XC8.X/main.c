@@ -13,27 +13,26 @@ void main(void)
     main_init();
     uint16_t old = 0;
     
-    
-    transmitter_send(arr, sizeof(arr));
-
     while (1)
     {
-        if(timer1_getTicks() - old > 50 ){
+        if(receiver_task()){
+            continue;
+        }
+        if(communicator_task()){
+            continue;
+        }
+         if(timer1_getTicks() - old > 50 ){
             LED_Toggle();
             old = timer1_getTicks();
         }
-        receiver_task();
-//        LED_SetHigh();
-//        LED_SetLow();
-        
-        // Add your application code
     }
 }
 
 void main_init(void){
     SYSTEM_Initialize();
-    receiver_init();
-    transmitter_init(NULL);
+//    receiver_init();
+//    transmitter_init(NULL);
+    communicator_init(true);
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
 }

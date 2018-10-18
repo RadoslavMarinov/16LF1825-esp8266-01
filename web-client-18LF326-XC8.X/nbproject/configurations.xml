@@ -33,6 +33,13 @@
         <itemPath>mcc_generated_files/tmr1.c</itemPath>
       </logicalFolder>
       <logicalFolder name="modules" displayName="modules" projectFiles="true">
+        <logicalFolder name="communicatior"
+                       displayName="communicatior"
+                       projectFiles="true">
+          <itemPath>modules/communicatior/communicator-primary.h</itemPath>
+          <itemPath>modules/communicatior/communicator.c</itemPath>
+          <itemPath>modules/communicatior/communicator.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="parser" displayName="parser" projectFiles="true">
           <itemPath>modules/parser/parser.c</itemPath>
           <itemPath>modules/parser/parser-primary.h</itemPath>

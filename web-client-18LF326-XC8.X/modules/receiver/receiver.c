@@ -10,6 +10,7 @@ volatile static SelfData receiver_self;
 uint8_t receiver_task(void){
     uint8_t data, didSomeWork = 0/* NO */;
     static uint8_t frStarted = 0;
+    Parser_Codes p_code;
     while(receiver_getCircBuffFilledDataSize() > 0){
         didSomeWork = 1;  //YES
         data = cBuffGetChar(cBuffTail);
@@ -17,13 +18,17 @@ uint8_t receiver_task(void){
         if( data == 0x0D || data == 0x0A ){
             if(frStarted){
                 receiver_push2FrameBuff('\0');
-                if( 
-                        parser_analyse((uint8_t *)frBuffData,  frBuffSize) 
-                        == 
-                        PARSER_RC_PARSE_msgCompl ) {
+                p_code =  parser_analyse( (uint8_t *)frBuffData,  frBuffSize) ;
+                if( p_code != parserCode_Unknown ) {
+                    cBuffHead = cBuffTail;
+                    receiver_stop();
+                    ((Parser_OnMsg)__onMessage)(p_code, (uint8_t*)frBuffData, frBuffSize);
                     receiver_resetFrBuff();
+                    frStarted  = 0;
+                    return true;
                 }
                 frStarted  = 0;
+                
             }
              receiver_incrTail();
         } else {
@@ -36,10 +41,28 @@ uint8_t receiver_task(void){
 }
 
 /* Interfaces */
-void receiver_init(){
+void receiver_init(Receiver_OnMsg onMsg){
+    __setOnMsg(onMsg);
     receiver_resetFrBuff();
+    receiver_start();
     cBuffHead = 0;
     cBuffTail= 0; 
+}
+
+void receiver_start(void){
+    volatile uint8_t dummy = 0;
+    dummy  = RC1REG;    //clear Rx Interrupt flag by reading the data register
+    if(dummy) dummy = 0;    //Prevent optimisation 
+    __enable_continReceive();
+    __enable_rxInterrupt();
+}
+
+void receiver_stop(void){
+    volatile uint8_t dummy = 0;
+    __disable_continReceive();
+    __disable_rxInterrupt();
+    dummy  = RC1REG;    //clear Rx Interrupt flag by reading the data register
+    if(dummy) dummy = 0;    //Prevent optimisation 
 }
 
 static void receiver_resetFrBuff(void){

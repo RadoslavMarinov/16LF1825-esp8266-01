@@ -5,10 +5,12 @@
         <group>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/receiver/receiver.h</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/main.c</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/parser.h</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/transmitter/transmitter.c</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/receiver/receiver-primary.h</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/communicatior/communicator.h</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/receiver/receiver.c</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/parser.c</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/mcc_generated_files/eusart.c</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/communicatior/communicator.c</file>
         </group>
     </open-files>
 </project-private>
