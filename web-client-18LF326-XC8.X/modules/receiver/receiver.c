@@ -15,7 +15,7 @@ uint8_t receiver_task(void){
         didSomeWork = 1;  //YES
         data = cBuffGetChar(cBuffTail);
 
-        if( data == 0x0D || data == 0x0A ){
+        if( data == 0x0D || data == 0x0A ) {
             if(frStarted){
                 receiver_push2FrameBuff('\0');
                 p_code =  parser_analyse( (uint8_t *)frBuffData,  frBuffSize) ;
@@ -29,12 +29,12 @@ uint8_t receiver_task(void){
                 frStarted  = 0;
                 
             }
-             receiver_incrTail();
         } else {
             receiver_push2FrameBuff(data);
-            receiver_incrTail();
             frStarted = 1;
         }
+        
+        receiver_incrTail();
     }
     return didSomeWork;
 }
