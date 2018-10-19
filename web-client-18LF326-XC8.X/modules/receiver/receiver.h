@@ -24,6 +24,9 @@ void receiver_incrTail(void);
 void receiver_push2FrameBuff(uint8_t data);
 void receiver_stop(void);
 void receiver_start(void);
+void receiver_stopAndReset(void);
+void receiver_resetFrBuff(void);
+void receiver_clearErrorFrBuffOvrfl(void);
 
 
 #endif	/* XC_HEADER_TEMPLATE_H */

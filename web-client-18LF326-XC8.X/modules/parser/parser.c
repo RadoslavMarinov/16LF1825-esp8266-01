@@ -11,12 +11,14 @@ void parser_init(Parser_OnMsg onMsgCb) {
 }
 
 Parser_Codes parser_analyse(uint8_t * data, uint16_t len) {
-    uint16_t lasFrStIdx = (len-1);
+    int16_t lasFrStIdx = (len-1);
+    uint8_t ch;
     
     Parser_Codes code = 0;
     do{
         lasFrStIdx--;
-    } while(data[lasFrStIdx] != '\0' );
+        ch = data[lasFrStIdx];
+    } while(data[lasFrStIdx] != '\0' && lasFrStIdx > -1 );
     lasFrStIdx++;
     /* Wait Message terminator "ERROR" | "OK" | "ready" */    
     if( strcmp((char *)&data[lasFrStIdx], "OK") == 0 ){

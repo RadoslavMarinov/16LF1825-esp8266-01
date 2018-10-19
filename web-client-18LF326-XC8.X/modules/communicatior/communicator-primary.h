@@ -15,6 +15,8 @@
 typedef enum {
     stOff,
     stReset,
+    stTurnOffEcho,
+           
 }State;
 
 typedef struct{
@@ -59,8 +61,11 @@ static void communicator_initSelf(void);
 static uint8_t handleEvReset(void);
 static uint8_t dispatchEvReset(void);
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len);
+static void enterState_turnOffEcho(void);
 
 static const char COMMAND_RESET[] = "AT+RST\r\n";
+static const char COMMAND_TURN_OFF_ECHO[] = "ATE0\r\n";
+
 
 #endif	/* COMMUNICATOR_PRIMARY_H */
 

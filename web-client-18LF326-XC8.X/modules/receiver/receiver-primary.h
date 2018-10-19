@@ -12,8 +12,8 @@
 
 
 /* Init data structure  */
-#define RECEIVER_CIRC_BUFFER_SIZE 512U
-#define RECEIVER_FRAME_BUFF_SIZE 100U
+#define RECEIVER_CIRC_BUFFER_SIZE 256U
+#define RECEIVER_FRAME_BUFF_SIZE 512U
 
 /* Typedefs */
 // EVENTS
@@ -67,6 +67,7 @@ typedef struct {
 /* Circular Buffer */
 #define CbError                 (receiver_self.err)
 #define SET_err(err)            do{ CbError.err = 1; }while(0)    
+#define CLEAR_err(err)            do{ CbError.err = 0; }while(0)    
 
 /* FRAME BUFFER*/
 #define FRAME_Buff              (receiver_self.frBuff)
@@ -95,4 +96,5 @@ typedef struct {
 
 #endif	/* RECEIVER_PRIMARY_H */
 
-static void receiver_resetFrBuff(void);
+
+static void receiver_resetCircBuff(void);

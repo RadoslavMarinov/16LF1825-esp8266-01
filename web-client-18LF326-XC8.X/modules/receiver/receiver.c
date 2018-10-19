@@ -20,12 +20,11 @@ uint8_t receiver_task(void){
                 receiver_push2FrameBuff('\0');
                 p_code =  parser_analyse( (uint8_t *)frBuffData,  frBuffSize) ;
                 if( p_code != parserCode_Unknown ) {
-                    cBuffHead = cBuffTail;
-                    receiver_stop();
+
                     ((Parser_OnMsg)__onMessage)(p_code, (uint8_t*)frBuffData, frBuffSize);
-                    receiver_resetFrBuff();
-                    frStarted  = 0;
-                    return true;
+                    
+//                    frStarted  = 0;
+//                    return true;
                 }
                 frStarted  = 0;
                 
@@ -65,10 +64,19 @@ void receiver_stop(void){
     if(dummy) dummy = 0;    //Prevent optimisation 
 }
 
-static void receiver_resetFrBuff(void){
+static void receiver_resetCircBuff(void){
+    cBuffTail = cBuffHead  = 0;
+}
+
+void receiver_resetFrBuff(void){
     frBuffLocked = false;
     frBuffSize = 0;
 }
+
+void receiver_clearErrorFrBuffOvrfl(void){
+    CLEAR_err(frameBuffOverflow);
+}
+
 //HAVE SIDE EFECTS  - CARE WHEN USE !!!!!!!!!!!!!!!!!!!!!
 void receiver_push(uint8_t data){
         
@@ -130,6 +138,13 @@ void receiver_incrTail(){
         cBuffTail++;
     }
     
+}
+
+void receiver_stopAndReset(void){
+    receiver_stop();
+    receiver_resetCircBuff();
+    receiver_resetFrBuff();
+//    NOTE - Receiver_start() must be called to start reception)
 }
 
 void receiver_push2FrameBuff(uint8_t data){

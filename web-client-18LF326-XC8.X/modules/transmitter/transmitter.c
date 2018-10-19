@@ -22,6 +22,7 @@ uint8_t transmitter_send(uint8_t * data, uint8_t length){
         SET_State(stBusy);
         SET_DataSize(length);
         SET_DataPointer(data);
+        SET_CurIdx(0);
         return transmitter_sendNext();
     } else {
         return false;
@@ -36,6 +37,7 @@ uint8_t transmitter_sendNext(void){
         return true;
     } else{
         USART_DisableTxInter();
+        SET_State(stReady);
         return false;
     }
 }

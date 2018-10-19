@@ -52,11 +52,38 @@ static uint8_t handleEvReset(void){
 }
 
 /************************************************************************
+ * STATE TRANSITION
+ ***********************************************************************/
+static void enterState_turnOffEcho(void){
+    __setState(stTurnOffEcho);
+    transmitter_send((uint8_t*)COMMAND_TURN_OFF_ECHO, sizeof(COMMAND_TURN_OFF_ECHO));
+//    receiver_start();
+//    WAIT RESPONSE "OK"
+}
+/************************************************************************
  * CALL BACKS
  ***********************************************************************/
 //Parser_OnMsg
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
+   
+   
     
+    if(code == (Parser_Codes)parserCode_Ok) {
+        switch(__state){
+            case stReset:{
+                break;
+            }
+            default:
+                break;
+        }
+    } else if( code == (Parser_Codes)parserCode_Ready ) {
+        receiver_clearErrorFrBuffOvrfl(); //FRame Buff Overflow Always happens onReset
+        communicator_initSelf();
+        enterState_turnOffEcho();
+    }
+    
+     receiver_resetFrBuff();
+
 }
 
 //static uint8_t enterState(State st){
