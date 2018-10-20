@@ -14,5 +14,7 @@
 /* CONDITIONAL COMPILATION */
 #define UNDER_TEST
 
+#define CONFIG_stopHere()  do{ ; }while(1)
+
 #endif	/* CONFIG_H */
 

@@ -23,8 +23,6 @@ uint8_t receiver_task(void){
 
                     ((Parser_OnMsg)__onMessage)(p_code, (uint8_t*)frBuffData, frBuffSize);
                     
-//                    frStarted  = 0;
-//                    return true;
                 }
                 frStarted  = 0;
                 
@@ -55,18 +53,18 @@ void receiver_start(void){
     __enable_continReceive();
     __enable_rxInterrupt();
 }
-
-void receiver_stop(void){
-    volatile uint8_t dummy = 0;
-    __disable_continReceive();
-    __disable_rxInterrupt();
-    dummy  = RC1REG;    //clear Rx Interrupt flag by reading the data register
-    if(dummy) dummy = 0;    //Prevent optimisation 
-}
-
-static void receiver_resetCircBuff(void){
-    cBuffTail = cBuffHead  = 0;
-}
+//
+//void receiver_stop(void){
+//    volatile uint8_t dummy = 0;
+//    __disable_continReceive();
+//    __disable_rxInterrupt();
+//    dummy  = RC1REG;    //clear Rx Interrupt flag by reading the data register
+//    if(dummy) dummy = 0;    //Prevent optimisation 
+//}
+//
+//static void receiver_resetCircBuff(void){
+//    cBuffTail = cBuffHead  = 0;
+//}
 
 void receiver_resetFrBuff(void){
     frBuffLocked = false;
@@ -140,12 +138,12 @@ void receiver_incrTail(){
     
 }
 
-void receiver_stopAndReset(void){
-    receiver_stop();
-    receiver_resetCircBuff();
-    receiver_resetFrBuff();
-//    NOTE - Receiver_start() must be called to start reception)
-}
+//void receiver_stopAndReset(void){
+//    receiver_stop();
+//    receiver_resetCircBuff();
+//    receiver_resetFrBuff();
+////    NOTE - Receiver_start() must be called to start reception)
+//}
 
 void receiver_push2FrameBuff(uint8_t data){
     frBuffData[frBuffSize++] = data;

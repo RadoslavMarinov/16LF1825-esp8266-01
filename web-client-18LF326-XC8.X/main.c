@@ -21,10 +21,11 @@ void main(void)
         if(communicator_task()){
             continue;
         }
-         if(timer1_getTicks() - old > 50 ){
-            LED_Toggle();
-            old = timer1_getTicks();
-        }
+        LED_Toggle();
+//         if(timer1_getTicks() - old > 50 ){
+//            LED_Toggle();
+//            old = timer1_getTicks();
+//        }
     }
 }
 

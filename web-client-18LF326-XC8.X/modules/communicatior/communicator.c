@@ -54,12 +54,24 @@ static uint8_t handleEvReset(void){
 /************************************************************************
  * STATE TRANSITION
  ***********************************************************************/
-static void enterState_turnOffEcho(void){
+static void enterSt_turnOffEcho(void){
     __setState(stTurnOffEcho);
     transmitter_send((uint8_t*)COMMAND_TURN_OFF_ECHO, sizeof(COMMAND_TURN_OFF_ECHO));
 //    receiver_start();
 //    WAIT RESPONSE "OK"
 }
+
+static void enterSt_setWifiMode(void){
+    __setState(stSetWifiMode);
+    if(false == __trSend(COMMAND_SET_MODE_STATION)){
+        __raiseErr(errTrBusy);
+        #ifdef UNDER_TEST
+        CONFIG_stopHere();
+        #endif
+    }
+}
+
+
 /************************************************************************
  * CALL BACKS
  ***********************************************************************/
@@ -70,7 +82,9 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
     
     if(code == (Parser_Codes)parserCode_Ok) {
         switch(__state){
-            case stReset:{
+            case stTurnOffEcho:{
+                //exitSt_TurnOffEcho();
+                enterSt_setWifiMode();
                 break;
             }
             default:
@@ -79,7 +93,7 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
     } else if( code == (Parser_Codes)parserCode_Ready ) {
         receiver_clearErrorFrBuffOvrfl(); //FRame Buff Overflow Always happens onReset
         communicator_initSelf();
-        enterState_turnOffEcho();
+        enterSt_turnOffEcho();
     }
     
      receiver_resetFrBuff();
