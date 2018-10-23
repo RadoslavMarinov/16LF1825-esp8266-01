@@ -22,7 +22,7 @@ void communicator_init(uint8_t start){
     communicator_initSelf();
     receiver_init(handleMessage);
     transmitter_init(NULL);
-    parser_init(handleMessage);
+//    parser_init(handleMessage);
     if(start){
         __raiseEv(evReset);
     }

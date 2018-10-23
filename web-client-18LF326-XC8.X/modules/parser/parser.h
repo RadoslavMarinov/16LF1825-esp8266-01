@@ -25,7 +25,6 @@ typedef void(*Parser_OnMsg)(Parser_Codes code, uint8_t * data, uint16_t len);
 
 
 Parser_Codes parser_analyse(uint8_t * data, uint16_t len);
-void parser_init(Parser_OnMsg onMsgCb);
 
 #endif	/* PARSER_H */
 

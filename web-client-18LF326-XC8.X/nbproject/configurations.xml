@@ -13,6 +13,7 @@
         <itemPath>mcc_generated_files/eusart.h</itemPath>
         <itemPath>mcc_generated_files/interrupt_manager.h</itemPath>
         <itemPath>mcc_generated_files/tmr1.h</itemPath>
+        <itemPath>mcc_generated_files/memory.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -31,6 +32,7 @@
         <itemPath>mcc_generated_files/eusart.c</itemPath>
         <itemPath>mcc_generated_files/interrupt_manager.c</itemPath>
         <itemPath>mcc_generated_files/tmr1.c</itemPath>
+        <itemPath>mcc_generated_files/memory.c</itemPath>
       </logicalFolder>
       <logicalFolder name="modules" displayName="modules" projectFiles="true">
         <logicalFolder name="communicatior"
@@ -40,7 +42,17 @@
           <itemPath>modules/communicatior/communicator.c</itemPath>
           <itemPath>modules/communicatior/communicator.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="eeprom" displayName="eeprom" projectFiles="true">
+          <itemPath>modules/eeprom/eeprom-primary.h</itemPath>
+          <itemPath>modules/eeprom/eeprom.c</itemPath>
+          <itemPath>modules/eeprom/eeprom.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="parser" displayName="parser" projectFiles="true">
+          <logicalFolder name="json-parser" displayName="json-parser" projectFiles="true">
+            <itemPath>modules/parser/json-parser/json-parser-primary.h</itemPath>
+            <itemPath>modules/parser/json-parser/json-parser.c</itemPath>
+            <itemPath>modules/parser/json-parser/json-parser.h</itemPath>
+          </logicalFolder>
           <itemPath>modules/parser/parser.c</itemPath>
           <itemPath>modules/parser/parser-primary.h</itemPath>
           <itemPath>modules/parser/parser.h</itemPath>
@@ -190,6 +202,7 @@
                   value="Press to browse for a specific firmware version"/>
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
@@ -212,8 +225,8 @@
         <property key="programoptions.preservedataflash" value="false"/>
         <property key="programoptions.preservedataflash.ranges"
                   value="${programoptions.preservedataflash.ranges}"/>
-        <property key="programoptions.preserveeeprom" value="false"/>
-        <property key="programoptions.preserveeeprom.ranges" value="f000-f0ff"/>
+        <property key="programoptions.preserveeeprom" value="true"/>
+        <property key="programoptions.preserveeeprom.ranges" value="f000-f0FF"/>
         <property key="programoptions.preserveprogram.ranges" value=""/>
         <property key="programoptions.preserveprogramrange" value="false"/>
         <property key="programoptions.preserveuserid" value="false"/>

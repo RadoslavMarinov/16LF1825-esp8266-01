@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <xc.h>
 #include <stdbool.h>
+
 /* CONDITIONAL COMPILATION */
 #define UNDER_TEST
 
