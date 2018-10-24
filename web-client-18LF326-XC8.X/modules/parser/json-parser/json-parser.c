@@ -8,9 +8,18 @@ static Self jsonParser_self;
 uint8_t jsonParser_analyse(char * lastAddr){
     
     char * data;
+#ifdef UNDER_TEST
+    uint16_t jsonStrLen = 0; 
+#endif
     data = lastAddr;
 //    TODO: check if json is too long!
     while( (*data) != '{' ){
+#ifdef UNDER_TEST
+        if( jsonStrLen++ > JSON_MAX_STR_LEN ){
+            __raiseErr(jsonStrTooLong);
+            CONFIG_stopHere();
+        }
+#endif
         data--;
     }
     jsonParser_parse(data);
@@ -28,15 +37,18 @@ void jsonParser_parse( char * startAddr ){
     }
 #endif
     data++; //Expected key first char
-    data = processKeyValue(data);
+    data = parseKeyValuePair(data);
 }
 
-static char* processKeyValue(char * keyStAddr){
+static char* parseKeyValuePair(char * keyStAddr){
     char * data;
     data = keyStAddr;
     data = copyKey(data); // data should point to key`s closing quot. mark
-    data += 2;            // data should point to val`s closing quot. mark if exist!
-    copyVal(data);
+    data += 2;            /* data should point to val`s opening quotation mark
+                           *  or first value numerical character */
+    data = copyVal(data); /* data should point to val`s closing
+                           *  quotation mark (if value alphabetical is string), 
+                           or last numerical character (if "value" is alphanumerical string)*/
     return data;
 }
 
@@ -77,27 +89,27 @@ static char* copyVal(char * valStAddr ){
         *dst = '\0';
         
     } else {
-        __valNum = getNumfromStr(src);
-      return src;  
+        __valNum = getNumFromStr(src, &src);
+        __isValStr = false;
     }
     return src;
 }
 
-static uint16_t getNumfromStr(char * numStr){
+static uint16_t getNumFromStr(char * numStrStAddr, char **numStrLastAddr){
     uint16_t power = 1;
     char *endAddr;
     char * dig;
-    dig = numStr;
     uint16_t val = 0;
+    dig = numStrStAddr;
     while(*dig >= '0' && *dig <= '9'){
         dig++;
     }
     endAddr = --dig;
-    while( dig >= numStr ){
+    while( dig >= numStrStAddr ){
         val += ( (*dig) - 48 ) * power;
         power *= 10;
         dig--;
     }
-    numStr = endAddr;
+    *numStrLastAddr = endAddr;
     return val;
 }

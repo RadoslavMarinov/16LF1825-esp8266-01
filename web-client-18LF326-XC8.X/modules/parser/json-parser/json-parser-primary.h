@@ -10,21 +10,19 @@
 
 #include "json-parser.h"
 
-#define KEY_MAX_LEN             10U
-#define VAL_MAX_LEN             20U    
-
 typedef struct {
     unsigned int invalidJson :1;
     unsigned int keyArrayTooLong :1;
+    unsigned int jsonStrTooLong :1;
 }Error;
 
 typedef struct {
     
     union {
-        char strValue[VAL_MAX_LEN + 1];  //+1 for the null character
+        char strValue[JSON_VAL_MAX_LEN + 1];  //+1 for the null character
         uint16_t numValue;
     };
-    char key[KEY_MAX_LEN + 1];      //+1 for the null character
+    char key[JSON_KEY_MAX_LEN + 1];      //+1 for the null character
     unsigned int isValueString : 1;
     
 }KeyValuePair;
@@ -47,7 +45,7 @@ typedef struct {
 
 //Key
 #define __keyArr            ( __keyVal.key )
-#define __keyArrLastAddr    (&(__keyArr[KEY_MAX_LEN - 1]))
+#define __keyArrLastAddr    (&(__keyArr[JSON_KEY_MAX_LEN - 1]))
 
 // Value
 #define __valArr            ( __keyVal.strValue )
@@ -58,11 +56,26 @@ typedef struct {
 
 
 
-static char* processKeyValue(char * keyStAddr);
+static char* parseKeyValuePair(char * keyStAddr);
 
 /* Return last address of the key array */
 static char* copyKey(char * keyStAddr);
 static char* copyVal(char * valStAddr );
-static uint16_t getNumfromStr(char * numStr);
+static uint16_t getNumFromStr(char * numStrStAddr, char **numStrLastAddr);
+
+
+#ifndef JSON_KEY_MAX_LEN
+#error "Missing required: JSON_KEY_MAX_LEN "
+#endif
+
+#ifndef JSON_VAL_MAX_LEN
+#error "Missing required: JSON_VAL_MAX_LEN "
+#endif
+
+#ifndef JSON_MAX_STR_LEN
+#error "Missing required: JSON_MAX_STR_LEN "
+#endif
+
+
 #endif	/* JSON_PARSER_PRIMARY_H */
 

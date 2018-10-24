@@ -23,8 +23,8 @@ void main(void)
 
     char c;
     
-    eeprom_writeData((uint8_t*)name, sizeof(name)-1, 0xF0);
-    eeprom_readData((uint8_t*)nameR, 18, 0xEE);
+    eeprom_writeStr((char*)name, sizeof(name)-1, 0xF0);
+    eeprom_readStr((char*)nameR, 18, 0xEE);
     c = eeprom_readByte(0x10);
     while (1)
     {

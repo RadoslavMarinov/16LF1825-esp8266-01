@@ -35,6 +35,11 @@
         <itemPath>mcc_generated_files/memory.c</itemPath>
       </logicalFolder>
       <logicalFolder name="modules" displayName="modules" projectFiles="true">
+        <logicalFolder name="comander" displayName="comander" projectFiles="true">
+          <itemPath>modules/comander/comander-primary.h</itemPath>
+          <itemPath>modules/comander/comander.c</itemPath>
+          <itemPath>modules/comander/comander.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="communicatior"
                        displayName="communicatior"
                        projectFiles="true">
