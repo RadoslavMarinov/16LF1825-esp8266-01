@@ -23,16 +23,27 @@ uint8_t jsonParser_analyse(char * lastAddr){
 #endif
         data--;
     }
-    jsonParser_parse(data); //Data is now in Self data
-    commander_execute(__keyArr, __valArr);
+
+    while((*data) != '}' ){
+        data++;
+        // data now points to key open quote
+        data = jsonParser_parse(data); //Data is now in Self data
+        /* Data now points either to closing '"' , or at the last character of 
+         the number */
+        commander_execute(__keyArr, __valArr);
+        data ++;
+        // data now points to key open quote
+    }
+    
     
     return 0;
 }
 
-void jsonParser_parse( char * startAddr ){ // startAddr should point to '{'
+// Returns 
+char * jsonParser_parse( char * keyStartAddr ){ // startAddr should point to '{'
 
     char * data;            
-    data = startAddr + 1 ;  //Data should point to '"'
+    data = keyStartAddr;  //Data should point to '"'
 #ifdef UNDER_TEST
     if(*data != '"'){
         __raiseErr(invalidJson);
@@ -41,6 +52,7 @@ void jsonParser_parse( char * startAddr ){ // startAddr should point to '{'
 #endif
     data++; //Expected key first char
     data = parseKeyValuePair(data);
+    return data;
 }
 
 static char* parseKeyValuePair(char * keyStAddr){

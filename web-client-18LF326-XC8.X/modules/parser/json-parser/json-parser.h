@@ -11,7 +11,7 @@
 #include "../../../config.h"
 
 uint8_t jsonParser_analyse(char * lastAddr);
-void jsonParser_parse( char * startAddr );
+char * jsonParser_parse( char * keyStartAddr );
 
 #endif	/* JSON_PARSER_H */
 
