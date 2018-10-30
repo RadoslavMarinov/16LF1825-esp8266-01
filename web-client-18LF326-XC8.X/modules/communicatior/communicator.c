@@ -4,6 +4,7 @@
 #include "../receiver/receiver.h"
 #include "../transmitter/transmitter.h"
 #include "../parser/parser.h"
+#include "../parser/json-parser/json-parser.h"
 
 Self comm_self;
 

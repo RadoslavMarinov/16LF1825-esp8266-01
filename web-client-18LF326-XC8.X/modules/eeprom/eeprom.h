@@ -9,10 +9,10 @@
 #define	EEPROM_MNG_H
 
 typedef void (Eeprom_writeWiFiSsid_fp)(char * ssid, uint16_t len);
-void eeprom_writeWiFiSsid(char * ssid, uint16_t len);
+void eeprom_writeWiFiSsid(void * data);
 
-void eeprom_writeStr(char * data, uint16_t len, uint16_t offset);
-void eeprom_readStr(char * data, uint16_t len, uint16_t eeIdx);
+void eeprom_writeStr(char * data, uint16_t offset);
+void eeprom_readStr(char * data, uint16_t eeStartIdx);
 uint8_t eeprom_readByte(uint16_t eeIdx);
 void eeprom_writeByte(uint16_t eeIdx, uint8_t data);
 

@@ -1,6 +1,7 @@
 
 #include "json-parser-primary.h"
 #include "json-parser.h"
+#include "../../comander/comander.h"
 
 static Self jsonParser_self;
 
@@ -22,7 +23,9 @@ uint8_t jsonParser_analyse(char * lastAddr){
 #endif
         data--;
     }
-    jsonParser_parse(data);
+    jsonParser_parse(data); //Data is now in Self data
+    commander_execute(__keyArr, __valArr);
+    
     return 0;
 }
 

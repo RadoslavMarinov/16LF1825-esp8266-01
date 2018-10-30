@@ -9,6 +9,7 @@
 #define	CONFIG_H
 
 #include <stdint.h>
+#include "string.h"
 #include <xc.h>
 #include <stdbool.h>
 

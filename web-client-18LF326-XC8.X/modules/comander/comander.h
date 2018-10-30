@@ -14,14 +14,14 @@
 #error "Missing required: JSON_KEY_MAX_LEN "
 #endif
 
-#define COMMANDER_COMMAND_COUNT     2U
+#define COMMANDER_COMMAND_COUNT     10U
 #define COMMAND_STR_MAX_LEN         JSON_KEY_MAX_LEN
 
-
+typedef void (*Commander_fp)(void *);
 
 typedef struct {
     char command[COMMAND_STR_MAX_LEN];
-    void *fp;
+    Commander_fp fp;
 }Comander_commandUnit;
 
 
@@ -30,7 +30,7 @@ typedef struct {
 }Commander_commandMap;
 
 
-
+uint8_t commander_execute(char *command, void * value);
 
 
 #endif	/* COMANDER_H */

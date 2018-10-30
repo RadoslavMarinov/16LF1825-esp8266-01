@@ -9,21 +9,30 @@ __eeprom char wifi_ssid[EE_WIFI_SSID_MAX_LEN] = "esp_def_network";
 __eeprom char wifi_pwd[EE_WIFI_SSID_MAX_LEN] = "esp_def_pwd";
 
 
-
-void eeprom_writeWiFiSsid(char * ssid, uint16_t len){
+/*******************************************************************************
+ CALLBACKS USED FOR STRING GUNCTION MAP
+ ******************************************************************************/
+void eeprom_writeWiFiSsid(void* data){
 #ifdef UNDER_TEST
-    if(len >= EE_WIFI_SSID_MAX_LEN){
+    if(strlen(data) >= EE_WIFI_SSID_MAX_LEN){
         __raiseErr(errTooLongWifiSsid);
         CONFIG_stopHere();
     }
 #endif 
-    eeprom_writeStr(ssid, len, EE_IDX_WIFI_SSID);
+    eeprom_writeStr(data, EE_IDX_WIFI_SSID);
 }
+/******************************************************************************/
 
-void eeprom_writeStr(char * data, uint16_t len, uint16_t offset){
-    uint16_t idx;
-    for(idx = 0; idx < len; idx++){
+
+
+
+
+void eeprom_writeStr(char * data, uint16_t offset){
+    uint16_t idx = 0;
+    while(data[idx] != '\0'){
+        
         eeprom_writeByte(offset + idx, data[idx]);
+        idx++;
     }
     eeprom_writeByte(offset + idx, '\0');
 }
@@ -41,17 +50,22 @@ void eeprom_writeByte(uint16_t eeIdx, uint8_t data){
 }
 
 
-void eeprom_readStr(char * data, uint16_t len, uint16_t startIdx){ 
-    uint16_t idx;
-    for(idx = 0; idx < len; idx++){
-        data[idx] = eeprom_readByte(startIdx + idx);
+void eeprom_readStr(char * data, uint16_t eeStartIdx){ 
+    uint16_t idx = 0;
+    char ch;
+    ch = eeprom_readByte(eeStartIdx + idx);
+    while( ch != '\0'){
+        data[idx] = ch;
+        idx++;
+        ch = eeprom_readByte(eeStartIdx + idx);
     }
+    data[idx] = '\0';
 }
 
 uint8_t eeprom_readByte(uint16_t eeIdx){
     
     if( eeIdx >= EE_SIZE ){
-        __raiseErr(errWriteAtWrongAddr);
+        __raiseErr(errReadAtWrongAddr);
         #ifdef UNDER_TEST
         CONFIG_stopHere();
         #endif

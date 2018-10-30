@@ -38,6 +38,7 @@
  ******************************************************************************/
 typedef struct {
     unsigned int errWriteAtWrongAddr;
+    unsigned int errReadAtWrongAddr;
     unsigned int errTooLongWifiSsid;
 }Errors;
 

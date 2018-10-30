@@ -23,9 +23,9 @@ void main(void)
 
     char c;
     
-    eeprom_writeStr((char*)name, sizeof(name)-1, 0xF0);
-    eeprom_readStr((char*)nameR, 18, 0xEE);
-    c = eeprom_readByte(0x10);
+    eeprom_writeStr((char*)name, 0x0);
+    eeprom_readStr((char*)nameR, 0x0);
+//    c = eeprom_readByte(0x10);
     while (1)
     {
         if(receiver_task()){
