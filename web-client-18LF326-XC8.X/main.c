@@ -13,7 +13,15 @@ const uint8_t name[] = "RikoSonqRikoSonq";
 uint8_t nameR[30] ;
 
 
-
+void main_setLed(void * data){
+    uint16_t level;
+    level = *((uint16_t *)data);
+    if(level){
+        LED_SetHigh();
+    } else {
+        LED_SetLow();
+    }
+}
 //__eeprom char regNumber[10] = "A93213";
 
 void main(void)
@@ -36,7 +44,7 @@ void main(void)
         }
 //        LED_Toggle();
          if(timer1_getTicks() - old > 50 ){
-            LED_Toggle();
+//            LED_Toggle();
             old = timer1_getTicks();
         }
     }

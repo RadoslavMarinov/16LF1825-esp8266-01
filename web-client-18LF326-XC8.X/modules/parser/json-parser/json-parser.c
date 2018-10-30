@@ -29,10 +29,10 @@ uint8_t jsonParser_analyse(char * lastAddr){
     return 0;
 }
 
-void jsonParser_parse( char * startAddr ){
+void jsonParser_parse( char * startAddr ){ // startAddr should point to '{'
 
-    char * data;
-    data = startAddr + 1 ;  //Expected quotation mark
+    char * data;            
+    data = startAddr + 1 ;  //Data should point to '"'
 #ifdef UNDER_TEST
     if(*data != '"'){
         __raiseErr(invalidJson);

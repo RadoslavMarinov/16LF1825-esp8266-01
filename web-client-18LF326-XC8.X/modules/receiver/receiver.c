@@ -18,7 +18,7 @@ uint8_t receiver_task(void){
         if( data == 0x0D || data == 0x0A ) {
             if(frStarted){
                 receiver_push2FrameBuff('\0');
-                p_code =  parser_analyse( (uint8_t *)frBuffData,  frBuffSize) ;
+                p_code =  parser_analyse((uint8_t *)frBuffData,  frBuffSize) ;
                 if( p_code != parserCode_Unknown ) {
 
                     ((Parser_OnMsg)__onMessage)(p_code, (uint8_t*)frBuffData, frBuffSize);

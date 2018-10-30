@@ -91,10 +91,14 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
             default:
                 break;
         }
+    } else if(code == (Parser_Codes)parserCode_Json ){
+            jsonParser_analyse((char*)&data[len - 7]);  //Should Point to "}"
     } else if( code == (Parser_Codes)parserCode_Ready ) {
         receiver_clearErrorFrBuffOvrfl(); //FRame Buff Overflow Always happens onReset
         communicator_initSelf();
         enterSt_turnOffEcho();
+    } else {
+        
     }
     
      receiver_resetFrBuff();

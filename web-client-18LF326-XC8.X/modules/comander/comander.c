@@ -10,7 +10,7 @@ const Commander_commandMap commandMap = { .commander_commands={
     {"b1", NULL},                           
     {"b11", NULL},
     {"c1", NULL},
-    {"c12", NULL},                          //5
+    {"so", NULL},                          
     {"swfid", eeprom_writeWiFiSsid},        
     {"swfpwd", NULL},                          
     {"z22", NULL},
@@ -20,15 +20,23 @@ const Commander_commandMap commandMap = { .commander_commands={
 uint8_t commander_execute(char *command, void * value) {
     int16_t mapIdx;
     mapIdx = commander_find(command);
+    
+    /* If mapIdx is lower than 0 the string is not found.
+     * If the callback at the coresponding unit index is NULL,
+     * then there is no action to perform for the given command.
+     */
     if( mapIdx >=0 && __getCallBack(mapIdx) != NULL ){
         __runMapCallBack(mapIdx, value);
     } else {
-        return 1;
+        return 1; 
     }
     
     return 0;
 }
 
+/* Returns the index of the string(the command) if it is found.
+ * If not found, returns -1.
+ */
 static int16_t commander_find(char *command) {
     uint16_t top,  bott, workTop, workBott, work;
     uint8_t charOffs = 0;
