@@ -44,7 +44,7 @@ void main(void)
         }
 //        LED_Toggle();
          if(timer1_getTicks() - old > 50 ){
-//            LED_Toggle();
+            LED_Toggle();
             old = timer1_getTicks();
         }
     }
