@@ -9,6 +9,7 @@
 #define	CONFIG_H
 
 #include <stdint.h>
+#include <stdio.h>
 #include "string.h"
 #include <xc.h>
 #include <stdbool.h>
@@ -23,6 +24,9 @@
 #define JSON_MAX_STR_LEN            100U
 //COMANDER
 
+/* SERVER DATA */
+#define CONF_SERVER_HOST                "electricity-manager1.herokuapp.com"
+#define CONF_SERVER_UPDATE_ROUTE        "/enddef"
 
 
 

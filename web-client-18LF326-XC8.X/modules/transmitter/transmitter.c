@@ -13,6 +13,9 @@ void transmitter_init(void(*onReady)(void)){
 }
 
 
+uint8_t transmitter_isBusy(void){
+    return IS_State(stBusy);
+}
 
 uint8_t transmitter_send(uint8_t * data, uint8_t length){
 //    SEND_Byte('R');

@@ -93,29 +93,6 @@ void receiver_push(uint8_t data){
     
 }
 
-//HAVE SIDE EFECTS  - CARE WHEN USE !!!!!!!!!!!!!!!!!!!!!
-//uint8_t receiver_pop(void){ 
-//    uint8_t data;
-//    
-//    
-//    if(cBuffTail == cBuffHead ) {
-//        #if defined(UNDER_TEST)
-//        SET_err(circBuffOverPop);
-//        #endif
-//        return 0xFF;
-//    }
-//    
-//    data = cBuff[cBuffTail];
-//    cBuffTail++;
-//    
-//    if(cBuffTail >= sizeof(cBuff)){
-//        cBuffTail= 0;
-//    }
-//    
-//    
-//    return data;
-//}
-
 uint16_t receiver_getCircBuffFilledDataSize() {
     uint16_t size;
     
@@ -138,12 +115,7 @@ void receiver_incrTail(){
     
 }
 
-//void receiver_stopAndReset(void){
-//    receiver_stop();
-//    receiver_resetCircBuff();
-//    receiver_resetFrBuff();
-////    NOTE - Receiver_start() must be called to start reception)
-//}
+
 
 void receiver_push2FrameBuff(uint8_t data){
     frBuffData[frBuffSize++] = data;

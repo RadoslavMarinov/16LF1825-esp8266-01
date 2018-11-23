@@ -11,14 +11,23 @@
 #include "string.h"
 #include "../parser/parser.h"
 
+#define TX_MSG_SIZE                                 100U
 
+
+typedef enum {
+    tcp,
+    udp,
+}TransportProtocol;
 
 typedef enum {
     stOff,
     stReset,
     stTurnOffEcho,
     stSetWifiMode,
-           
+    stJoinAp,
+    stConnectServer,  
+    stSeMsgLength,
+    stSendUpdateMessageToServer,
 }State;
 
 typedef struct{
@@ -41,6 +50,7 @@ typedef struct {
     State state;
     Events events;
     Errors errors;
+    char txBuff[TX_MSG_SIZE];
 }Self;
 
 
@@ -71,9 +81,19 @@ typedef struct {
 #define __clearErr(err)     do{ __errors.err  = 0; }while(0)
 
 /********************************************************
+ * TX Buffer
+ *******************************************************/
+#define __txBuff            ( comm_self.txBuff )
+
+
+/********************************************************
  * REQUIRED INTERFACES
  *******************************************************/
-#define __trSend(command)   (transmitter_send(((uint8_t*)command), sizeof(command) ))
+#define __trSend(command, size)   (transmitter_send(((uint8_t*)command), size ))
+#define CONSTRUCT_HEADER(method, route, host) \
+#method " " #route " HTTP/1.1\r\nHost: " #host
+
+
 /********************************************************
  * STATIC FUNCTION DECLARATIONS
  *******************************************************/
@@ -82,10 +102,18 @@ static uint8_t handleEvReset(void);
 static uint8_t dispatchEvReset(void);
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len);
 static void enterState_turnOffEcho(void);
+static void enterSt_connectToAp(void);
+static void enterState_connectServer(void);
+static void enterState_setMsgLength(void);
 
 static const char COMMAND_RESET[] = "AT+RST\r\n";
 static const char COMMAND_TURN_OFF_ECHO[] = "ATE0\r\n";
 static const char COMMAND_SET_MODE_STATION[] = "AT+CWMODE=1\r\n";
+static const char COMMAND_CONNECT_SERVER[] = "AT+CIPSTART=\"TCP\",\"electricity-manager1.herokuapp.com\",80\r\n";
+
+static const char COMMAND_POST_SERVER_UPDATE[] = 
+    "POST "CONF_SERVER_UPDATE_ROUTE" HTTP/1.1\r\nHost: "CONF_SERVER_HOST"\r\n\r\n";
+
 
 
 #endif	/* COMMUNICATOR_PRIMARY_H */

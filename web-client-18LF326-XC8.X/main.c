@@ -9,19 +9,18 @@
 
 
 
-const uint8_t name[] = "RikoSonqRikoSonq";
-uint8_t nameR[30] ;
+//const uint8_t name[] = "RikoSonqRikoSonq";
+//uint8_t nameR[30] ;
 
-
-void main_setLed(void * data){
-    uint16_t level;
-    level = *((uint16_t *)data);
-    if(level){
-        LED_SetHigh();
-    } else {
-        LED_SetLow();
-    }
-}
+//void main_setLed(void * data){
+//    uint16_t level;
+//    level = *((uint16_t *)data);
+//    if(level){
+//        LED_SetHigh();
+//    } else {
+//        LED_SetLow();
+//    }
+//}
 //__eeprom char regNumber[10] = "A93213";
 
 void main(void)
@@ -31,8 +30,8 @@ void main(void)
 
     char c;
     
-    eeprom_writeStr((char*)name, 0x0);
-    eeprom_readStr((char*)nameR, 0x0);
+//    eeprom_writeStr((char*)name, 0x0);
+//    eeprom_readStr((char*)nameR, 0x0);
 //    c = eeprom_readByte(0x10);
     while (1)
     {

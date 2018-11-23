@@ -18,10 +18,10 @@
 /******************************************************************************* 
  * CONFIGURATION
  ******************************************************************************/
-#define EE_IDX_WIFI_SSID            0U
-#define EE_WIFI_SSID_MAX_LEN        16U
+#define EE_IDX_WIFI_PWD             0U
+#define EE_WIFI_PWD_MAX_LEN        16U
 
-#define EE_IDX_WIFI_PWD             (EE_IDX_WIFI_SSID + EE_WIFI_SSID_MAX_LEN)
+#define EE_IDX_WIFI_SSID             ( EE_IDX_WIFI_PWD + EE_WIFI_PWD_MAX_LEN )
 #define EE_WIFI_SSID_MAX_LEN        16U
 
 

@@ -21,6 +21,18 @@ void eeprom_writeWiFiSsid(void* data){
 #endif 
     eeprom_writeStr(data, EE_IDX_WIFI_SSID);
 }
+
+void eeprom_writeWiFiPwd(void* data){
+#ifdef UNDER_TEST
+    if( strlen(data) >= EE_WIFI_PWD_MAX_LEN ){
+        __raiseErr(errTooLongWifiSsid);
+        CONFIG_stopHere();
+    }
+#endif 
+   eeprom_writeStr(data, EE_IDX_WIFI_PWD); 
+}
+
+
 /******************************************************************************/
 
 
@@ -50,16 +62,17 @@ void eeprom_writeByte(uint16_t eeIdx, uint8_t data){
 }
 
 
-void eeprom_readStr(char * data, uint16_t eeStartIdx){ 
+char * eeprom_readStr(char * dest, uint16_t eeStartIdx){ 
     uint16_t idx = 0;
     char ch;
     ch = eeprom_readByte(eeStartIdx + idx);
     while( ch != '\0'){
-        data[idx] = ch;
+        dest[idx] = ch;
         idx++;
         ch = eeprom_readByte(eeStartIdx + idx);
     }
-    data[idx] = '\0';
+    dest[idx] = '\0';
+    return dest;
 }
 
 uint8_t eeprom_readByte(uint16_t eeIdx){
@@ -73,4 +86,12 @@ uint8_t eeprom_readByte(uint16_t eeIdx){
     } else {
         return DATAEE_ReadByte(__getAddr(eeIdx));
     }
+}
+
+char * eeprom_readWifiSsid(char * dest){
+    return eeprom_readStr(dest, EE_IDX_WIFI_SSID);
+}
+
+char * eeprom_readWifiPwd(char * dest) {
+    return eeprom_readStr(dest, EE_IDX_WIFI_PWD);
 }

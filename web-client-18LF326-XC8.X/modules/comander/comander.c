@@ -12,7 +12,7 @@ const Commander_commandMap commandMap = { .commander_commands={
     {"c1", NULL},
     {"so", NULL},                          
     {"swfid", eeprom_writeWiFiSsid},        
-    {"swfpwd", NULL},                          
+    {"swfpwd", eeprom_writeWiFiPwd},                          
     {"z22", NULL},
     {"z22", NULL},                          //9  
 } };

@@ -4,13 +4,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/main.c</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/transmitter/transmitter.c</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/mcc_generated_files/tmr1.c</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/json-parser/json-parser.c</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/transmitter/transmitter-primary.h</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/transmitter/transmitter.h</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/receiver/receiver.c</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/comander/comander.c</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/eeprom/eeprom.c</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/mcc_generated_files/pin_manager.h</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/json-parser/json-parser.h</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/communicatior/communicator-primary.h</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/config.h</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/communicatior/communicator.c</file>
         </group>
     </open-files>

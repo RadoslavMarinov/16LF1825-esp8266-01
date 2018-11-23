@@ -23,9 +23,7 @@ Parser_Codes parser_analyse(uint8_t * data, uint16_t len) {
     /* Wait Message terminator "ERROR" | "OK" | "ready" */    
     if( strcmp((char *)&data[lasFrStIdx], "OK") == 0 ){
         code = parserCode_Ok;
-    } else if(strcmp((char *)&data[lasFrStIdx], "JSON") == 0 ){
-        
-//        jsonParser_analyse((char*)&data[lasFrStIdx-2]);
+    } else if(strcmp((char *)&data[lasFrStIdx], "JSON") == 0 ){      
         code = parserCode_Json;        
     } else if(strcmp((char *)&data[lasFrStIdx], "ERROR") == 0 ){
         code = parserCode_Error;
