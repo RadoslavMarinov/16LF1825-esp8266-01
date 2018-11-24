@@ -5,8 +5,8 @@
 
 static Self eeprom_self;
 
-__eeprom char wifi_ssid[EE_WIFI_SSID_MAX_LEN] = "esp_def_network";
-__eeprom char wifi_pwd[EE_WIFI_SSID_MAX_LEN] = "esp_def_pwd";
+__eeprom char wifi_ssid[EE_WIFI_SSID_MAX_LEN] = "riko_main";
+__eeprom char wifi_pwd[EE_WIFI_SSID_MAX_LEN] = "koinarci88";
 
 
 /*******************************************************************************

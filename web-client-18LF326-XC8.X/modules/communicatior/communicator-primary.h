@@ -27,18 +27,22 @@ typedef enum {
     stJoinAp,
     stConnectServer,  
     stSeMsgLength,
-    stSendUpdateMessageToServer,
+    stUpdateServer,
 }State;
 
 typedef struct{
     union {
-    unsigned int evReset : 1;
+    struct{
+        unsigned int evReset : 1;
+        unsigned int evWaitReceiver : 1;
+    };
     uint8_t evsCont;
     };
 }Events;
 
 typedef struct {
-    unsigned int errTrBusy; // When calling transmitter_send while busy
+    unsigned int errTrBusy : 1; // When calling transmitter_send while busy
+    unsigned int errEvWaitReceiverRaisedInWrongState : 1;
 }Errors;
 
 typedef struct {
@@ -100,11 +104,13 @@ typedef struct {
 static void communicator_initSelf(void);
 static uint8_t handleEvReset(void);
 static uint8_t dispatchEvReset(void);
+static uint8_t dispatchEventWaitReceiver(void);
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len);
 static void enterState_turnOffEcho(void);
 static void enterSt_connectToAp(void);
 static void enterState_connectServer(void);
 static void enterState_setMsgLength(void);
+static uint8_t enterState_updateServer(void);
 
 static const char COMMAND_RESET[] = "AT+RST\r\n";
 static const char COMMAND_TURN_OFF_ECHO[] = "ATE0\r\n";

@@ -26,7 +26,7 @@
 
 /* SERVER DATA */
 #define CONF_SERVER_HOST                "electricity-manager1.herokuapp.com"
-#define CONF_SERVER_UPDATE_ROUTE        "/enddef"
+#define CONF_SERVER_UPDATE_ROUTE        "/enddev"
 
 
 

@@ -15,6 +15,13 @@ uint8_t communicator_task(void){
         if( __isRaisedEv(evReset) ){
             didWork = dispatchEvReset();
         }
+        else if(__isRaisedEv(evWaitReceiver)){
+            if(dispatchEventWaitReceiver()){
+                __clearEv(evWaitReceiver);
+                didWork = true;
+            }
+            
+        }
     }
     return didWork;
 }
@@ -41,6 +48,20 @@ static void communicator_initSelf(void){
  ***********************************************************************/
 static uint8_t dispatchEvReset(void) {
     return handleEvReset();
+}
+
+static uint8_t dispatchEventWaitReceiver(void) {
+    switch (__state) {
+        case stUpdateServer:{
+            return enterState_updateServer();
+        }
+        default:{
+        #ifdef UNDER_TEST
+        __raiseErr(errEvWaitReceiverRaisedInWrongState);
+        CONFIG_stopHere();
+        #endif
+        }
+    }
 }
 
 /************************************************************************
@@ -99,35 +120,38 @@ static void enterState_connectServer(){
     }
 }
 
-static void enterState_setMsgLength(){
+static void enterState_setMsgLength(void){
     uint16_t length;
+    char msgSizeCmd[20];
     __setState(stSeMsgLength);
     
-    if( false == __trSend("AT+CIPSEND=", 11) ){
+    strcpy(msgSizeCmd, "AT+CIPSEND=");
+    sprintf(&msgSizeCmd[11], "%d\r\n", sizeof(COMMAND_POST_SERVER_UPDATE) - 1);
+    if( false == __trSend(msgSizeCmd, strlen(msgSizeCmd)) ){
         #ifdef UNDER_TEST
         __raiseErr(errTrBusy);
         CONFIG_stopHere();
         #endif
     }
-//    TODO : get this blocking shit out of here - it returns OK anyway - use it!
-    while(transmitter_isBusy()){
-        ;
-    }
-    sprintf(__txBuff, "%d\r\n", sizeof(COMMAND_POST_SERVER_UPDATE));
-    length = strlen(__txBuff);
-    if( false == __trSend(__txBuff, length) ){
-        #ifdef UNDER_TEST
-        __raiseErr(errTrBusy);
-        CONFIG_stopHere();
-        #endif
-    }
+}
 
-    if( false == __trSend(COMMAND_POST_SERVER_UPDATE, sizeof(COMMAND_POST_SERVER_UPDATE)) ){
+static uint8_t enterState_updateServer(void){
+    
+    __setState(stUpdateServer);
+    
+    if(receiver_getCircBuffFilledDataSize() > 0){
+        __raiseEv(evWaitReceiver);
+        return false;
+    }
+    
+    if( false == __trSend(COMMAND_POST_SERVER_UPDATE, sizeof(COMMAND_POST_SERVER_UPDATE) - 1 ) ){
         #ifdef UNDER_TEST
         __raiseErr(errTrBusy);
         CONFIG_stopHere();
         #endif
     }
+    return true;
+            
 }
 
 /************************************************************************
@@ -153,6 +177,10 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
             }
             case stConnectServer:{
                 enterState_setMsgLength();
+                break;
+            }
+            case stSeMsgLength:{
+                enterState_updateServer();
                 break;
             }
             default:
