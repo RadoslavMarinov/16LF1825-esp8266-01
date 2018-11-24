@@ -43,7 +43,6 @@ void main(void)
         }
 //        LED_Toggle();
          if(timer1_getTicks() - old > 50 ){
-            LED_Toggle();
             old = timer1_getTicks();
         }
     }
@@ -53,10 +52,23 @@ void main_init(void){
     SYSTEM_Initialize();
 //    receiver_init();
 //    transmitter_init(NULL);
+    gpio_init();
     communicator_init(true);
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
 }
+
+void gpio_init(void){
+
+    SW1_SetLow();
+    SW2_SetLow();
+    LED1_SetLow();
+    LED2_SetLow();
+    CH_RESET_SetLow(); //LOW active
+    CH_PD_SetLow(); //LOW active
+}
+
+
 
 /**
  End of File
