@@ -26,6 +26,7 @@ struct {
     unsigned int eeprom:1;
     unsigned int esp:1;
     unsigned int parser:1;
+    unsigned int json_parser:1;
     unsigned int receiver:1;
     unsigned int timer:1;
     unsigned int transmitter:1;
@@ -86,11 +87,17 @@ struct {
 #define ESP_ENABLE()                do{ CH_PD_SetHigh(); }while(0)
 #define ESP_DISABLE()               do{ CH_PD_SetLow(); }while(0)
 
+#define ESP_MODE_PIN()              ( SERVER_EN_H_GetValue() )
 /* SERVER DATA */
 #define CONF_SERVER_HOST                "electricity-manager1.herokuapp.com"
 #define CONF_SERVER_UPDATE_ROUTE        "/enddev"
 
-
-
+/*********************************** Access Point Settings ***********************************/
+#define ESP_AP_SSID         "rikotech"
+// !!!!!!!!! Must be at least 8 symbols !!!!!!!!
+#define ESP_AP_PWD          "rikomari12"
+#define ESP_AP_CH           "5"          
+#define ESP_AP_ENC          "3"
+/*********************************** A ***********************************/
 #endif	/* CONFIG_H */
 

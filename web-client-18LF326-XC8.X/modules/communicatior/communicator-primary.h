@@ -9,19 +9,43 @@
 #define	COMMUNICATOR_PRIMARY_H
 
 #include "string.h"
+#include "communicator.h"
 #include "../parser/parser.h"
 
 #define MODULE_NAME communicator
 
+/******************************************************************************* 
+ * CONDITIONALS
+ ******************************************************************************/
 #ifdef CONFIG_raiseError
     #define __addGlobalError()   do{CONFIG_raiseError(MODULE_NAME);}while(0)
 #else
     #define __addGlobalError()   
 #endif
 
+#ifndef ESP_AP_SSID
+#error "Missing required ESP_AP_SSID"
+#endif 
+
+#ifndef ESP_AP_PWD
+#error "Missing required ESP_AP_PWD"
+#endif 
+
+#ifndef ESP_AP_CH
+#error "Missing required ESP_AP_CH"
+#endif 
+
+#ifndef ESP_AP_ENC
+#error "Missing required ESP_AP_ENC"
+#endif 
+
+
+/******************************************************************************* 
+ * 
+ ******************************************************************************/
+
 
 #define TX_MSG_SIZE                                 100U
-
 
 typedef enum {
     tcp,
@@ -34,6 +58,7 @@ typedef enum {
     stTurnOffEcho,
     stSetWifiMode,
     stJoinAp,
+    stSetAp,
     stConnectServer,  
     stSeMsgLength,
     stUpdateServer,
@@ -63,6 +88,7 @@ typedef struct {
     State state;
     Events events;
     Errors errors;
+    communicator_EspMode espMode;
     char txBuff[TX_MSG_SIZE];
 }Self;
 
@@ -94,6 +120,11 @@ typedef struct {
 #define __clearErr(err)     do{ __errors.err  = 0; }while(0)
 
 /********************************************************
+ * ESP MODE
+ *******************************************************/
+#define __espMode           (comm_self.espMode)
+#define __setEspMode(mode)  do{__espMode = (mode);}while(0)
+/********************************************************
  * TX Buffer
  *******************************************************/
 #define __txBuff            ( comm_self.txBuff )
@@ -110,21 +141,27 @@ typedef struct {
 /********************************************************
  * STATIC FUNCTION DECLARATIONS
  *******************************************************/
-static void communicator_initSelf(void);
 static uint8_t handleEvReset(void);
 static uint8_t dispatchEvReset(void);
 static uint8_t dispatchEventWaitReceiver(void);
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len);
 static void enterState_turnOffEcho(void);
+static void enterSt_setWifiMode(communicator_EspMode espMode);
 static void enterSt_connectToAp(void);
+static void enterSt_setAp(void);
 static void enterState_connectServer(void);
 static void enterState_setMsgLength(void);
 static uint8_t enterState_updateServer(void);
+static void communicator_initSelf(void);
 
 static const char COMMAND_RESET[] = "AT+RST\r\n";
 static const char COMMAND_TURN_OFF_ECHO[] = "ATE0\r\n";
 static const char COMMAND_SET_MODE_STATION[] = "AT+CWMODE=1\r\n";
+static const char COMMAND_SET_MODE_ACCESS_POINT[] = "AT+CWMODE=2\r\n";
 static const char COMMAND_CONNECT_SERVER[] = "AT+CIPSTART=\"TCP\",\"electricity-manager1.herokuapp.com\",80\r\n";
+static const char COMMAND_SET_AP[]  = 
+    "AT+CWSAP=\""ESP_AP_SSID"\",\""ESP_AP_PWD"\","ESP_AP_CH","ESP_AP_ENC"\r\n";
+//"AT+CWSAP=\"esp_123\",\"1234test\",5,3\r\n";
 
 static const char COMMAND_POST_SERVER_UPDATE[] = 
     "POST "CONF_SERVER_UPDATE_ROUTE" HTTP/1.1\r\nHost: "CONF_SERVER_HOST"\r\n\r\n";

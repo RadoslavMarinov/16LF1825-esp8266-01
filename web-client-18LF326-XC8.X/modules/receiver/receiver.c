@@ -76,11 +76,6 @@ void receiver_resetFrBuff(void){
     frBuffSize = 0;
 }
 
-
-void receiver_clearErrorFrBuffOvrfl(void){
-    CLEAR_err(frameBuffOverflow);
-}
-
 //HAVE SIDE EFECTS  - CARE WHEN USE !!!!!!!!!!!!!!!!!!!!!
 void receiver_push(uint8_t data){
         

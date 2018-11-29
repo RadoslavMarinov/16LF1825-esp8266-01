@@ -8,7 +8,13 @@
 #ifndef COMMUNICATOR_H
 #define	COMMUNICATOR_H
 
-void communicator_init(uint8_t start);
+typedef enum{
+    communicator_espModeStation,
+    communicator_espModeAccessPoint,
+    communicator_espModeDual,
+}communicator_EspMode;
+
+void communicator_init(uint8_t start, communicator_EspMode espMode);
 uint8_t communicator_task(void);
 
 

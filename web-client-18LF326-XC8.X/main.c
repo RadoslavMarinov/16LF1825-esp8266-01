@@ -12,6 +12,7 @@
 
 /*
  *  TODO:
+ * What will do with handleEvReset /communicator.c
  * 
  * 013DC
  */ 
@@ -20,11 +21,10 @@ void main(void)
 {
 
     main_init();
-    LED_GREEN_ON();
     ESP_ENABLE();
 
     esp_reset(timer_getTicksFromMS(ESP_RESET_TIME_MS), onEspReset);
-    
+
     
     while (1)
     {
@@ -49,7 +49,8 @@ void main_init(void){
     SYSTEM_Initialize();
     gpio_init();
     timer_init();
-    communicator_init(false);
+ 
+    communicator_init(false, ESP_MODE_PIN() ? communicator_espModeAccessPoint : communicator_espModeStation);
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
 }

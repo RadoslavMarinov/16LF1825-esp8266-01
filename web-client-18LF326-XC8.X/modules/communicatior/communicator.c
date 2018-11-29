@@ -9,6 +9,10 @@
 
 Self comm_self;
 
+
+/************************************************************************
+ * GLOBAL METHODS
+ ***********************************************************************/
 uint8_t communicator_task(void){
     uint8_t didWork = false;
     if( __isPendingEv() ) {
@@ -27,24 +31,35 @@ uint8_t communicator_task(void){
 }
 
 
-void communicator_init(uint8_t start){
+void communicator_init(uint8_t start, communicator_EspMode espMode){
+    __setEspMode(espMode);
     communicator_initSelf();
     receiver_init(handleMessage, false);
     transmitter_init(NULL);
+    
 //    parser_init(handleMessage);
     if(start){
         __raiseEv(evReset);
     }
 }
 
+
+
+
+
+/************************************************************************
+ * STATIC METHODS
+ ***********************************************************************/
 static void communicator_initSelf(void){
     __clearAllEvents();
     __setState(stOff);
 
 }
 
+
+
 /************************************************************************
- * EVENT DISPATCHERS
+ * STATIC EVENT DISPATCHERS
  ***********************************************************************/
 static uint8_t dispatchEvReset(void) {
     return handleEvReset();
@@ -65,17 +80,17 @@ static uint8_t dispatchEventWaitReceiver(void) {
 }
 
 /************************************************************************
- * EVENT HANDLERS
+ * STATIC EVENT HANDLERS
  ***********************************************************************/
 static uint8_t handleEvReset(void){
-    communicator_init(false);
+    communicator_init(false, __espMode);
     transmitter_send((uint8_t*)COMMAND_RESET, sizeof(COMMAND_RESET) - 1);
     __setState(stReset);
     return true;
 }
 
 /************************************************************************
- * STATE TRANSITION
+ * STATIC STATE TRANSITION
  ***********************************************************************/
 static void enterSt_turnOffEcho(void){
     __setState(stTurnOffEcho);
@@ -83,13 +98,34 @@ static void enterSt_turnOffEcho(void){
 //    WAIT RESPONSE "OK"
 }
 
-static void enterSt_setWifiMode(void){
+static void enterSt_setWifiMode(communicator_EspMode espMode){
     __setState(stSetWifiMode);
-    if(false == __trSend(COMMAND_SET_MODE_STATION, sizeof(COMMAND_SET_MODE_STATION) - 1 )){
-        #ifdef UNDER_TEST
-        __raiseErr(errTrBusy);
-        CONFIG_stopHere();
-        #endif
+    
+    switch(espMode){
+        case communicator_espModeStation:{
+            if(false == __trSend(COMMAND_SET_MODE_STATION, sizeof(COMMAND_SET_MODE_STATION) - 1 )){
+                #ifdef UNDER_TEST
+                __raiseErr(errTrBusy);
+                CONFIG_stopHere();
+                #endif
+            }
+            break;
+        }
+        case communicator_espModeAccessPoint:{
+            if(false == __trSend(COMMAND_SET_MODE_ACCESS_POINT, sizeof(COMMAND_SET_MODE_ACCESS_POINT) - 1 )){
+                #ifdef UNDER_TEST
+                __raiseErr(errTrBusy);
+                CONFIG_stopHere();
+                #endif
+            }
+            break;
+        }
+        case communicator_espModeDual: {
+            break;
+        }
+        default:{
+            
+        }
     }
 }
 
@@ -109,9 +145,19 @@ static void enterSt_connectToAp(void){
     }
 }
 
+static void enterSt_setAp(void){
+       __setState(stSetAp);
+    if( false == __trSend(COMMAND_SET_AP, sizeof(COMMAND_SET_AP) - 1) ){
+        #ifdef UNDER_TEST
+        __raiseErr(errTrBusy);
+        CONFIG_stopHere();
+        #endif
+    } 
+}
+
 static void enterState_connectServer(){
     __setState(stConnectServer);
-    if( false == __trSend(COMMAND_CONNECT_SERVER, sizeof(COMMAND_CONNECT_SERVER)) ){
+    if( false == __trSend(COMMAND_CONNECT_SERVER, sizeof(COMMAND_CONNECT_SERVER) - 1 ) ){
         #ifdef UNDER_TEST
         __raiseErr(errTrBusy);
         CONFIG_stopHere();
@@ -154,7 +200,7 @@ static uint8_t enterState_updateServer(void){
 }
 
 /************************************************************************
- * CALL BACKS
+ * STATIC CALL BACKS
  ***********************************************************************/
 //Parser_OnMsg
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
@@ -163,11 +209,29 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
         switch(__state){
             case stTurnOffEcho:{
                 //exitSt_TurnOffEcho();
-                enterSt_setWifiMode();
+                enterSt_setWifiMode(__espMode);
                 break;
             }
             case stSetWifiMode:{
-                enterSt_connectToAp();
+                //==
+                switch(__espMode){
+                    case communicator_espModeStation:{
+                        enterSt_connectToAp();
+                        break;
+                    }
+                    case communicator_espModeAccessPoint:{
+                        enterSt_setAp();
+                        break;
+                    }
+                    case communicator_espModeDual:{
+                        break;
+                    }
+                    default:{
+                        
+                    }
+                }
+                //==
+                
                 break;
             }
             case stJoinAp:{
@@ -188,8 +252,7 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
     } else if(code == (Parser_Codes)parserCode_Json ){
             jsonParser_analyse((char*)&data[len - 7]);  //Should Point to "}"
     } else if( code == (Parser_Codes)parserCode_Ready ) {
-        receiver_clearErrorFrBuffOvrfl(); //FRame Buff Overflow Always happens onReset
-        communicator_initSelf();
+        __clearAllEvents();
         enterSt_turnOffEcho();
     } else {
         

@@ -27,7 +27,6 @@ void receiver_start(void);
 void receiver_stopAndReset(void);
 void receiver_resetFrBuff(void);
 void receiver_resetCircBuff(void);
-void receiver_clearErrorFrBuffOvrfl(void);
 
 
 #endif	/* XC_HEADER_TEMPLATE_H */

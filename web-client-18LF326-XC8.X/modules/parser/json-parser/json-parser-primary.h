@@ -8,7 +8,21 @@
 #ifndef JSON_PARSER_PRIMARY_H
 #define	JSON_PARSER_PRIMARY_H
 
+#include "../../../config.h"
 #include "json-parser.h"
+
+#define MODULE_NAME json_parser
+
+/******************************************************************************* 
+ * CONDITIONALS
+ ******************************************************************************/
+#ifdef CONFIG_raiseError
+    #define __addGlobalError()   do{CONFIG_raiseError(MODULE_NAME);}while(0)
+#else
+    #define __addGlobalError()   
+#endif
+
+
 
 typedef struct {
     unsigned int invalidJson :1;
@@ -36,7 +50,7 @@ typedef struct {
  * ERRORS
  ******************************************************************************/
 #define __errors            (jsonParser_self.errors)
-#define __raiseErr(err)     do { __errors.err = 1; }while(0)
+#define __raiseErr(err)     do { __errors.err = 1; __addGlobalError(); }while(0)
 
 /*******************************************************************************
  * KEY VALUE PAIR

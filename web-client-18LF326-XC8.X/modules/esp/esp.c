@@ -22,7 +22,6 @@ void esp_reset(Timner_Ticks ticks, void(*cb)(void)) {
     if( timer < 0 ){
         __raiseError(errUnavailableTimer);
     } else {
-        __raiseError(errAfterResetCallBackNULL);
         __setAfterReset(cb);
         __setTimerNumber(timer);
         ESP_RESET_ENABLE();
