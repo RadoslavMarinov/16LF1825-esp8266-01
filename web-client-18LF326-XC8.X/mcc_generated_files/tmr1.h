@@ -60,6 +60,7 @@
 
 #endif
 
+typedef uint16_t TimerTicks;
         
 
 uint16_t timer1_getTicks(void);

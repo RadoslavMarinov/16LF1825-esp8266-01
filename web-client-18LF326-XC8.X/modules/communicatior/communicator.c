@@ -29,7 +29,7 @@ uint8_t communicator_task(void){
 
 void communicator_init(uint8_t start){
     communicator_initSelf();
-    receiver_init(handleMessage);
+    receiver_init(handleMessage, false);
     transmitter_init(NULL);
 //    parser_init(handleMessage);
     if(start){
@@ -80,7 +80,6 @@ static uint8_t handleEvReset(void){
 static void enterSt_turnOffEcho(void){
     __setState(stTurnOffEcho);
     transmitter_send((uint8_t*)COMMAND_TURN_OFF_ECHO, sizeof(COMMAND_TURN_OFF_ECHO) - 1);
-//    receiver_start();
 //    WAIT RESPONSE "OK"
 }
 

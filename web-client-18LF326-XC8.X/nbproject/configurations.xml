@@ -67,6 +67,11 @@
           <itemPath>modules/receiver/receiver-primary.h</itemPath>
           <itemPath>modules/receiver/receiver.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="timer" displayName="timer" projectFiles="true">
+          <itemPath>modules/timer/timer-primary.h</itemPath>
+          <itemPath>modules/timer/timer.c</itemPath>
+          <itemPath>modules/timer/timer.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="transmitter" displayName="transmitter" projectFiles="true">
           <itemPath>modules/transmitter/transmitter-primary.h</itemPath>
           <itemPath>modules/transmitter/transmitter.c</itemPath>

@@ -20,9 +20,9 @@ uint8_t receiver_task(void){
                 receiver_push2FrameBuff('\0');
                 p_code =  parser_analyse((uint8_t *)frBuffData,  frBuffSize) ;
                 if( p_code != parserCode_Unknown ) {
-
+                    //Resets frame buffer, starts to fill from 0
                     ((Parser_OnMsg)__onMessage)(p_code, (uint8_t*)frBuffData, frBuffSize);
-                    
+                     
                 }
                 frStarted  = 0;
                 
@@ -38,12 +38,17 @@ uint8_t receiver_task(void){
 }
 
 /* Interfaces */
-void receiver_init(Receiver_OnMsg onMsg){
-    __setOnMsg(onMsg);
+void receiver_init(Receiver_OnMsg onMsg, uint8_t start){
+    if(onMsg){
+        __setOnMsg(onMsg);
+    }
+    receiver_resetCircBuff();
     receiver_resetFrBuff();
-    receiver_start();
-    cBuffHead = 0;
-    cBuffTail= 0; 
+    if(start){
+        receiver_start();
+    } else {
+        receiver_stop();
+    }
 }
 
 void receiver_start(void){
@@ -53,23 +58,24 @@ void receiver_start(void){
     __enable_continReceive();
     __enable_rxInterrupt();
 }
-//
-//void receiver_stop(void){
-//    volatile uint8_t dummy = 0;
-//    __disable_continReceive();
-//    __disable_rxInterrupt();
-//    dummy  = RC1REG;    //clear Rx Interrupt flag by reading the data register
-//    if(dummy) dummy = 0;    //Prevent optimisation 
-//}
-//
-//static void receiver_resetCircBuff(void){
-//    cBuffTail = cBuffHead  = 0;
-//}
+
+void receiver_stop(void){
+    volatile uint8_t dummy = 0;
+    __disable_continReceive();
+    __disable_rxInterrupt();
+    dummy  = RC1REG;    //clear Rx Interrupt flag by reading the data register
+    if(dummy) dummy = 0;    //Prevent optimisation 
+}
+
+void receiver_resetCircBuff(void){
+    cBuffTail = cBuffHead  = 0;
+}
 
 void receiver_resetFrBuff(void){
     frBuffLocked = false;
     frBuffSize = 0;
 }
+
 
 void receiver_clearErrorFrBuffOvrfl(void){
     CLEAR_err(frameBuffOverflow);
@@ -122,5 +128,8 @@ void receiver_push2FrameBuff(uint8_t data){
     if(frBuffSize > sizeof(frBuffData)){
         SET_err(frameBuffOverflow);
         receiver_resetFrBuff();
+        #ifdef UNDER_TEST
+//            CONFIG_stopHere();
+        #endif
     }
 }

@@ -29,6 +29,7 @@ Parser_Codes parser_analyse(uint8_t * data, uint16_t len) {
         code = parserCode_Error;
     } else if(strcmp((char *)&data[lasFrStIdx], "ready") == 0 ){
         code = parserCode_Ready;
+        LED_RED_OFF();
     } else {
         return parserCode_Unknown;
     }

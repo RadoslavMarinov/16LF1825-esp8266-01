@@ -6,33 +6,33 @@
 #include "modules/communicatior/communicator.h"
 #include "modules/transmitter/transmitter-primary.h"
 #include "modules/eeprom/eeprom.h"
+#include "modules/timer/timer.h"
 
+/*
+ *  TODO:
+ *  remove receiver_start from receiver_init
+ * remove LED_GREEN_ON from parser 
+ */ 
+void enableEsp(void){
+    ESP_ENABLE();
+    ESP_RESET_DISABLE();
+    LED_RED_ON();
+    LED_GREEN_OFF();
+//    receiver_start();
+    timer_start(timer_getTicksFromMS(ESP_RESET_MSG_TIME_MS) , receiver_start);
+}
 
-
-//const uint8_t name[] = "RikoSonqRikoSonq";
-//uint8_t nameR[30] ;
-
-//void main_setLed(void * data){
-//    uint16_t level;
-//    level = *((uint16_t *)data);
-//    if(level){
-//        LED_SetHigh();
-//    } else {
-//        LED_SetLow();
-//    }
-//}
-//__eeprom char regNumber[10] = "A93213";
 
 void main(void)
 {
-    uint16_t old = 0;
-    main_init();
 
-    char c;
+    main_init();
+    LED_GREEN_ON();
+//    enableEsp();
+    timer_start(timer_getTicksFromMS(ESP_RESET_TIME_MS) , enableEsp);
+
     
-//    eeprom_writeStr((char*)name, 0x0);
-//    eeprom_readStr((char*)nameR, 0x0);
-//    c = eeprom_readByte(0x10);
+    
     while (1)
     {
         if(receiver_task()){
@@ -41,34 +41,35 @@ void main(void)
         if(communicator_task()){
             continue;
         }
-//        LED_Toggle();
-         if(timer1_getTicks() - old > 50 ){
-            old = timer1_getTicks();
+        if(timer_task()){
+            continue;
         }
+//        if(SYSTEM_TIMER_getTicks() > timer_getTicksFromSeconds(650) && !once){
+//            timer_start(timer_getTicksFromSeconds(10), enableEsp);
+//            once = 1;
+//           LED_RED_OFF(); 
+//        }
     }
 }
 
 void main_init(void){
     SYSTEM_Initialize();
-//    receiver_init();
-//    transmitter_init(NULL);
     gpio_init();
-    communicator_init(true);
+    timer_init();
+    communicator_init(false);
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
 }
 
 void gpio_init(void){
-
-    SW1_SetLow();
-    SW2_SetLow();
-    LED1_SetLow();
-    LED2_SetLow();
-    CH_RESET_SetLow(); //LOW active
-    CH_PD_SetLow(); //LOW active
+    
+    SWITCH1_OFF();
+    SWITCH2_OFF();
+    LED_RED_OFF();
+    LED_GREEN_OFF();
+    ESP_RESET_ENABLE(); 
+    ESP_DISABLE(); 
 }
-
-
 
 /**
  End of File

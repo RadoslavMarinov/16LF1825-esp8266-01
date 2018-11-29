@@ -55,7 +55,7 @@
 /**
   Section: Global Variables Definitions
 */
-volatile uint16_t timer1ReloadVal;
+volatile TimerTicks timer1ReloadVal;
 void (*TMR1_InterruptHandler)(void);
 
 /**

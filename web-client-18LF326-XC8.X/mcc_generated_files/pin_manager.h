@@ -99,6 +99,26 @@
 #define SW2_SetAnalogMode()      do { ANSELAbits.ANSA2 = 1; } while(0)
 #define SW2_SetDigitalMode()     do { ANSELAbits.ANSA2 = 0; } while(0)
 
+// get/set SERVER_EN_H aliases
+#define SERVER_EN_H_TRIS                 TRISAbits.TRISA4
+#define SERVER_EN_H_LAT                  LATAbits.LATA4
+#define SERVER_EN_H_PORT                 PORTAbits.RA4
+#define SERVER_EN_H_WPU                  WPUAbits.WPUA4
+#define SERVER_EN_H_OD                   ODCONAbits.ODCA4
+#define SERVER_EN_H_ANS                  ANSELAbits.ANSA4
+#define SERVER_EN_H_SetHigh()            do { LATAbits.LATA4 = 1; } while(0)
+#define SERVER_EN_H_SetLow()             do { LATAbits.LATA4 = 0; } while(0)
+#define SERVER_EN_H_Toggle()             do { LATAbits.LATA4 = ~LATAbits.LATA4; } while(0)
+#define SERVER_EN_H_GetValue()           PORTAbits.RA4
+#define SERVER_EN_H_SetDigitalInput()    do { TRISAbits.TRISA4 = 1; } while(0)
+#define SERVER_EN_H_SetDigitalOutput()   do { TRISAbits.TRISA4 = 0; } while(0)
+#define SERVER_EN_H_SetPullup()          do { WPUAbits.WPUA4 = 1; } while(0)
+#define SERVER_EN_H_ResetPullup()        do { WPUAbits.WPUA4 = 0; } while(0)
+#define SERVER_EN_H_SetPushPull()        do { ODCONAbits.ODCA4 = 0; } while(0)
+#define SERVER_EN_H_SetOpenDrain()       do { ODCONAbits.ODCA4 = 1; } while(0)
+#define SERVER_EN_H_SetAnalogMode()      do { ANSELAbits.ANSA4 = 1; } while(0)
+#define SERVER_EN_H_SetDigitalMode()     do { ANSELAbits.ANSA4 = 0; } while(0)
+
 // get/set LED1 aliases
 #define LED1_TRIS                 TRISCbits.TRISC0
 #define LED1_LAT                  LATCbits.LATC0

@@ -88,13 +88,14 @@ typedef struct {
 #define ENABLE_TxInterrupt()    do{ PIE1bits.TXIE = 1; }while(0)
 #define DISABLE_TxInterrupt()   do{ PIE1bits.TXIE = 0; }while(0)
 
-#define __disable_continReceive()   do{ RC1STAbits.CREN  = 0; }while(0)
 #define __enable_continReceive()    do{ RC1STAbits.CREN  = 1; }while(0)
+#define __disable_continReceive()   do{ RC1STAbits.CREN  = 0; }while(0)
 
 #define __enable_rxInterrupt()    do{ PIE1bits.RCIE = 1; }while(0)
 #define __disable_rxInterrupt()    do{ PIE1bits.RCIE = 0; }while(0)
 
+#define __enable_interrupts()       do{__enable_rxInterrupt(); __enable_continReceive();}while(0)
+#define __disable_interrupts()       do{__disable_rxInterrupt(); __disable_continReceive();}while(0)
 #endif	/* RECEIVER_PRIMARY_H */
 
 
-static void receiver_resetCircBuff(void);

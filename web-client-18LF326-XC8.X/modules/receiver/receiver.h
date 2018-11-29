@@ -15,7 +15,7 @@
 typedef void(*Receiver_OnMsg)(Parser_Codes code, uint8_t * data, uint16_t len);
 
 /* Interfaces Declarations*/
-void receiver_init(Receiver_OnMsg onMsg);
+void receiver_init(Receiver_OnMsg onMsg, uint8_t start);
 void receiver_push(uint8_t data);
 uint8_t receiver_pop(void);
 uint16_t receiver_getCircBuffFilledDataSize(void);
@@ -26,6 +26,7 @@ void receiver_stop(void);
 void receiver_start(void);
 void receiver_stopAndReset(void);
 void receiver_resetFrBuff(void);
+void receiver_resetCircBuff(void);
 void receiver_clearErrorFrBuffOvrfl(void);
 
 
