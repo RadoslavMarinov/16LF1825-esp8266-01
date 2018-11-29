@@ -1,5 +1,6 @@
 #include "config.h"
 #include "main.h"
+#include "main-primary.h"
 #include "mcc_generated_files/mcc.h"
 #include "modules/receiver/receiver.h"
 #include "modules/transmitter/transmitter.h"
@@ -11,23 +12,9 @@
 
 /*
  *  TODO:
- * remove LED_GREEN_ON from parser 
  * 
  * 013DC
  */ 
-
-//void enableEsp(void){
-//    ESP_ENABLE();
-//    ESP_RESET_DISABLE();
-//    LED_RED_ON();
-//    LED_GREEN_OFF();
-////    receiver_start();
-//    timer_start(timer_getTicksFromMS(ESP_RESET_MSG_TIME_MS) , receiver_start);
-//}
-
-void callBack(void){
-    timer_start(timer_getTicksFromMS(ESP_RESET_MSG_TIME_MS) , receiver_start);
-}
 
 void main(void)
 {
@@ -35,9 +22,8 @@ void main(void)
     main_init();
     LED_GREEN_ON();
     ESP_ENABLE();
-//    enableEsp();
-//    
-    esp_reset(timer_getTicksFromMS(ESP_RESET_TIME_MS), callBack);
+
+    esp_reset(timer_getTicksFromMS(ESP_RESET_TIME_MS), onEspReset);
     
     
     while (1)
@@ -78,9 +64,32 @@ void gpio_init(void){
     ESP_DISABLE(); 
 }
 
+static void onEspReset(void){
+    timer_start(timer_getTicksFromMS(ESP_RESET_MSG_TIME_MS) , receiver_start);
+}
+
 /**
  End of File
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits

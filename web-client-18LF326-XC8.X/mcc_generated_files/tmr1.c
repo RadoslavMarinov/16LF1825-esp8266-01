@@ -76,7 +76,6 @@ uint16_t timer1_getTicks(void){
 void TMR1_ISR(void)
 {
     ticks++;
-//    LED_Toggle();
     // Clear the TMR1 interrupt flag
     PIR1bits.TMR1IF = 0;
     TMR1_WriteTimer(timer1ReloadVal);
