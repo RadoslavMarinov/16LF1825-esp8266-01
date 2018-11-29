@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=mcc_generated_files/mcc.c mcc_generated_files/device_config.c mcc_generated_files/pin_manager.c mcc_generated_files/eusart.c mcc_generated_files/interrupt_manager.c mcc_generated_files/tmr1.c mcc_generated_files/memory.c modules/comander/comander.c modules/communicatior/communicator.c modules/eeprom/eeprom.c modules/parser/json-parser/json-parser.c modules/parser/parser.c modules/receiver/receiver.c modules/timer/timer.c modules/transmitter/transmitter.c main.c
+SOURCEFILES_QUOTED_IF_SPACED=mcc_generated_files/mcc.c mcc_generated_files/device_config.c mcc_generated_files/pin_manager.c mcc_generated_files/eusart.c mcc_generated_files/interrupt_manager.c mcc_generated_files/tmr1.c mcc_generated_files/memory.c modules/comander/comander.c modules/communicatior/communicator.c modules/eeprom/eeprom.c modules/esp/esp.c modules/parser/json-parser/json-parser.c modules/parser/parser.c modules/receiver/receiver.c modules/timer/timer.c modules/transmitter/transmitter.c main.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/mcc_generated_files/mcc.p1 ${OBJECTDIR}/mcc_generated_files/device_config.p1 ${OBJECTDIR}/mcc_generated_files/pin_manager.p1 ${OBJECTDIR}/mcc_generated_files/eusart.p1 ${OBJECTDIR}/mcc_generated_files/interrupt_manager.p1 ${OBJECTDIR}/mcc_generated_files/tmr1.p1 ${OBJECTDIR}/mcc_generated_files/memory.p1 ${OBJECTDIR}/modules/comander/comander.p1 ${OBJECTDIR}/modules/communicatior/communicator.p1 ${OBJECTDIR}/modules/eeprom/eeprom.p1 ${OBJECTDIR}/modules/parser/json-parser/json-parser.p1 ${OBJECTDIR}/modules/parser/parser.p1 ${OBJECTDIR}/modules/receiver/receiver.p1 ${OBJECTDIR}/modules/timer/timer.p1 ${OBJECTDIR}/modules/transmitter/transmitter.p1 ${OBJECTDIR}/main.p1
-POSSIBLE_DEPFILES=${OBJECTDIR}/mcc_generated_files/mcc.p1.d ${OBJECTDIR}/mcc_generated_files/device_config.p1.d ${OBJECTDIR}/mcc_generated_files/pin_manager.p1.d ${OBJECTDIR}/mcc_generated_files/eusart.p1.d ${OBJECTDIR}/mcc_generated_files/interrupt_manager.p1.d ${OBJECTDIR}/mcc_generated_files/tmr1.p1.d ${OBJECTDIR}/mcc_generated_files/memory.p1.d ${OBJECTDIR}/modules/comander/comander.p1.d ${OBJECTDIR}/modules/communicatior/communicator.p1.d ${OBJECTDIR}/modules/eeprom/eeprom.p1.d ${OBJECTDIR}/modules/parser/json-parser/json-parser.p1.d ${OBJECTDIR}/modules/parser/parser.p1.d ${OBJECTDIR}/modules/receiver/receiver.p1.d ${OBJECTDIR}/modules/timer/timer.p1.d ${OBJECTDIR}/modules/transmitter/transmitter.p1.d ${OBJECTDIR}/main.p1.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/mcc_generated_files/mcc.p1 ${OBJECTDIR}/mcc_generated_files/device_config.p1 ${OBJECTDIR}/mcc_generated_files/pin_manager.p1 ${OBJECTDIR}/mcc_generated_files/eusart.p1 ${OBJECTDIR}/mcc_generated_files/interrupt_manager.p1 ${OBJECTDIR}/mcc_generated_files/tmr1.p1 ${OBJECTDIR}/mcc_generated_files/memory.p1 ${OBJECTDIR}/modules/comander/comander.p1 ${OBJECTDIR}/modules/communicatior/communicator.p1 ${OBJECTDIR}/modules/eeprom/eeprom.p1 ${OBJECTDIR}/modules/esp/esp.p1 ${OBJECTDIR}/modules/parser/json-parser/json-parser.p1 ${OBJECTDIR}/modules/parser/parser.p1 ${OBJECTDIR}/modules/receiver/receiver.p1 ${OBJECTDIR}/modules/timer/timer.p1 ${OBJECTDIR}/modules/transmitter/transmitter.p1 ${OBJECTDIR}/main.p1
+POSSIBLE_DEPFILES=${OBJECTDIR}/mcc_generated_files/mcc.p1.d ${OBJECTDIR}/mcc_generated_files/device_config.p1.d ${OBJECTDIR}/mcc_generated_files/pin_manager.p1.d ${OBJECTDIR}/mcc_generated_files/eusart.p1.d ${OBJECTDIR}/mcc_generated_files/interrupt_manager.p1.d ${OBJECTDIR}/mcc_generated_files/tmr1.p1.d ${OBJECTDIR}/mcc_generated_files/memory.p1.d ${OBJECTDIR}/modules/comander/comander.p1.d ${OBJECTDIR}/modules/communicatior/communicator.p1.d ${OBJECTDIR}/modules/eeprom/eeprom.p1.d ${OBJECTDIR}/modules/esp/esp.p1.d ${OBJECTDIR}/modules/parser/json-parser/json-parser.p1.d ${OBJECTDIR}/modules/parser/parser.p1.d ${OBJECTDIR}/modules/receiver/receiver.p1.d ${OBJECTDIR}/modules/timer/timer.p1.d ${OBJECTDIR}/modules/transmitter/transmitter.p1.d ${OBJECTDIR}/main.p1.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/mcc_generated_files/mcc.p1 ${OBJECTDIR}/mcc_generated_files/device_config.p1 ${OBJECTDIR}/mcc_generated_files/pin_manager.p1 ${OBJECTDIR}/mcc_generated_files/eusart.p1 ${OBJECTDIR}/mcc_generated_files/interrupt_manager.p1 ${OBJECTDIR}/mcc_generated_files/tmr1.p1 ${OBJECTDIR}/mcc_generated_files/memory.p1 ${OBJECTDIR}/modules/comander/comander.p1 ${OBJECTDIR}/modules/communicatior/communicator.p1 ${OBJECTDIR}/modules/eeprom/eeprom.p1 ${OBJECTDIR}/modules/parser/json-parser/json-parser.p1 ${OBJECTDIR}/modules/parser/parser.p1 ${OBJECTDIR}/modules/receiver/receiver.p1 ${OBJECTDIR}/modules/timer/timer.p1 ${OBJECTDIR}/modules/transmitter/transmitter.p1 ${OBJECTDIR}/main.p1
+OBJECTFILES=${OBJECTDIR}/mcc_generated_files/mcc.p1 ${OBJECTDIR}/mcc_generated_files/device_config.p1 ${OBJECTDIR}/mcc_generated_files/pin_manager.p1 ${OBJECTDIR}/mcc_generated_files/eusart.p1 ${OBJECTDIR}/mcc_generated_files/interrupt_manager.p1 ${OBJECTDIR}/mcc_generated_files/tmr1.p1 ${OBJECTDIR}/mcc_generated_files/memory.p1 ${OBJECTDIR}/modules/comander/comander.p1 ${OBJECTDIR}/modules/communicatior/communicator.p1 ${OBJECTDIR}/modules/eeprom/eeprom.p1 ${OBJECTDIR}/modules/esp/esp.p1 ${OBJECTDIR}/modules/parser/json-parser/json-parser.p1 ${OBJECTDIR}/modules/parser/parser.p1 ${OBJECTDIR}/modules/receiver/receiver.p1 ${OBJECTDIR}/modules/timer/timer.p1 ${OBJECTDIR}/modules/transmitter/transmitter.p1 ${OBJECTDIR}/main.p1
 
 # Source Files
-SOURCEFILES=mcc_generated_files/mcc.c mcc_generated_files/device_config.c mcc_generated_files/pin_manager.c mcc_generated_files/eusart.c mcc_generated_files/interrupt_manager.c mcc_generated_files/tmr1.c mcc_generated_files/memory.c modules/comander/comander.c modules/communicatior/communicator.c modules/eeprom/eeprom.c modules/parser/json-parser/json-parser.c modules/parser/parser.c modules/receiver/receiver.c modules/timer/timer.c modules/transmitter/transmitter.c main.c
+SOURCEFILES=mcc_generated_files/mcc.c mcc_generated_files/device_config.c mcc_generated_files/pin_manager.c mcc_generated_files/eusart.c mcc_generated_files/interrupt_manager.c mcc_generated_files/tmr1.c mcc_generated_files/memory.c modules/comander/comander.c modules/communicatior/communicator.c modules/eeprom/eeprom.c modules/esp/esp.c modules/parser/json-parser/json-parser.c modules/parser/parser.c modules/receiver/receiver.c modules/timer/timer.c modules/transmitter/transmitter.c main.c
 
 
 CFLAGS=
@@ -162,6 +162,13 @@ ${OBJECTDIR}/modules/eeprom/eeprom.p1: modules/eeprom/eeprom.c  nbproject/Makefi
 	@${RM} ${OBJECTDIR}/modules/eeprom/eeprom.p1 
 	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1  -fno-short-double -fno-short-float -O0 -fasmfile -Og -maddrqual=ignore -xassembler-with-cpp -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-osccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall $(COMPARISON_BUILD)  -std=c99 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/modules/eeprom/eeprom.p1 modules/eeprom/eeprom.c 
 	@${FIXDEPS} ${OBJECTDIR}/modules/eeprom/eeprom.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
+	
+${OBJECTDIR}/modules/esp/esp.p1: modules/esp/esp.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/modules/esp" 
+	@${RM} ${OBJECTDIR}/modules/esp/esp.p1.d 
+	@${RM} ${OBJECTDIR}/modules/esp/esp.p1 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1  -fno-short-double -fno-short-float -O0 -fasmfile -Og -maddrqual=ignore -xassembler-with-cpp -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-osccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall $(COMPARISON_BUILD)  -std=c99 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/modules/esp/esp.p1 modules/esp/esp.c 
+	@${FIXDEPS} ${OBJECTDIR}/modules/esp/esp.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 ${OBJECTDIR}/modules/parser/json-parser/json-parser.p1: modules/parser/json-parser/json-parser.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/modules/parser/json-parser" 
@@ -275,6 +282,13 @@ ${OBJECTDIR}/modules/eeprom/eeprom.p1: modules/eeprom/eeprom.c  nbproject/Makefi
 	@${RM} ${OBJECTDIR}/modules/eeprom/eeprom.p1 
 	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -fno-short-double -fno-short-float -O0 -fasmfile -Og -maddrqual=ignore -xassembler-with-cpp -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-osccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall $(COMPARISON_BUILD)  -std=c99 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/modules/eeprom/eeprom.p1 modules/eeprom/eeprom.c 
 	@${FIXDEPS} ${OBJECTDIR}/modules/eeprom/eeprom.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
+	
+${OBJECTDIR}/modules/esp/esp.p1: modules/esp/esp.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/modules/esp" 
+	@${RM} ${OBJECTDIR}/modules/esp/esp.p1.d 
+	@${RM} ${OBJECTDIR}/modules/esp/esp.p1 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -fno-short-double -fno-short-float -O0 -fasmfile -Og -maddrqual=ignore -xassembler-with-cpp -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-osccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall $(COMPARISON_BUILD)  -std=c99 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/modules/esp/esp.p1 modules/esp/esp.c 
+	@${FIXDEPS} ${OBJECTDIR}/modules/esp/esp.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 ${OBJECTDIR}/modules/parser/json-parser/json-parser.p1: modules/parser/json-parser/json-parser.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/modules/parser/json-parser" 

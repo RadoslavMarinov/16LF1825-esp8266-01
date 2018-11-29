@@ -10,6 +10,17 @@
 
 #include <stdint.h>
 
+#define MODULE_NAME receiver
+
+/******************************************************************************* 
+ * CONDITIONALS
+ ******************************************************************************/
+#ifdef CONFIG_raiseError
+    #define __addGlobalError()   do{CONFIG_raiseError(MODULE_NAME);}while(0)
+#else
+    #define __addGlobalError()   
+#endif
+
 
 /* Init data structure  */
 #define RECEIVER_CIRC_BUFFER_SIZE 256U
@@ -66,7 +77,7 @@ typedef struct {
 
 /* Circular Buffer */
 #define CbError                 (receiver_self.err)
-#define SET_err(err)            do{ CbError.err = 1; }while(0)    
+#define SET_err(err)            do{ CbError.err = 1; __addGlobalError();}while(0)    
 #define CLEAR_err(err)            do{ CbError.err = 0; }while(0)    
 
 /* FRAME BUFFER*/

@@ -18,7 +18,24 @@
 #include "mcc_generated_files/tmr1.h"
 #include "mcc_generated_files/pin_manager.h"
 
-/* CONDITIONAL COMPILATION */
+/******************************** APPLICATION ERROR MONITOR *******************************/
+
+struct {
+    unsigned int comander:1;
+    unsigned int communicator:1;
+    unsigned int eeprom:1;
+    unsigned int esp:1;
+    unsigned int parser:1;
+    unsigned int receiver:1;
+    unsigned int timer:1;
+    unsigned int transmitter:1;
+}config_appErrors;
+
+#define CONFIG_raiseError(err)          do{config_appErrors.err = 1;}while(0)
+#define CONFIG_clearError(err)          do{config_appErrors.err = 0;}while(0)
+
+
+/********************************* CONDITIONAL COMPILATION *********************************/
 #define UNDER_TEST
 #define CONFIG_stopHere()  do{ ; }while(1)
 

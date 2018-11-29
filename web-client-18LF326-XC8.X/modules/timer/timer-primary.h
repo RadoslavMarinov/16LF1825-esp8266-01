@@ -11,6 +11,18 @@
 #include "../../config.h"
 #include "timer.h"
 
+
+#define MODULE_NAME timer
+
+/******************************************************************************* 
+ * CONDITIONALS
+ ******************************************************************************/
+#ifdef CONFIG_raiseError
+    #define __addGlobalError()   do{CONFIG_raiseError(MODULE_NAME);}while(0)
+#else
+    #define __addGlobalError()   
+#endif
+
 /***************************************************
  Required interfaces
  **************************************************/
@@ -48,7 +60,7 @@ typedef struct {
 
 //ERRORS
 #define __errors                           (timer_self.errors)
-#define __setError(err)                     do{ __errors.err = 1; }while(0)
+#define __setError(err)                     do{ __errors.err = 1; __addGlobalError();}while(0)
 #define __isRaisedError(err)                (__errors.err == 1 ? true : false )
 
 // Expiration Time in Ticks

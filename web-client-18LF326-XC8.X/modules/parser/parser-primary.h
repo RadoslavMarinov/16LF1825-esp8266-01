@@ -8,6 +8,18 @@
 #ifndef PARSER_PRIMARY_H
 #define	PARSER_PRIMARY_H
 
+#define MODULE_NAME parser
+
+/******************************************************************************* 
+ * CONDITIONALS
+ ******************************************************************************/
+#ifdef CONFIG_raiseError
+    #define __addGlobalError()   do{CONFIG_raiseError(MODULE_NAME);}while(0)
+#else
+    #define __addGlobalError()   
+#endif
+
+
 typedef struct {
 }Self;
 

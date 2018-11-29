@@ -7,30 +7,37 @@
 #include "modules/transmitter/transmitter-primary.h"
 #include "modules/eeprom/eeprom.h"
 #include "modules/timer/timer.h"
+#include "modules/esp/esp.h"
 
 /*
  *  TODO:
- *  remove receiver_start from receiver_init
  * remove LED_GREEN_ON from parser 
+ * 
+ * 013DC
  */ 
-void enableEsp(void){
-    ESP_ENABLE();
-    ESP_RESET_DISABLE();
-    LED_RED_ON();
-    LED_GREEN_OFF();
-//    receiver_start();
+
+//void enableEsp(void){
+//    ESP_ENABLE();
+//    ESP_RESET_DISABLE();
+//    LED_RED_ON();
+//    LED_GREEN_OFF();
+////    receiver_start();
+//    timer_start(timer_getTicksFromMS(ESP_RESET_MSG_TIME_MS) , receiver_start);
+//}
+
+void callBack(void){
     timer_start(timer_getTicksFromMS(ESP_RESET_MSG_TIME_MS) , receiver_start);
 }
-
 
 void main(void)
 {
 
     main_init();
     LED_GREEN_ON();
+    ESP_ENABLE();
 //    enableEsp();
-    timer_start(timer_getTicksFromMS(ESP_RESET_TIME_MS) , enableEsp);
-
+//    
+    esp_reset(timer_getTicksFromMS(ESP_RESET_TIME_MS), callBack);
     
     
     while (1)

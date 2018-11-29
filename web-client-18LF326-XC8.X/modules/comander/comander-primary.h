@@ -13,6 +13,11 @@
 
 #define COMMAND_NOT_FOUND 0xFFFFU
 
+#ifdef CONFIG_raiseError
+    #define __addGlobalError()   do{CONFIG_raiseError(esp);}while(0)
+#else
+    #define __addGlobalError()   
+#endif
 
 #ifndef JSON_KEY_MAX_LEN
 #error "Missing required: JSON_KEY_MAX_LEN "

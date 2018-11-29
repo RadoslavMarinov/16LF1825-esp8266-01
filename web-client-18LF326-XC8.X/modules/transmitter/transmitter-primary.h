@@ -8,6 +8,18 @@
 #ifndef TRANSMITTER_PRIMARY_H
 #define	TRANSMITTER_PRIMARY_H
 
+#define MODULE_NAME transmitter
+
+/******************************************************************************* 
+ * CONDITIONALS
+ ******************************************************************************/
+#ifdef CONFIG_raiseError
+    #define __addGlobalError()   do{CONFIG_raiseError(MODULE_NAME);}while(0)
+#else
+    #define __addGlobalError()   
+#endif
+
+
 typedef enum {
     stReady,
     stBusy,

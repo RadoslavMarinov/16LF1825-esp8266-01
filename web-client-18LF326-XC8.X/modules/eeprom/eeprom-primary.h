@@ -10,6 +10,18 @@
 
 #include "eeprom.h"
 
+#define MODULE_NAME eeprom
+
+/******************************************************************************* 
+ * CONDITIONALS
+ ******************************************************************************/
+#ifdef CONFIG_raiseError
+    #define __addGlobalError()   do{CONFIG_raiseError(MODULE_NAME);}while(0)
+#else
+    #define __addGlobalError()   
+#endif
+
+
 /******************************************************************************* 
  * CONFIGURATION
  ******************************************************************************/
@@ -50,7 +62,7 @@ typedef struct {
  * ERRORS
  ******************************************************************************/
 #define __errors        (eeprom_self.errors)
-#define __raiseErr(err)   do{ __errors.err  = 1; }while(0)
+#define __raiseErr(err)   do{ __errors.err  = 1; __addGlobalError();}while(0)
 #define __clearErr(err)   do{ __errors.err  = 0; }while(0)
 
 #endif	/* EEPROM_MNG_PRIMARY_H */

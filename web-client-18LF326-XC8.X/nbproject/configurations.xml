@@ -52,6 +52,11 @@
           <itemPath>modules/eeprom/eeprom.c</itemPath>
           <itemPath>modules/eeprom/eeprom.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="esp" displayName="esp" projectFiles="true">
+          <itemPath>modules/esp/esp.c</itemPath>
+          <itemPath>modules/esp/esp-primary.h</itemPath>
+          <itemPath>modules/esp/esp.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="parser" displayName="parser" projectFiles="true">
           <logicalFolder name="json-parser" displayName="json-parser" projectFiles="true">
             <itemPath>modules/parser/json-parser/json-parser-primary.h</itemPath>
