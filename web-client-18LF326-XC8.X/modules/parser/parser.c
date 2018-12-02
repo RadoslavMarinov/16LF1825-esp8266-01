@@ -34,3 +34,28 @@ Parser_Codes parser_analyse(uint8_t * data, uint16_t len) {
     }
     return code;
 }
+
+uint8_t parser_substring(const char * subStr, const char * superStr){
+
+	char * super;
+	char * sub;
+
+	super  = (char*)superStr;
+	sub = (char*)subStr;
+
+    while( *super != '\0'){
+        while(*sub != *super && *super != '\0'){
+            super++;
+        }
+        while(*sub == *super && *sub != '\0'){
+            sub++;
+            super++;
+        }
+        if(*sub == '\0'){
+            return true;
+        }
+        sub = (char*)subStr;
+    }
+    return false;
+
+}

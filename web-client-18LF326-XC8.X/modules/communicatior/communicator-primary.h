@@ -39,6 +39,19 @@
 #error "Missing required ESP_AP_ENC"
 #endif 
 
+#ifndef ESP_AP_IP
+#error "Missing required ESP_AP_IP"
+#endif 
+
+#ifndef ESP_AP_GATEWAY
+#error "Missing required ESP_AP_GATEWAY"
+#endif 
+
+
+#ifndef ESP_AP_SUBNET
+#error "Missing required ESP_AP_SUBNET"
+#endif 
+
 
 /******************************************************************************* 
  * 
@@ -59,6 +72,11 @@ typedef enum {
     stSetWifiMode,
     stJoinAp,
     stSetAp,
+    stEnableDhcp,
+    stSetApAddr,
+    stSetConnsMultSingle,
+    stConfServer,
+    sthttpServer,
     stConnectServer,  
     stSeMsgLength,
     stUpdateServer,
@@ -149,6 +167,11 @@ static void enterState_turnOffEcho(void);
 static void enterSt_setWifiMode(communicator_EspMode espMode);
 static void enterSt_connectToAp(void);
 static void enterSt_setAp(void);
+static void enterState_enableDhcp(communicator_EspMode mode, uint8_t enable);
+static void enterSt_setApAddr(void);
+static void enterState_enableServerMultipleConnections(uint8_t yes);
+static void enterState_confServer(const char *portStr);
+static void enterState_httpServer(void);
 static void enterState_connectServer(void);
 static void enterState_setMsgLength(void);
 static uint8_t enterState_updateServer(void);
@@ -162,6 +185,14 @@ static const char COMMAND_CONNECT_SERVER[] = "AT+CIPSTART=\"TCP\",\"electricity-
 static const char COMMAND_SET_AP[]  = 
     "AT+CWSAP=\""ESP_AP_SSID"\",\""ESP_AP_PWD"\","ESP_AP_CH","ESP_AP_ENC"\r\n";
 //"AT+CWSAP=\"esp_123\",\"1234test\",5,3\r\n";
+
+static const char COMMAND_SET_AP_ADDR[] = 
+     "AT+CIPAP_DEF=\"" ESP_AP_IP "\",\""  ESP_AP_GATEWAY "\",\"" ESP_AP_SUBNET "\"\r\n";
+
+static const char COMMAND_SET_MULT_CONNS[] = "AT+CIPMUX=1\r\n";
+static const char COMMAND_SET_SINGLE_CONN[] = "AT+CIPMUX=0\r\n";
+
+
 
 static const char COMMAND_POST_SERVER_UPDATE[] = 
     "POST "CONF_SERVER_UPDATE_ROUTE" HTTP/1.1\r\nHost: "CONF_SERVER_HOST"\r\n\r\n";

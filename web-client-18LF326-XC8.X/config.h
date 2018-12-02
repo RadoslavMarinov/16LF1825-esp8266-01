@@ -98,6 +98,13 @@ struct {
 #define ESP_AP_PWD          "rikomari12"
 #define ESP_AP_CH           "5"          
 #define ESP_AP_ENC          "3"
+
+//ACCESS POINT ADDRESSESS
+#define ESP_AP_IP       "192.168.2.1"
+#define ESP_AP_GATEWAY  "192.168.2.1"
+#define ESP_AP_SUBNET   "255.255.255.0"
+
+
 /*********************************** A ***********************************/
 #endif	/* CONFIG_H */
 

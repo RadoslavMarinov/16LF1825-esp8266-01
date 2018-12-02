@@ -109,17 +109,28 @@ static char* copyVal(char * valStAddr ){
     }
     return src;
 }
-
+/*
+ * This function is complicated because it has to return two things:
+ * 1: the integer value of the string
+ * 2: the end address of the string value. This one is returned by changing
+ *      pointer "numStrStAddr" itself. 
+ * 
+ * To understand how this function works it helps to see how is it invoked.
+ * 
+ * Please consider changing this hacker-like messy
+ *  code by just returning a structure.
+ */
 static uint16_t getNumFromStr(char * numStrStAddr, char **numStrLastAddr){
     uint16_t power = 1;
     char *endAddr;
     char * dig;
     uint16_t val = 0;
     dig = numStrStAddr;
-    while(*dig >= '0' && *dig <= '9'){
+    while(*dig >= '0' && *dig <= '9'){ //Position "dig" to the end char
         dig++;
     }
-    endAddr = --dig;
+    // "dig" passed the end char by 1. Return to the end char
+    endAddr = --dig; // Need endAddr to change the "numStrStAddr" the end of the program
     while( dig >= numStrStAddr ){
         val += ( (*dig) - 48 ) * power;
         power *= 10;

@@ -155,6 +155,89 @@ static void enterSt_setAp(void){
     } 
 }
 
+static void enterState_enableDhcp(communicator_EspMode mode, uint8_t enable){
+    __setState(stEnableDhcp);
+    strcpy(__txBuff, "AT+CWDHCP=");
+    // Append first argument
+    switch(mode){
+        case communicator_espModeStation:{
+            strcat(__txBuff, "1,");
+            break;
+        } 
+        case communicator_espModeAccessPoint:{
+            strcat(__txBuff, "0,");
+            break;
+        }
+        case communicator_espModeDual: {
+            strcat(__txBuff, "2,");
+            break;
+        }
+        default:{
+            
+        }
+    }
+    // Append second argument
+    if(enable){
+        strcat(__txBuff, "1\r\n");
+    } else {
+        strcat(__txBuff, "0\r\n");
+    }
+    // Send the string
+    if( false == __trSend(__txBuff, strlen(__txBuff)) ){
+        #ifdef UNDER_TEST
+        __raiseErr(errTrBusy);
+        CONFIG_stopHere();
+        #endif
+    }
+    
+}
+
+static void enterSt_setApAddr(void){
+    __setState(stSetApAddr);
+    if( false == __trSend(COMMAND_SET_AP_ADDR, sizeof(COMMAND_SET_AP_ADDR) - 1) ){
+            #ifdef UNDER_TEST
+            __raiseErr(errTrBusy);
+            CONFIG_stopHere();
+            #endif
+        } 
+}
+
+static void enterState_enableServerMultipleConnections(uint8_t yes){
+    __setState(stSetConnsMultSingle);
+    if(yes){
+        if( false == __trSend(COMMAND_SET_MULT_CONNS, sizeof(COMMAND_SET_MULT_CONNS) - 1) ){
+            #ifdef UNDER_TEST
+            __raiseErr(errTrBusy);
+            CONFIG_stopHere();
+            #endif
+        }   
+    } else {
+        if( false == __trSend(COMMAND_SET_SINGLE_CONN, sizeof(COMMAND_SET_SINGLE_CONN) - 1) ){
+            #ifdef UNDER_TEST
+            __raiseErr(errTrBusy);
+            CONFIG_stopHere();
+            #endif
+        } 
+    }
+}
+
+static void enterState_confServer(const char *portStr){
+    __setState(stConfServer);
+    strcpy( (char*)__txBuff, "AT+CIPSERVER=1,");
+    strcat(__txBuff, portStr);
+    strcat(__txBuff, "\r\n");
+    if( false == __trSend(__txBuff, strlen(__txBuff)) ){
+        #ifdef UNDER_TEST
+        __raiseErr(errTrBusy);
+        CONFIG_stopHere();
+        #endif
+    }
+}
+
+void enterState_httpServer(void){
+    __setState(sthttpServer);
+}
+
 static void enterState_connectServer(){
     __setState(stConnectServer);
     if( false == __trSend(COMMAND_CONNECT_SERVER, sizeof(COMMAND_CONNECT_SERVER) - 1 ) ){
@@ -207,13 +290,14 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
     
     if(code == (Parser_Codes)parserCode_Ok) {
         switch(__state){
+            //------------
             case stTurnOffEcho:{
                 //exitSt_TurnOffEcho();
                 enterSt_setWifiMode(__espMode);
                 break;
             }
+            //------------
             case stSetWifiMode:{
-                //==
                 switch(__espMode){
                     case communicator_espModeStation:{
                         enterSt_connectToAp();
@@ -230,24 +314,54 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
                         
                     }
                 }
-                //==
-                
                 break;
             }
+            //------------
+            case stSetAp:{
+                enterState_enableDhcp(communicator_espModeAccessPoint, true);
+                break;
+            }
+            //------------
+            case stEnableDhcp:{
+                enterSt_setApAddr();
+                break;
+            }
+            //------------
+            case stSetApAddr:{
+                enterState_enableServerMultipleConnections(true);
+                break;
+            }
+            //------------
+            case stSetConnsMultSingle:{
+                enterState_confServer("80");
+                break;
+            }
+            
+            //------------
+            case stConfServer:{
+                enterState_httpServer();
+                break;
+            }
+            
+            //------------
             case stJoinAp:{
                 enterState_connectServer();
                 break;
             }
+            //------------
             case stConnectServer:{
                 enterState_setMsgLength();
                 break;
             }
+            //------------
             case stSeMsgLength:{
                 enterState_updateServer();
                 break;
             }
+            //------------
             default:
                 break;
+            //------------
         }
     } else if(code == (Parser_Codes)parserCode_Json ){
             jsonParser_analyse((char*)&data[len - 7]);  //Should Point to "}"
