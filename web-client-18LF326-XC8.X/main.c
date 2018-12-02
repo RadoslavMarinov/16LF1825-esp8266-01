@@ -66,7 +66,12 @@ void gpio_init(void){
 }
 
 static void onEspReset(void){
-    timer_start(timer_getTicksFromMS(ESP_RESET_MSG_TIME_MS) , receiver_start);
+    timer_start(timer_getTicksFromMS(ESP_RESET_MSG_TIME_MS) , start_communication);
+}
+
+static void start_communication(void){
+    receiver_start();
+    communicator_initEsp();
 }
 
 /**

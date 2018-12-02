@@ -85,7 +85,7 @@ typedef enum {
 typedef struct{
     union {
     struct{
-        unsigned int evReset : 1;
+        unsigned int evInitEsp : 1;
         unsigned int evWaitReceiver : 1;
     };
     uint8_t evsCont;
@@ -159,11 +159,12 @@ typedef struct {
 /********************************************************
  * STATIC FUNCTION DECLARATIONS
  *******************************************************/
-static uint8_t handleEvReset(void);
-static uint8_t dispatchEvReset(void);
+static uint8_t dispatchEvInitEsp(void);
+
 static uint8_t dispatchEventWaitReceiver(void);
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len);
-static void enterState_turnOffEcho(void);
+static void enterSt_turnOffEcho(void);
+
 static void enterSt_setWifiMode(communicator_EspMode espMode);
 static void enterSt_connectToAp(void);
 static void enterSt_setAp(void);

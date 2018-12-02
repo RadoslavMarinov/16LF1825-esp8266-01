@@ -16,15 +16,18 @@ Self comm_self;
 uint8_t communicator_task(void){
     uint8_t didWork = false;
     if( __isPendingEv() ) {
-        if( __isRaisedEv(evReset) ){
-            didWork = dispatchEvReset();
+        if( __isRaisedEv(evInitEsp) ){
+            __clearEv(evInitEsp);
+            didWork = dispatchEvInitEsp();
         }
+//        else if(__isRaisedEv(ev...)){
+//            
+//        }
         else if(__isRaisedEv(evWaitReceiver)){
             if(dispatchEventWaitReceiver()){
                 __clearEv(evWaitReceiver);
                 didWork = true;
-            }
-            
+            }    
         }
     }
     return didWork;
@@ -34,16 +37,18 @@ uint8_t communicator_task(void){
 void communicator_init(uint8_t start, communicator_EspMode espMode){
     __setEspMode(espMode);
     communicator_initSelf();
-    receiver_init(handleMessage, false);
+    receiver_init(parser_analyse, handleMessage, false);
     transmitter_init(NULL);
     
 //    parser_init(handleMessage);
     if(start){
-        __raiseEv(evReset);
+//        __raiseEv(evReset);
     }
 }
 
-
+void communicator_initEsp(void){
+    __raiseEv(evInitEsp);
+}
 
 
 
@@ -61,9 +66,11 @@ static void communicator_initSelf(void){
 /************************************************************************
  * STATIC EVENT DISPATCHERS
  ***********************************************************************/
-static uint8_t dispatchEvReset(void) {
-    return handleEvReset();
+static uint8_t dispatchEvInitEsp(void){
+    enterSt_turnOffEcho();
+    return true;
 }
+
 
 static uint8_t dispatchEventWaitReceiver(void) {
     switch (__state) {
@@ -82,12 +89,12 @@ static uint8_t dispatchEventWaitReceiver(void) {
 /************************************************************************
  * STATIC EVENT HANDLERS
  ***********************************************************************/
-static uint8_t handleEvReset(void){
-    communicator_init(false, __espMode);
-    transmitter_send((uint8_t*)COMMAND_RESET, sizeof(COMMAND_RESET) - 1);
-    __setState(stReset);
-    return true;
-}
+//static uint8_t handleEvReset(void){
+//    communicator_init(false, __espMode);
+//    transmitter_send((uint8_t*)COMMAND_RESET, sizeof(COMMAND_RESET) - 1);
+//    __setState(stReset);
+//    return true;
+//}
 
 /************************************************************************
  * STATIC STATE TRANSITION

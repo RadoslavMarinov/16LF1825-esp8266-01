@@ -16,6 +16,7 @@ typedef enum{
 
 void communicator_init(uint8_t start, communicator_EspMode espMode);
 uint8_t communicator_task(void);
+void communicator_initEsp(void);
 
 
 #endif	/* COMMUNICATOR_H */

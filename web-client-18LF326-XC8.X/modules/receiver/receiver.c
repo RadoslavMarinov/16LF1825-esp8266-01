@@ -18,7 +18,7 @@ uint8_t receiver_task(void){
         if( data == 0x0D || data == 0x0A ) {
             if(frStarted){
                 receiver_push2FrameBuff('\0');
-                p_code =  parser_analyse((uint8_t *)frBuffData,  frBuffSize) ;
+                p_code =  __onFrame((char*)frBuffData,  frBuffSize) ;
                 if( p_code != parserCode_Unknown ) {
                     //Resets frame buffer, starts to fill from 0
                     ((Parser_OnMsg)__onMessage)(p_code, (uint8_t*)frBuffData, frBuffSize);
@@ -38,9 +38,12 @@ uint8_t receiver_task(void){
 }
 
 /* Interfaces */
-void receiver_init(Receiver_OnMsg onMsg, uint8_t start){
+void receiver_init(receiver_OnFrame onFrame, Receiver_OnMsg onMsg, uint8_t start){
     if(onMsg){
         __setOnMsg(onMsg);
+    }
+    if(onFrame != NULL){
+        __setOnFrame(onFrame);
     }
     receiver_resetCircBuff();
     receiver_resetFrBuff();

@@ -8,7 +8,8 @@
 #ifndef RECEIVER_PRIMARY_H
 #define	RECEIVER_PRIMARY_H
 
-#include <stdint.h>
+#include "../../config.h"
+#include "receiver.h"
 
 #define MODULE_NAME receiver
 
@@ -43,6 +44,7 @@ typedef struct {
     unsigned int circBuffOverPop :1; // Trying to pop more than CircBuff is filled with
     unsigned int frameBuffOverflow :1;
     unsigned int uart_overrun :1;
+    unsigned int errGarbageData :1;
 }Errors;
 
 // Cic Buffer
@@ -64,6 +66,7 @@ typedef struct {
     Errors err;
     CircBuff cb;
     FrameBuff frBuff;
+    receiver_OnFrame onFrame;
     void * onMessage;
 }SelfData;
 
@@ -78,7 +81,8 @@ typedef struct {
 /* Circular Buffer */
 #define CbError                 (receiver_self.err)
 #define SET_err(err)            do{ CbError.err = 1; __addGlobalError();}while(0)    
-#define CLEAR_err(err)            do{ CbError.err = 0; }while(0)    
+#define CLEAR_err(err)  \
+            do{ CbError.err = 0;  }while(0)    
 
 /* FRAME BUFFER*/
 #define FRAME_Buff              (receiver_self.frBuff)
@@ -89,9 +93,13 @@ typedef struct {
 #define LOCK_frameBuff()        do{ frBuffLocked = 1; }while(0)
 #define UNLOCK_frameBuff()      do{ frBuffLocked = 0; }while(0)
 
+// On Frame 
+#define __onFrame               (receiver_self.onFrame)
+#define __setOnFrame(cb)        do{ __onFrame = (cb); }while(0)
 
 #define __onMessage             ( receiver_self.onMessage )
 #define __setOnMsg(cb)          do{ __onMessage = (cb); }while(0)
+
 
 /* UART */
 #define ENABLE_RxInterrupt()    do{ PIE1bits.RCIE = 1; }while(0)

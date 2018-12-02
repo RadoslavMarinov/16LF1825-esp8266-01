@@ -7,27 +7,25 @@
 
 
 /* Detects if frame is terminat*/
-Parser_Codes parser_analyse(uint8_t * data, uint16_t len) {
-    int16_t lasFrStIdx = (len-1);
+Parser_Codes parser_analyse(char * frameStAddr, uint16_t len) {
+
+    char * curr = (char *)( frameStAddr + (len - 1) ); /*  "curr"should point to '\0'
+                                                  * which is the end of the string/frame
+                                                  */  
     uint8_t ch;
     
     Parser_Codes code = 0;
     
-    do{
-        lasFrStIdx--;
-        ch = data[lasFrStIdx];
-    } while(data[lasFrStIdx] != '\0' && lasFrStIdx > -1 );
-    
-    lasFrStIdx++;
+    curr = getStartOfStr(curr, len);
     
     /* Wait Message terminator "ERROR" | "OK" | "ready" */    
-    if( strcmp((char *)&data[lasFrStIdx], "OK") == 0 ){
+    if( strcmp(curr, "OK") == 0 ){
         code = parserCode_Ok;
-    } else if(strcmp((char *)&data[lasFrStIdx], "JSON") == 0 ){      
+    } else if(strcmp(curr, "JSON") == 0 ){      
         code = parserCode_Json;        
-    } else if(strcmp((char *)&data[lasFrStIdx], "ERROR") == 0 ){
+    } else if(strcmp(curr, "ERROR") == 0 ){
         code = parserCode_Error;
-    } else if(strcmp((char *)&data[lasFrStIdx], "ready") == 0 ){
+    } else if(strcmp(curr, "ready") == 0 ){
         code = parserCode_Ready;
     } else {
         return parserCode_Unknown;
@@ -37,25 +35,39 @@ Parser_Codes parser_analyse(uint8_t * data, uint16_t len) {
 
 uint8_t parser_substring(const char * subStr, const char * superStr){
 
-	char * super;
+	char * sup;
+	char * csupr;
 	char * sub;
 
-	super  = (char*)superStr;
+	sup  = (char*)superStr;
 	sub = (char*)subStr;
 
-    while( *super != '\0'){
-        while(*sub != *super && *super != '\0'){
-            super++;
-        }
-        while(*sub == *super && *sub != '\0'){
-            sub++;
-            super++;
-        }
-        if(*sub == '\0'){
-            return true;
-        }
-        sub = (char*)subStr;
-    }
-    return false;
+	while(*sup != '\0'){
+		csupr = sup;
+		while(*sub == *csupr && *sub != '\0'){
+			sub++;
+			csupr++;
+		}
 
+		if(*sub == '\0'){
+			return true;
+		} else {
+			sup++;
+			sub = (char*)subStr;
+		}
+	}
+
+    return false;
+}
+/* "endCh is assumed to point to the end of string or the '\0' character"*/
+static char * getStartOfStr(char * endCh, uint16_t len){
+    int16_t length;
+    char * ch;
+    length = len;
+    ch = endCh;
+    do{
+        ch--;
+        length--;
+    } while(*ch != '\0' && length > 0 );
+    return ++ch;
 }

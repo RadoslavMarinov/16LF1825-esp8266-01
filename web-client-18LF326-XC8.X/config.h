@@ -49,7 +49,7 @@ struct {
 /*********************************** Interfaces ***********************************/
 // Main
 //The time taken to hold the ESP  in reset (viaRESET_PIN low)
-#define ESP_RESET_TIME_MS           (500U)
+#define ESP_RESET_TIME_MS           (300U)
 /*
  *  After released from reset, a long message is being sent from ESP.
  * That message causes receiver frame buffer overflow. To prevent 
@@ -60,7 +60,7 @@ struct {
  * because frame buffer overflows. 
  * During this time the recever is stopped and part of the message is thus ignored.
  */
-#define ESP_RESET_MSG_TIME_MS       (180U)
+#define ESP_RESET_MSG_TIME_MS       (500U)
 
 //Timer
 #define Timner_Ticks                TimerTicks    
