@@ -29,8 +29,8 @@ typedef struct{
     void (*transmitter_readyCb)(void);
     Transmitter_State state;
     uint8_t * data;
-    uint8_t dataSize;
-    uint8_t curIdx;
+    uint16_t dataSize;
+    uint16_t curIdx;
 }Transmitter_Self;
 
 /*********************************************************

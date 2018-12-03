@@ -17,7 +17,7 @@ void transmitter_init(void(*onReady)(void)){
 //    return IS_State(stBusy);
 //}
 
-uint8_t transmitter_send(uint8_t * data, uint8_t length){
+uint8_t transmitter_send(uint8_t * data, uint16_t length){
 //    SEND_Byte('R');
 //    TX1REG = 'R';
 //    PIE1bits.TXIE = 1;
