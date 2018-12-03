@@ -6,23 +6,29 @@
 static Self jsonParser_self;
 
 
-uint8_t jsonParser_analyse(char * lastAddr){
-    
+jsonParser_Code jsonParser_analyse(char * startAddr){ //Should point to '{' character
     char * data;
-#ifdef UNDER_TEST
-    uint16_t jsonStrLen = 0; 
-#endif
-    data = lastAddr;
-//    TODO: check if json is too long!
-    while( (*data) != '{' ){
-#ifdef UNDER_TEST
-        if( jsonStrLen++ > JSON_MAX_STR_LEN ){
-            __raiseErr(jsonStrTooLong);
-            CONFIG_stopHere();
-        }
-#endif
-        data--;
+    if(*startAddr != '{'){
+        return jsonParser_codeInvalidJson;
+    } else {
+        data = startAddr;
     }
+    
+    
+//#ifdef UNDER_TEST
+//    uint16_t jsonStrLen = 0; 
+//#endif
+//    data = lastAddr;
+////    TODO: check if json is too long!
+//    while( (*data) != '{' ){
+//#ifdef UNDER_TEST
+//        if( jsonStrLen++ > JSON_MAX_STR_LEN ){
+//            __raiseErr(jsonStrTooLong);
+//            CONFIG_stopHere();
+//        }
+//#endif
+//        data--;
+//    }
 
     while((*data) != '}' ){
         data++;
@@ -36,11 +42,11 @@ uint8_t jsonParser_analyse(char * lastAddr){
     }
     
     
-    return 0;
+    return jsonParser_codeValidJson;
 }
 
 // Returns 
-char * jsonParser_parse( char * keyStartAddr ){ // startAddr should point to '{'
+char * jsonParser_parse( char * keyStartAddr ){ 
 
     char * data;            
     data = keyStartAddr;  //Data should point to '"'

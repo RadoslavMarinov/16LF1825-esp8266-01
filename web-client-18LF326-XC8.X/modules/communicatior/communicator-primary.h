@@ -95,6 +95,7 @@ typedef struct{
 typedef struct {
     unsigned int errTrBusy : 1; // When calling transmitter_send while busy
     unsigned int errEvWaitReceiverRaisedInWrongState : 1;
+    unsigned int errEspErrorMessage : 1;
 }Errors;
 
 typedef struct {
@@ -159,12 +160,14 @@ typedef struct {
 /********************************************************
  * STATIC FUNCTION DECLARATIONS
  *******************************************************/
+/******************** DISPATCHERS ********************/
 static uint8_t dispatchEvInitEsp(void);
-
 static uint8_t dispatchEventWaitReceiver(void);
+static uint8_t dispatchMsgOk(void);
+/******************** HANDLERS ********************/
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len);
+/******************** TRAMSITIONS ********************/
 static void enterSt_turnOffEcho(void);
-
 static void enterSt_setWifiMode(communicator_EspMode espMode);
 static void enterSt_connectToAp(void);
 static void enterSt_setAp(void);
@@ -175,7 +178,9 @@ static void enterState_confServer(const char *portStr);
 static void enterState_httpServer(void);
 static void enterState_connectServer(void);
 static void enterState_setMsgLength(void);
-static uint8_t enterState_updateServer(void);
+static uint8_t enterSt_updateServer(void);
+
+/******************** OTHERS ********************/
 static void communicator_initSelf(void);
 
 static const char COMMAND_RESET[] = "AT+RST\r\n";

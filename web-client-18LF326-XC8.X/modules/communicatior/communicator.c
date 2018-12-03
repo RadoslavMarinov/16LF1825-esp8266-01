@@ -75,7 +75,7 @@ static uint8_t dispatchEvInitEsp(void){
 static uint8_t dispatchEventWaitReceiver(void) {
     switch (__state) {
         case stUpdateServer:{
-            return enterState_updateServer();
+            return enterSt_updateServer();
         }
         default:{
         #ifdef UNDER_TEST
@@ -84,6 +84,84 @@ static uint8_t dispatchEventWaitReceiver(void) {
         #endif
         }
     }
+}
+
+static uint8_t dispatchMsgOk(void) {
+    switch(__state){
+        //------------ STATE
+        case stTurnOffEcho:{
+            //exitSt_TurnOffEcho();
+            enterSt_setWifiMode(__espMode);
+            break;
+        }
+        //------------ STATE
+        case stSetWifiMode:{
+            switch(__espMode){
+                case communicator_espModeStation:{
+                    enterSt_connectToAp();
+                    break;
+                }
+                case communicator_espModeAccessPoint:{
+                    enterSt_setAp();
+                    break;
+                }
+                case communicator_espModeDual:{
+                    break;
+                }
+                default:{
+
+                }
+            }
+            break;
+        }
+        //------------ STATE
+        case stSetAp:{
+            enterState_enableDhcp(communicator_espModeAccessPoint, true);
+            break;
+        }
+        //------------ STATE
+        case stEnableDhcp:{
+            enterSt_setApAddr();
+            break;
+        }
+        //------------ STATE
+        case stSetApAddr:{
+            enterState_enableServerMultipleConnections(true);
+            break;
+        }
+        //------------ STATE
+        case stSetConnsMultSingle:{
+            enterState_confServer("80");
+            break;
+        }
+
+        //------------ STATE
+        case stConfServer:{
+            enterState_httpServer();
+            break;
+        }
+
+        //------------ STATE
+        case stJoinAp:{
+            enterState_connectServer();
+            break;
+        }
+        //------------ STATE
+        case stConnectServer:{
+            enterState_setMsgLength();
+            break;
+        }
+        //------------ STATE
+        case stSeMsgLength:{
+            enterSt_updateServer();
+            break;
+        }
+        //------------ STATE
+        default:
+            break;
+        //------------
+    }
+    return 0;
 }
 
 /************************************************************************
@@ -241,8 +319,9 @@ static void enterState_confServer(const char *portStr){
     }
 }
 
-void enterState_httpServer(void){
+static void enterState_httpServer(void){
     __setState(sthttpServer);
+    receiver_setOnFrameCb(parser_httpServer);
 }
 
 static void enterState_connectServer(){
@@ -270,7 +349,7 @@ static void enterState_setMsgLength(void){
     }
 }
 
-static uint8_t enterState_updateServer(void){
+static uint8_t enterSt_updateServer(void){
     
     __setState(stUpdateServer);
     
@@ -295,91 +374,29 @@ static uint8_t enterState_updateServer(void){
 //Parser_OnMsg
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
     
-    if(code == (Parser_Codes)parserCode_Ok) {
-        switch(__state){
-            //------------
-            case stTurnOffEcho:{
-                //exitSt_TurnOffEcho();
-                enterSt_setWifiMode(__espMode);
-                break;
-            }
-            //------------
-            case stSetWifiMode:{
-                switch(__espMode){
-                    case communicator_espModeStation:{
-                        enterSt_connectToAp();
-                        break;
-                    }
-                    case communicator_espModeAccessPoint:{
-                        enterSt_setAp();
-                        break;
-                    }
-                    case communicator_espModeDual:{
-                        break;
-                    }
-                    default:{
-                        
-                    }
-                }
-                break;
-            }
-            //------------
-            case stSetAp:{
-                enterState_enableDhcp(communicator_espModeAccessPoint, true);
-                break;
-            }
-            //------------
-            case stEnableDhcp:{
-                enterSt_setApAddr();
-                break;
-            }
-            //------------
-            case stSetApAddr:{
-                enterState_enableServerMultipleConnections(true);
-                break;
-            }
-            //------------
-            case stSetConnsMultSingle:{
-                enterState_confServer("80");
-                break;
-            }
-            
-            //------------
-            case stConfServer:{
-                enterState_httpServer();
-                break;
-            }
-            
-            //------------
-            case stJoinAp:{
-                enterState_connectServer();
-                break;
-            }
-            //------------
-            case stConnectServer:{
-                enterState_setMsgLength();
-                break;
-            }
-            //------------
-            case stSeMsgLength:{
-                enterState_updateServer();
-                break;
-            }
-            //------------
-            default:
-                break;
-            //------------
+    switch(code){
+        /***************** CODE ********************/
+        case parserCode_Ok:{
+            dispatchMsgOk();
+            break;
         }
-    } else if(code == (Parser_Codes)parserCode_Json ){
-            jsonParser_analyse((char*)&data[len - 7]);  //Should Point to "}"
-    } else if( code == (Parser_Codes)parserCode_Ready ) {
-        __clearAllEvents();
-        enterSt_turnOffEcho();
-    } else {
-        
+        /***************** CODE ********************/
+        case parserCode_Ready:{
+            __clearAllEvents();
+            enterSt_turnOffEcho();
+            break;
+        }
+        /***************** CODE ********************/
+        case parserCode_Error:{
+            __raiseErr(errEspErrorMessage);
+            break;
+        }
+        default:{
+            break;
+        }
     }
     
-     receiver_resetFrBuff();
+    receiver_resetFrBuff();
 
 }
 

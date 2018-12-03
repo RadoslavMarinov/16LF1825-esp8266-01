@@ -1,9 +1,11 @@
 #include "../../config.h"
 #include "parser-primary.h"
-#include "../receiver/receiver.h"
 #include "parser.h"
+#include "../receiver/receiver.h"
 #include "string.h"
 #include "json-parser/json-parser.h"
+#include "http-parser/http-parser.h"
+#include "../utils/utils.h"
 
 
 /* Detects if frame is terminat*/
@@ -12,18 +14,14 @@ Parser_Codes parser_analyse(char * frameStAddr, uint16_t len) {
     char * curr = (char *)( frameStAddr + (len - 1) ); /*  "curr"should point to '\0'
                                                   * which is the end of the string/frame
                                                   */  
-    uint8_t ch;
-    
-    Parser_Codes code = 0;
+    Parser_Codes code = parserCode_Unknown;
     
     curr = getStartOfStr(curr, len);
     
     /* Wait Message terminator "ERROR" | "OK" | "ready" */    
     if( strcmp(curr, "OK") == 0 ){
         code = parserCode_Ok;
-    } else if(strcmp(curr, "JSON") == 0 ){      
-        code = parserCode_Json;        
-    } else if(strcmp(curr, "ERROR") == 0 ){
+    }  else if(strcmp(curr, "ERROR") == 0 ){
         code = parserCode_Error;
     } else if(strcmp(curr, "ready") == 0 ){
         code = parserCode_Ready;
@@ -33,33 +31,47 @@ Parser_Codes parser_analyse(char * frameStAddr, uint16_t len) {
     return code;
 }
 
-uint8_t parser_substring(const char * subStr, const char * superStr){
+Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
+    char * cur = (char *)( frameStAddr + (len - 1) ); /*  "curr"should point to '\0'
+                                                        * which is the end of the string/frame
+                                                        */  
+    char * substrStart = NULL;
+    Parser_Codes code = parserCode_Unknown;
+    httpParser_HttpHeader *httpHeader;
+    cur = getStartOfStr(cur, len);
+    
 
-	char * sup;
-	char * csupr;
-	char * sub;
+    if( strncmp("+IPD", cur, 4) == 0 ){
+        cur += 4; // Skip "+IPD" and start after it.
+        substrStart = utils_substring(":", cur);
+        if(substrStart != NULL){
+            
+            cur = substrStart + 1; /*"cur" should point either to 
+                                    * http method first character, 
+                                    * or JSON first character '[' */
+            if(jsonParser_analyse(cur) == jsonParser_codeInvalidJson){
+                httpHeader = httpParser_parse(cur);
+            }
+            if(httpHeader != NULL){
+                switch(httpHeader->httpRoute){
+                    case __routeRoot:{
+//                        SERVER_HTML_HOME
+                        //Send the server page, but wait request-header reception to finish
+                        break;
+                    } default:{
+                        //Send page not found but wait request-header reception to finish
+                    }
+                }
+            }
+        }
+    }
 
-	sup  = (char*)superStr;
-	sub = (char*)subStr;
-
-	while(*sup != '\0'){
-		csupr = sup;
-		while(*sub == *csupr && *sub != '\0'){
-			sub++;
-			csupr++;
-		}
-
-		if(*sub == '\0'){
-			return true;
-		} else {
-			sup++;
-			sub = (char*)subStr;
-		}
-	}
-
-    return false;
+    return code;   
 }
-/* "endCh is assumed to point to the end of string or the '\0' character"*/
+
+    
+
+/*  "endCh is assumed to point to the end of string ('\0' character")  */
 static char * getStartOfStr(char * endCh, uint16_t len){
     int16_t length;
     char * ch;

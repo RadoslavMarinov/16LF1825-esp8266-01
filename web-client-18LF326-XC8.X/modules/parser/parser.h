@@ -24,9 +24,12 @@ typedef enum {
 
 typedef void(*Parser_OnMsg)(Parser_Codes code, uint8_t * data, uint16_t len);
 
-uint8_t parser_substring(const char * subStr, const char * superStr);
+
 
 Parser_Codes parser_analyse(char * frameStAddr, uint16_t len);
+Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len);
+
+
 
 #endif	/* PARSER_H */
 

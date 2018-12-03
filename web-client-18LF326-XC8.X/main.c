@@ -12,6 +12,7 @@
 
 /*
  *  TODO:
+ * Dont forget to reset frame buffer when parsing and handling is done!
  * What will do with handleEvReset /communicator.c
  * 
  * 013DC

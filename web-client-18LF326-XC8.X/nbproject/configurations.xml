@@ -58,6 +58,11 @@
           <itemPath>modules/esp/esp.h</itemPath>
         </logicalFolder>
         <logicalFolder name="parser" displayName="parser" projectFiles="true">
+          <logicalFolder name="http-parser" displayName="http-parser" projectFiles="true">
+            <itemPath>modules/parser/http-parser/http-parser-primary.h</itemPath>
+            <itemPath>modules/parser/http-parser/http-parser.c</itemPath>
+            <itemPath>modules/parser/http-parser/http-parser.h</itemPath>
+          </logicalFolder>
           <logicalFolder name="json-parser" displayName="json-parser" projectFiles="true">
             <itemPath>modules/parser/json-parser/json-parser-primary.h</itemPath>
             <itemPath>modules/parser/json-parser/json-parser.c</itemPath>
@@ -81,6 +86,11 @@
           <itemPath>modules/transmitter/transmitter-primary.h</itemPath>
           <itemPath>modules/transmitter/transmitter.c</itemPath>
           <itemPath>modules/transmitter/transmitter.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="utils" displayName="utils" projectFiles="true">
+          <itemPath>modules/utils/utils-primary.h</itemPath>
+          <itemPath>modules/utils/utils.c</itemPath>
+          <itemPath>modules/utils/utils.h</itemPath>
         </logicalFolder>
       </logicalFolder>
       <itemPath>main.c</itemPath>

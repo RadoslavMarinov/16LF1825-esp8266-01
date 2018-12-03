@@ -79,6 +79,11 @@ void receiver_resetFrBuff(void){
     frBuffSize = 0;
 }
 
+//
+void receiver_setOnFrameCb(receiver_OnFrame onFrame){
+    __setOnFrame(onFrame);
+}
+
 //HAVE SIDE EFECTS  - CARE WHEN USE !!!!!!!!!!!!!!!!!!!!!
 void receiver_push(uint8_t data){
         
