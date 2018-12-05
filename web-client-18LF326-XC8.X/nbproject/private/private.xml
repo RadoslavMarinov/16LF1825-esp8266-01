@@ -3,14 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/server/server.c</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/main.c</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/parser.h</file>
+            <file>file:/C:/Program%20Files/Microchip/xc8/v2.00/pic/sources/c99/common/Umul8.c</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/json-parser/json-parser.c</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/http-parser/http-parser.h</file>
-            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/http-parser/http-parser-primary.h</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/server/server.h</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/timer/timer.c</file>
+            <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/server/server-primary.h</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/http-parser/http-parser.c</file>
             <file>file:/D:/Projects/iot-esp-web/uc/web-client-18LF326-XC8.X/modules/parser/parser.c</file>
-            <file>memory://fs2/disasm.dis</file>
         </group>
     </open-files>
 </project-private>

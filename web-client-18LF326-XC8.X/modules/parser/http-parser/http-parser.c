@@ -16,10 +16,17 @@ httpParser_HttpHeader *  httpParser_parse(char * headerAddr){
     
     
     method = httpParser_getHttpMethod(cur);
-    if(method != __methodInvalid){
+    if(method == __methodGet){
         __setMethod(__methodGet);
         __setHeaderStart(headerAddr);
         route = httpParser_getHttpRoute(headerAddr);
+        __setRoute(route);
+        return headerStrAddress;
+    } else if(method == __methodPost){
+        __setMethod(__methodPost);
+        __setHeaderStart(headerAddr);
+        route = httpParser_getHttpRoute(headerAddr);
+        __setRoute(route);
         return headerStrAddress;
     }
     
@@ -46,6 +53,7 @@ httpParser_HttpRoute httpParser_getHttpRoute(char * headerAddr){
     if(strncmp("/ ", cur, 2)==0){
         return __routeRoot;
     } else {
+
         return __routeInvalid;
     }
         

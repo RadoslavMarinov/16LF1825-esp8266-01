@@ -77,6 +77,11 @@
           <itemPath>modules/receiver/receiver-primary.h</itemPath>
           <itemPath>modules/receiver/receiver.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="server" displayName="server" projectFiles="true">
+          <itemPath>modules/server/server-primary.h</itemPath>
+          <itemPath>modules/server/server.c</itemPath>
+          <itemPath>modules/server/server.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="timer" displayName="timer" projectFiles="true">
           <itemPath>modules/timer/timer-primary.h</itemPath>
           <itemPath>modules/timer/timer.c</itemPath>

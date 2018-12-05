@@ -12,7 +12,7 @@ void transmitter_init(void(*onReady)(void)){
 //    transmitter_self.state =stReady;
 }
 
-
+//
 //uint8_t transmitter_isBusy(void){
 //    return IS_State(stBusy);
 //}

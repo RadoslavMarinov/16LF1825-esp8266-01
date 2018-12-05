@@ -9,9 +9,12 @@
 #include "modules/eeprom/eeprom.h"
 #include "modules/timer/timer.h"
 #include "modules/esp/esp.h"
+#include "modules/server/server.h"
 
 /*
  *  TODO:
+ * Reject connections with id != 0, in server mode
+ * Dont forget to wait entire request header time before sending response !
  * Dont forget to reset frame buffer when parsing and handling is done!
  * What will do with handleEvReset /communicator.c
  * 
@@ -36,6 +39,9 @@ void main(void)
             continue;
         }
         if(timer_task()){
+            continue;
+        }
+        if(server_task()){
             continue;
         }
 //        if(SYSTEM_TIMER_getTicks() > timer_getTicksFromSeconds(650) && !once){
