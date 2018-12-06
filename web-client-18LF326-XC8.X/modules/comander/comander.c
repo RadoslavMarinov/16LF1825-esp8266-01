@@ -25,6 +25,7 @@ uint8_t commander_execute(char *command, void * value) {
      * If the callback at the coresponding unit index is NULL,
      * then there is no action to perform for the given command.
      */
+    config_dummyFunc();
     if( mapIdx >=0 && __getCallBack(mapIdx) != NULL ){
         __runMapCallBack(mapIdx, value);
     } else {

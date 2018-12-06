@@ -11,7 +11,7 @@
 #include "../../../config.h"
 
 typedef enum{
-    jsonParser_codeInvalidJson,
+    jsonParser_codeInvalidJson = 0,
     jsonParser_codeValidJson,            
 }jsonParser_Code;
 

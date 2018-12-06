@@ -5,8 +5,8 @@
 
 static Self eeprom_self;
 
-__eeprom char wifi_ssid[EE_WIFI_SSID_MAX_LEN] = "riko_main";
-__eeprom char wifi_pwd[EE_WIFI_SSID_MAX_LEN] = "koinarci88";
+//__eeprom char wifi_ssid[EE_WIFI_SSID_MAX_LEN] = "riko_main";
+//__eeprom char wifi_pwd[EE_WIFI_SSID_MAX_LEN] = "koinarci88";
 
 
 /*******************************************************************************
@@ -19,6 +19,7 @@ void eeprom_writeWiFiSsid(void* data){
         CONFIG_stopHere();
     }
 #endif 
+    NOP();
     eeprom_writeStr(data, EE_IDX_WIFI_SSID);
 }
 

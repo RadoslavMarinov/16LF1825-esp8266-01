@@ -13,10 +13,10 @@
 
 /*
  *  TODO:
+ * Remove EEPROM initialization 
  * Reject connections with id != 0, in server mode
  * Dont forget to wait entire request header time before sending response !
  * Dont forget to reset frame buffer when parsing and handling is done!
- * What will do with handleEvReset /communicator.c
  * 
  * 013DC
  */ 
@@ -79,6 +79,13 @@ static void onEspReset(void){
 static void start_communication(void){
     receiver_start();
     communicator_initEsp();
+}
+
+void config_dummyFunc(void){
+    volatile int a = 7;
+    while(a){
+        a=0;
+    }
 }
 
 /**

@@ -10,6 +10,7 @@
 #include "../utils/utils.h"
 #include "../server/server.h"
 
+parser_Self parser_self;
 
 /* Detects if frame is terminat*/
 Parser_Codes parser_analyse(char * frameStAddr, uint16_t len) {
@@ -37,6 +38,10 @@ void sendServerEvent(void){
     server_raiseEventSendData(server_routeRoot);    
 }
 
+void sendServerEvSendNotFound(void){
+    server_raiseEventSendData(server_routeInvalid);
+}
+
 /*
  * This is the parser call-back function used when device starts the TCP server
  */
@@ -45,9 +50,11 @@ Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
                                                         * which is the end of the string/frame
                                                         */  
     char * substrStart = NULL;
+    char * strStart = NULL;
     Parser_Codes code = parserCode_Unknown;
     httpParser_HttpHeader *httpHeader = NULL;
-    cur = getStartOfStr(cur, len);
+    strStart = cur = getStartOfStr(cur, len);
+ 
     
     if(strcmp("OK", cur) == 0){
         server_raiseEventMsgOk();
@@ -56,6 +63,10 @@ Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
         server_raiseEventMsgOk();
     }
     else if( strncmp("+IPD", cur, 4) == 0 ){
+//        if(parser_getTcpConNum(strStart)){
+//
+//         }
+        
         cur += 4; // Skip "+IPD" and start after it.
         substrStart = utils_substring(":", cur);
         if(substrStart != NULL){
@@ -67,20 +78,55 @@ Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
                 httpHeader = httpParser_parse(cur);
             }
             if(httpHeader != NULL){
-                switch(httpHeader->httpRoute){
-                    case __routeRoot:{
-                        timer_start(5, sendServerEvent);
-//                        SERVER_HTML_HOME
-                        //Send the server page, but wait request-header reception to finish
+                
+                switch(httpHeader->httpMethod){
+                    
+                    // == METHOD GET
+                    case __methodGet :{
+                        switch(httpHeader->httpRoute){
+                            case __routeRoot:{
+                                timer_start(5, sendServerEvent);
+        //                        SERVER_HTML_HOME
+                                //Send the server page, but wait request-header reception to finish
+                                break;
+                            } case __routeInvalid:{
+                                timer_start(5, sendServerEvSendNotFound);
+                                //Send page not found but wait request-header reception to finish
+                            }
+                        } 
                         break;
-                    } default:{
-                        
-                        //Send page not found but wait request-header reception to finish
                     }
-                } 
+                    // == METHOD POST
+                    case  __methodPost:{
+                        switch(httpHeader->httpRoute){
+                            case __routeRoot:{
+                                __enableJsonParser();
+                                break;
+                            } case __routeInvalid:{
+                                
+                                break;
+                            }
+                        }
+//                        receiver_resetFrBuff();
+                        break;
+                    }
+                    // == METHOD GET
+                    case __methodInvalid:{
+                        receiver_resetFrBuff();
+                        break;
+                    }
+                } //METHOD DISPATCHER END
+                
             }
-            
         }
+    }
+    // END OF +IPD prefix
+    else if( __jsonParersEnabled && (*strStart) == '{' ){
+        if( jsonParser_codeValidJson == jsonParser_analyse(strStart) ){
+            
+            __disableeJsonParser();
+        }
+        
     }
 
     return code;   
@@ -99,4 +145,17 @@ static char * getStartOfStr(char * endCh, uint16_t len){
         length--;
     } while(*ch != '\0' && length > 0 );
     return ++ch;
+}
+
+//if number is greater than 9 - return 255
+//startOfLine should point to the begginnig of the the "+IPD" line
+uint8_t parser_getTcpConNum(char * startOfLine){
+    
+    do{
+        startOfLine++;
+    }while(*startOfLine != ',');
+    if( *(startOfLine+1) != ','){
+        return 0xFF;
+    }
+    return (*startOfLine) - 48;
 }

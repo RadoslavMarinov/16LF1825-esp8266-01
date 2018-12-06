@@ -13,6 +13,7 @@
 #include "string.h"
 #include <xc.h>
 #include <stdbool.h>
+#include "main.h"
 
 // 
 #include "mcc_generated_files/tmr1.h"
@@ -103,6 +104,8 @@ struct {
 #define ESP_AP_IP       "192.168.2.1"
 #define ESP_AP_GATEWAY  "192.168.2.1"
 #define ESP_AP_SUBNET   "255.255.255.0"
+
+
 
 
 /*********************************** A ***********************************/

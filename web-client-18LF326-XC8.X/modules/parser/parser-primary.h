@@ -21,8 +21,14 @@
 
 
 typedef struct {
-}Self;
+    unsigned int jsonParersEnabled:1;
+}parser_Self;
 
+
+/************************* SELF DATA **************************/
+#define __jsonParersEnabled         ( parser_self.jsonParersEnabled )
+#define __enableJsonParser()        do{ __jsonParersEnabled = 1; }while(0)            
+#define __disableeJsonParser()        do{ __jsonParersEnabled = 0; }while(0)            
 
 static char * getStartOfStr(char * endCh, uint16_t len);
 

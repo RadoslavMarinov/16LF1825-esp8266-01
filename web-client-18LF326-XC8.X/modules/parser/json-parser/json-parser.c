@@ -36,6 +36,7 @@ jsonParser_Code jsonParser_analyse(char * startAddr){ //Should point to '{' char
         data = jsonParser_parse(data); //Data is now in Self data
         /* Data now points either to closing '"' , or at the last character of 
          the number */
+            NOP();
         commander_execute(__keyArr, __valArr);
         data ++;
         // data now points to key open quote

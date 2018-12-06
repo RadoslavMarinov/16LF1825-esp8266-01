@@ -22,13 +22,7 @@ uint8_t server_task(void){
                 didSomeWork = true;
                 __clearEv(evMsgOk);
             }
-        } else if( __isRaisedEv(evSendNotFound) ) {
-            if( dispatchEvSendNotFound() ){
-               didSomeWork = true;
-                __clearEv(evSendNotFound); 
-            }
-        }
-        
+        }         
     }
     
     return didSomeWork;
@@ -43,23 +37,27 @@ void server_raiseEventSendData(server_Routes route){
             __raiseEv(evSendRes);
             __setRoute(route);
             break;
+        } case server_routeInvalid : {
+            __setRoute(server_routeInvalid);
+            __raiseEv(evSendRes);
         }
     }
 }
 
-void server_raiseEventNotFound(void){
-    __raiseEv(evSendNotFound);
-}
 
 void server_raiseEventMsgOk(void){
     __raiseEv(evMsgOk);
 }
 
+void server_raiseEventCloseTcpOk(void){
+    enterSt_closinTcpConnection();
+    __raiseEv(evMsgOk);
+}
+
+
 /**************************EVENT DISPATCHERS **************************/
 
-static uint8_t dispatchEvSendNotFound(void){
-    return true;
-}
+
 
 
 static uint8_t dispatchEvMsgOk(void){
@@ -70,22 +68,28 @@ static uint8_t dispatchEvMsgOk(void){
         //=== MSG "OK" - STATE
         case __stSendingResHederStatusLineDataSize : {
             switch (__route){
+                //== ROUTE
                 case server_routeRoot:{
                     if( transmitter_send((uint8_t*)HTTP_HEADER_OK_STATUS_LINE_OK, sizeof(HTTP_HEADER_OK_STATUS_LINE_OK) - 1 ) ) {
-                        enterSt_sendingResHederStatusLineOk();
+                        enterSt_sendingResHederStatusLine();
                         return true;
                     }                    
                     break;
-                } default:{
-                    return false;
+                }
+                //== ROUTE
+                case server_routeInvalid:{
+                    if( transmitter_send((uint8_t*)HTTP_HEADER_STATUS_LINE_NOT_FOUND, sizeof(HTTP_HEADER_STATUS_LINE_NOT_FOUND) - 1 ) ) {
+                        enterSt_sendingResHederStatusLine();
+                        return true;
+                    }
                 }
                 
             }
-
+            return false;
             break;
         } 
         //=== MSG OK - STATE
-        case __stSendingResHederStatusLineOk:{
+        case __stSendingResHederStatusLine:{
             switch (__route){
                 case server_routeRoot:{
                     if( transmitter_send((uint8_t*)HTTP_BODY_SEPARATOR_SIZE, sizeof(HTTP_BODY_SEPARATOR_SIZE) - 1 ) ) {
@@ -94,8 +98,9 @@ static uint8_t dispatchEvMsgOk(void){
                     }
                     break;
                     
-                } default:{
-                    
+                }case server_routeInvalid:{
+                    enterSt_closinTcpConnection();
+                    return false; // force doCloseTcpConnection
                 }
                 
             }
@@ -136,7 +141,7 @@ static uint8_t dispatchEvMsgOk(void){
             }
             break;
         }
-            
+            // STATE = CLOSE TCP CONNECTION
         case __stClosingTcpConnection:{
             
             if(done){
@@ -169,17 +174,28 @@ static uint8_t dispatchEvMsgOk(void){
 static uint8_t dispatchevSendRes(void){
     switch(__state){
         case __stIdle:{
+            //==STATE
             switch (__route){
+                //==ROUTE
                 case server_routeRoot:{
                     if( transmitter_send((uint8_t*)HTTP_HEADER_OK_SIZE, sizeof(HTTP_HEADER_OK_SIZE) - 1 ) ) {
                         enterSt_sendingResHederStatusLineDataSize();
                         return true;
                     }
                     break;
+                } 
+                //==ROUTE
+                case server_routeInvalid:{
+                    if( transmitter_send((uint8_t*)HTTP_HEADER_STATUS_NOT_FOUND_SIZE, sizeof(HTTP_HEADER_STATUS_NOT_FOUND_SIZE) - 1 ) ){
+                        enterSt_sendingResHederStatusLineDataSize();
+                        return true;
+                    }
                 }
+                //==ROUTE
             }
             break;
         }
+        //== STATE
         default:{
             
         }
@@ -188,6 +204,76 @@ static uint8_t dispatchevSendRes(void){
 }
 
 /************************** EVENT HANDLERS **************************/
+
+
+/************************** STATE TRANSITIONS **************************/
+
+/****** IDLE ******/
+
+static void enterSt_idle(void){
+    __setSt(__stIdle);
+}
+
+/****** STATUS LINE ******/
+static void enterSt_sendingResHederStatusLineDataSize(void){
+    __setSt(__stSendingResHederStatusLineDataSize);
+}
+
+
+static void enterSt_sendingResHederStatusLine(void){
+    __setSt(__stSendingResHederStatusLine);
+//    server_raiseEventSendData(__route);
+}
+
+
+
+/****** BODY SEPARATOR ******/
+static void enterSt_sendingBodySeparatorSize(void){
+    __setSt(__stSendingBodySeparatorSize);
+}
+
+static void enterSt_sendingBodySeparator(void){
+    __setSt(__stSendingBodySeparator);
+    
+}
+
+static void enterSt_sendingBody(void){
+    __setSt(__stSendingBody);
+}
+
+static server_Code doSt_sendingBody(void){
+    switch (__route){
+        case server_routeRoot:{
+            return sendBoydRoot();
+            break;    
+        } default:{
+            return __serverCode_didNothing;
+        }
+    }    
+} 
+
+static void enterSt_closinTcpConnection(void){
+    __setSt(__stClosingTcpConnection);
+
+}
+
+static uint8_t doSt_closinTcpConnection(void){
+//    char  closeStr[15];
+//    sprintf(closeStr, "AT+CIPCLOSE=%u\r\n", )
+    if(transmitter_send( (uint8_t*)CLOSE_TCP_CONNECTION, sizeof(CLOSE_TCP_CONNECTION)- 1) ){
+        return true;
+    } else {
+        return false;
+    } 
+}
+
+
+static void exitSt_closingTcpConnection(void){
+    receiver_resetFrBuff();
+}
+
+
+
 
 /************************** OTHERS **************************/
 static server_Code sendBoydRoot(void){
@@ -273,66 +359,4 @@ static server_Code sendBoydRoot(void){
     
     
     
-}
-
-/************************** STATE TRANSITIONS **************************/
-
-/****** IDLE ******/
-
-static void enterSt_idle(void){
-    __setSt(__stIdle);
-}
-
-/****** STATUS LINE ******/
-static void enterSt_sendingResHederStatusLineDataSize(void){
-    __setSt(__stSendingResHederStatusLineDataSize);
-}
-
-
-static void enterSt_sendingResHederStatusLineOk(void){
-    __setSt(__stSendingResHederStatusLineOk);
-//    server_raiseEventSendData(__route);
-}
-
-/****** BODY SEPARATOR ******/
-static void enterSt_sendingBodySeparatorSize(void){
-    __setSt(__stSendingBodySeparatorSize);
-}
-
-static void enterSt_sendingBodySeparator(void){
-    __setSt(__stSendingBodySeparator);
-    
-}
-
-static void enterSt_sendingBody(void){
-    __setSt(__stSendingBody);
-}
-
-static server_Code doSt_sendingBody(void){
-    switch (__route){
-        case server_routeRoot:{
-            return sendBoydRoot();
-            break;    
-        } default:{
-            return __serverCode_didNothing;
-        }
-    }    
-} 
-
-static void enterSt_closinTcpConnection(void){
-    __setSt(__stClosingTcpConnection);
-
-}
-
-static uint8_t doSt_closinTcpConnection(void){
-    if(transmitter_send( (uint8_t*)CLOSE_TCP_CONNECTION, sizeof(CLOSE_TCP_CONNECTION)- 1) ){
-        return true;
-    } else {
-        return false;
-    } 
-}
-
-
-static void exitSt_closingTcpConnection(void){
-    receiver_resetFrBuff();
 }
