@@ -30,16 +30,18 @@ uint8_t server_task(void){
 }
 
 /************************** PUBLIC METHODS **************************/
-void server_raiseEventSendData(server_Routes route){
+void server_raiseEventSendData(server_Routes route,  server_HttpMethod httpMeth){
     
     switch (route){
         case server_routeRoot:{
             __raiseEv(evSendRes);
             __setRoute(route);
+            __setHttpMethod(httpMeth);
             break;
         } case server_routeInvalid : {
             __setRoute(server_routeInvalid);
             __raiseEv(evSendRes);
+            __setHttpMethod(server_httpMethodInvalid);
         }
     }
 }
@@ -70,10 +72,18 @@ static uint8_t dispatchEvMsgOk(void){
             switch (__route){
                 //== ROUTE
                 case server_routeRoot:{
-                    if( transmitter_send((uint8_t*)HTTP_HEADER_OK_STATUS_LINE_OK, sizeof(HTTP_HEADER_OK_STATUS_LINE_OK) - 1 ) ) {
-                        enterSt_sendingResHederStatusLine();
-                        return true;
-                    }                    
+                    switch (__httpMethod){
+                        case server_httpMethodGet:
+                        case server_httpMethodPost:{
+                            if( transmitter_send((uint8_t*)HTTP_HEADER_OK_STATUS_LINE_OK, sizeof(HTTP_HEADER_OK_STATUS_LINE_OK) - 1 ) ) {
+                                enterSt_sendingResHederStatusLine();
+                                return true;
+                            }
+                            break;
+                        } case  server_httpMethodInvalid:{
+                            __raiseErr(errInvalidMethod);
+                        }   
+                    }
                     break;
                 }
                 //== ROUTE
@@ -88,14 +98,23 @@ static uint8_t dispatchEvMsgOk(void){
             return false;
             break;
         } 
-        //=== MSG OK - STATE
+        //=== MSG OK - STATE = STATUS LINE
         case __stSendingResHederStatusLine:{
             switch (__route){
                 case server_routeRoot:{
-                    if( transmitter_send((uint8_t*)HTTP_BODY_SEPARATOR_SIZE, sizeof(HTTP_BODY_SEPARATOR_SIZE) - 1 ) ) {
-                        enterSt_sendingBodySeparatorSize();
-                        return true;
+                    switch(__httpMethod){
+                        case server_httpMethodGet:
+                        case server_httpMethodPost:{
+                            if( transmitter_send((uint8_t*)HTTP_BODY_SEPARATOR_SIZE, sizeof(HTTP_BODY_SEPARATOR_SIZE) - 1 ) ) {
+                                enterSt_sendingBodySeparatorSize();
+                                return true;
+                            }
+                            break;
+                        }case  server_httpMethodInvalid:{
+                            __raiseErr(errInvalidMethod);
+                        }
                     }
+
                     break;
                     
                 }case server_routeInvalid:{
@@ -105,7 +124,7 @@ static uint8_t dispatchEvMsgOk(void){
                 
             }
         }
-        //=== MSG OK - STATE
+        //=== MSG OK - STATE BODDY SEPARATOR SIZE
         case __stSendingBodySeparatorSize:{
             switch (__route){
                 case server_routeRoot:{
@@ -119,7 +138,7 @@ static uint8_t dispatchEvMsgOk(void){
             }
             break;
         }
-        //=== MSG OK - STATE
+        //=== MSG OK - STATE BODDY SEPARATOR
         case __stSendingBodySeparator:{
             enterSt_sendingBody();
         }
@@ -244,7 +263,17 @@ static void enterSt_sendingBody(void){
 static server_Code doSt_sendingBody(void){
     switch (__route){
         case server_routeRoot:{
-            return sendBoydRoot();
+            switch (__httpMethod) {
+                case server_httpMethodGet:{
+                    return sendBoydRoot();
+                    break;
+                } case server_httpMethodPost:{
+                    return sendBodyOk();
+                } default:{
+                    return __serverCode_didNothing;
+                }
+            }
+            
             break;    
         } default:{
             return __serverCode_didNothing;
@@ -359,4 +388,32 @@ static server_Code sendBoydRoot(void){
     
     
     
+}
+static server_Code sendBodyOk(void){
+    static struct {
+        enum{
+            stSendBodySize,
+            stSendBody,
+            stAllSent,
+        }state;
+    }self = {.state = stSendBodySize};
+    
+    if(self.state == stSendBodySize){
+        if(transmitter_send((uint8_t*)HTTP_BODY_ROOT_OK_SIZE, sizeof(HTTP_BODY_ROOT_OK_SIZE) - 1) ){
+            self.state = stSendBody;
+            return __serverCode_didSomeWork;
+        } else {
+            return __serverCode_didNothing;
+        }
+    } else if(self.state == stSendBody){
+        if(transmitter_send((uint8_t*)HTTP_BODY_ROOT_OK, sizeof(HTTP_BODY_ROOT_OK) - 1) ){
+            self.state = stAllSent;
+            return __serverCode_didSomeWork;
+        } else {
+            return __serverCode_didNothing;
+        }        
+    } else {
+        self.state = stSendBodySize;
+        return __serverCode_done;
+    }  
 }

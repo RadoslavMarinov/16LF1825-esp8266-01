@@ -34,14 +34,17 @@ Parser_Codes parser_analyse(char * frameStAddr, uint16_t len) {
     }
     return code;
 }
-void sendServerEvent(void){
-    server_raiseEventSendData(server_routeRoot);    
+void sendServerEventSendRootData(void){
+    server_raiseEventSendData(server_routeRoot, server_httpMethodGet);    
 }
 
 void sendServerEvSendNotFound(void){
-    server_raiseEventSendData(server_routeInvalid);
+    server_raiseEventSendData(server_routeInvalid, server_httpMethodGet);
 }
 
+void sendEventServerResponseOk(void){
+    server_raiseEventSendData(server_routeRoot, server_httpMethodPost);
+}
 /*
  * This is the parser call-back function used when device starts the TCP server
  */
@@ -85,7 +88,7 @@ Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
                     case __methodGet :{
                         switch(httpHeader->httpRoute){
                             case __routeRoot:{
-                                timer_start(5, sendServerEvent);
+                                timer_start(5, sendServerEventSendRootData);
         //                        SERVER_HTML_HOME
                                 //Send the server page, but wait request-header reception to finish
                                 break;
@@ -101,6 +104,7 @@ Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
                         switch(httpHeader->httpRoute){
                             case __routeRoot:{
                                 __enableJsonParser();
+                                
                                 break;
                             } case __routeInvalid:{
                                 
@@ -123,7 +127,7 @@ Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
     // END OF +IPD prefix
     else if( __jsonParersEnabled && (*strStart) == '{' ){
         if( jsonParser_codeValidJson == jsonParser_analyse(strStart) ){
-            
+            timer_start(5, sendEventServerResponseOk);
             __disableeJsonParser();
         }
         
@@ -131,6 +135,7 @@ Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
 
     return code;   
 }
+
 
 
 

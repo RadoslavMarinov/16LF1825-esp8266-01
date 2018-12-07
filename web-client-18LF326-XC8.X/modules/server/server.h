@@ -14,9 +14,15 @@ typedef enum {
             
 }server_Routes;
 
+typedef enum {
+    server_httpMethodInvalid,
+    server_httpMethodGet,
+    server_httpMethodPost,        
+}server_HttpMethod;
+
 uint8_t server_task(void);
 
-void server_raiseEventSendData(server_Routes route);
+void server_raiseEventSendData(server_Routes route,  server_HttpMethod httpMeth);
 void server_raiseEventMsgOk(void);
 void server_raiseEventCloseTcpOk(void);
 

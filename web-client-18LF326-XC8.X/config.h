@@ -31,6 +31,7 @@ struct {
     unsigned int receiver:1;
     unsigned int timer:1;
     unsigned int transmitter:1;
+    unsigned int server:1;
 }config_appErrors;
 
 #define CONFIG_raiseError(err)          do{config_appErrors.err = 1;}while(0)

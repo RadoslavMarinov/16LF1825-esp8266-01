@@ -30,7 +30,8 @@ void eeprom_writeWiFiPwd(void* data){
         CONFIG_stopHere();
     }
 #endif 
-   eeprom_writeStr(data, EE_IDX_WIFI_PWD); 
+   config_dummyFunc();
+   eeprom_writeStr(data, EE_IDX_WIFI_PWD);
 }
 
 
