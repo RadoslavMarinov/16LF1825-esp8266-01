@@ -115,24 +115,20 @@ uint16_t receiver_getCircBuffFilledDataSize() {
 }
 
 void receiver_incrTail(){
-    
+    cBuffTail++;
     if(cBuffTail >= sizeof(cBuff)){
         cBuffTail= 0;
-    } else {
-        cBuffTail++;
     }
     
 }
 
-
-
 void receiver_push2FrameBuff(uint8_t data){
     frBuffData[frBuffSize++] = data;
-    if(frBuffSize > sizeof(frBuffData)){
+    if(frBuffSize >= sizeof(frBuffData)){
         SET_err(frameBuffOverflow);
         receiver_resetFrBuff();
         #ifdef UNDER_TEST
-//            CONFIG_stopHere();
+            CONFIG_stopHere();
         #endif
     }
 }

@@ -6,6 +6,7 @@
 #include "../transmitter/transmitter.h"
 #include "../parser/parser.h"
 #include "../parser/json-parser/json-parser.h"
+#include "../client/client.h"
 
 Self comm_self;
 
@@ -19,15 +20,6 @@ uint8_t communicator_task(void){
         if( __isRaisedEv(evInitEsp) ){
             __clearEv(evInitEsp);
             didWork = dispatchEvInitEsp();
-        }
-//        else if(__isRaisedEv(ev...)){
-//            
-//        }
-        else if(__isRaisedEv(evWaitReceiver)){
-            if(dispatchEventWaitReceiver()){
-                __clearEv(evWaitReceiver);
-                didWork = true;
-            }    
         }
     }
     return didWork;
@@ -72,19 +64,19 @@ static uint8_t dispatchEvInitEsp(void){
 }
 
 
-static uint8_t dispatchEventWaitReceiver(void) {
-    switch (__state) {
-        case stUpdateServer:{
-            return enterSt_updateServer();
-        }
-        default:{
-        #ifdef UNDER_TEST
-        __raiseErr(errEvWaitReceiverRaisedInWrongState);
-        CONFIG_stopHere();
-        #endif
-        }
-    }
-}
+//static uint8_t dispatchEventWaitReceiver(void) {
+//    switch (__state) {
+//        case stUpdateServer:{
+//            return enterSt_updateServer();
+//        }
+//        default:{
+//        #ifdef UNDER_TEST
+//        __raiseErr(errEvWaitReceiverRaisedInWrongState);
+//        CONFIG_stopHere();
+//        #endif
+//        }
+//    }
+//}
 
 static uint8_t dispatchMsgOk(void) {
     switch(__state){
@@ -148,12 +140,7 @@ static uint8_t dispatchMsgOk(void) {
         }
         //------------ STATE
         case stConnectServer:{
-            enterState_setMsgLength();
-            break;
-        }
-        //------------ STATE
-        case stSeMsgLength:{
-            enterSt_updateServer();
+            enterState_httpClient();
             break;
         }
         //------------ STATE
@@ -167,12 +154,7 @@ static uint8_t dispatchMsgOk(void) {
 /************************************************************************
  * STATIC EVENT HANDLERS
  ***********************************************************************/
-//static uint8_t handleEvReset(void){
-//    communicator_init(false, __espMode);
-//    transmitter_send((uint8_t*)COMMAND_RESET, sizeof(COMMAND_RESET) - 1);
-//    __setState(stReset);
-//    return true;
-//}
+
 
 /************************************************************************
  * STATIC STATE TRANSITION
@@ -334,38 +316,10 @@ static void enterState_connectServer(){
     }
 }
 
-static void enterState_setMsgLength(void){
-    uint16_t length;
-    char msgSizeCmd[20];
-    __setState(stSeMsgLength);
-    
-    strcpy(msgSizeCmd, "AT+CIPSEND=");
-    sprintf(&msgSizeCmd[11], "%d\r\n", sizeof(COMMAND_POST_SERVER_UPDATE) - 1);
-    if( false == __trSend(msgSizeCmd, strlen(msgSizeCmd)) ){
-        #ifdef UNDER_TEST
-        __raiseErr(errTrBusy);
-        CONFIG_stopHere();
-        #endif
-    }
-}
-
-static uint8_t enterSt_updateServer(void){
-    
-    __setState(stUpdateServer);
-    
-    if(receiver_getCircBuffFilledDataSize() > 0){
-        __raiseEv(evWaitReceiver);
-        return false;
-    }
-    
-    if( false == __trSend(COMMAND_POST_SERVER_UPDATE, sizeof(COMMAND_POST_SERVER_UPDATE) - 1 ) ){
-        #ifdef UNDER_TEST
-        __raiseErr(errTrBusy);
-        CONFIG_stopHere();
-        #endif
-    }
-    return true;
-            
+static void enterState_httpClient(void){
+    __setState(stHttpClient);
+    receiver_setOnFrameCb(parser_httpClient);
+    client_raiseEvStart();
 }
 
 /************************************************************************
@@ -399,7 +353,3 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
     receiver_resetFrBuff();
 
 }
-
-//static uint8_t enterState(State st){
-//    
-//}

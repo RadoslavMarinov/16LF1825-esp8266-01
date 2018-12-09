@@ -35,6 +35,11 @@
         <itemPath>mcc_generated_files/memory.c</itemPath>
       </logicalFolder>
       <logicalFolder name="modules" displayName="modules" projectFiles="true">
+        <logicalFolder name="client" displayName="client" projectFiles="true">
+          <itemPath>modules/client/client-primary.h</itemPath>
+          <itemPath>modules/client/client.c</itemPath>
+          <itemPath>modules/client/client.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="comander" displayName="comander" projectFiles="true">
           <itemPath>modules/comander/comander-primary.h</itemPath>
           <itemPath>modules/comander/comander.c</itemPath>
@@ -233,6 +238,7 @@
                   value="Press to browse for a specific firmware version"/>
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

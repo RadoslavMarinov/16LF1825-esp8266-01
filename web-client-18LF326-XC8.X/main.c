@@ -10,13 +10,15 @@
 #include "modules/timer/timer.h"
 #include "modules/esp/esp.h"
 #include "modules/server/server.h"
+#include "modules/client/client.h"
 
 /*
  *  TODO:
- * Remove EEPROM initialization 
+ * Add validator for AP SSID and password: can not be > 15!
+ * Increase receiver_frBuffer size it can not hold header + big json
  * Reject connections with id != 0, in server mode
  * Dont forget to wait entire request header time before sending response !
- * Dont forget to reset frame buffer when parsing and handling is done!
+ * Dont forget to reset frame when header has passed!
  * 
  * 013DC
  */ 
@@ -39,6 +41,10 @@ void main(void)
             continue;
         }
         if(timer_task()){
+            continue;
+        }
+        if(client_task())
+        {
             continue;
         }
         if(server_task()){
@@ -64,8 +70,8 @@ void main_init(void){
 
 void gpio_init(void){
     
-    SWITCH1_OFF();
-    SWITCH2_OFF();
+    SWITCH1_ON();
+    SWITCH2_ON();
     LED_RED_OFF();
     LED_GREEN_OFF();
     ESP_RESET_ENABLE(); 

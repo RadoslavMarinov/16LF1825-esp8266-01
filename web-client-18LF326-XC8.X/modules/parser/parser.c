@@ -9,6 +9,7 @@
 #include "http-parser/http-parser.h"
 #include "../utils/utils.h"
 #include "../server/server.h"
+#include "../client/client.h"
 
 parser_Self parser_self;
 
@@ -35,14 +36,17 @@ Parser_Codes parser_analyse(char * frameStAddr, uint16_t len) {
     return code;
 }
 void sendServerEventSendRootData(void){
+    receiver_resetFrBuff();
     server_raiseEventSendData(server_routeRoot, server_httpMethodGet);    
 }
 
 void sendServerEvSendNotFound(void){
+    receiver_resetFrBuff();
     server_raiseEventSendData(server_routeInvalid, server_httpMethodGet);
 }
 
 void sendEventServerResponseOk(void){
+    receiver_resetFrBuff();
     server_raiseEventSendData(server_routeRoot, server_httpMethodPost);
 }
 /*
@@ -127,6 +131,7 @@ Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
     // END OF +IPD prefix
     else if( __jsonParersEnabled && (*strStart) == '{' ){
         if( jsonParser_codeValidJson == jsonParser_analyse(strStart) ){
+            
             timer_start(5, sendEventServerResponseOk);
             __disableeJsonParser();
         }
@@ -136,6 +141,27 @@ Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
     return code;   
 }
 
+Parser_Codes parser_httpClient(char * frameStAddr, uint16_t len) {
+    char * cur = (char *)( frameStAddr + (len - 1) ); /*  "curr"should point to '\0'
+                                                        * which is the end of the string/frame
+                                                        */  
+
+    char * strStart = NULL;
+    Parser_Codes code = parserCode_Unknown;
+    strStart = cur = getStartOfStr(cur, len);
+    
+    
+    
+    if(strcmp("OK", cur) == 0){
+        client_raiseEventMsgOk();
+        
+    }
+//    else if()
+    
+    return code;
+    
+  
+}
 
 
 

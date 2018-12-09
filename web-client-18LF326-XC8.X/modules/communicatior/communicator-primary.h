@@ -77,7 +77,8 @@ typedef enum {
     stSetConnsMultSingle,
     stConfServer,
     sthttpServer,
-    stConnectServer,  
+    stConnectServer, 
+    stHttpClient,
     stSeMsgLength,
     stUpdateServer,
 }State;
@@ -162,7 +163,7 @@ typedef struct {
  *******************************************************/
 /******************** DISPATCHERS ********************/
 static uint8_t dispatchEvInitEsp(void);
-static uint8_t dispatchEventWaitReceiver(void);
+//static uint8_t dispatchEventWaitReceiver(void);
 static uint8_t dispatchMsgOk(void);
 /******************** HANDLERS ********************/
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len);
@@ -177,8 +178,8 @@ static void enterState_enableServerMultipleConnections(uint8_t yes);
 static void enterState_confServer(const char *portStr);
 static void enterState_httpServer(void);
 static void enterState_connectServer(void);
-static void enterState_setMsgLength(void);
-static uint8_t enterSt_updateServer(void);
+static void enterState_httpClient(void);
+
 
 /******************** OTHERS ********************/
 static void communicator_initSelf(void);
@@ -200,8 +201,6 @@ static const char COMMAND_SET_SINGLE_CONN[] = "AT+CIPMUX=0\r\n";
 
 
 
-static const char COMMAND_POST_SERVER_UPDATE[] = 
-    "POST "CONF_SERVER_UPDATE_ROUTE" HTTP/1.1\r\nHost: "CONF_SERVER_HOST"\r\n\r\n";
 
 
 

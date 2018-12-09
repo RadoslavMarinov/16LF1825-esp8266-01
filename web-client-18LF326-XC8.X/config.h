@@ -32,6 +32,7 @@ struct {
     unsigned int timer:1;
     unsigned int transmitter:1;
     unsigned int server:1;
+    unsigned int client:1;
 }config_appErrors;
 
 #define CONFIG_raiseError(err)          do{config_appErrors.err = 1;}while(0)
@@ -43,6 +44,7 @@ struct {
 #define CONFIG_stopHere()  do{ ; }while(1)
 
 /* APPLICATION CONFIGURATION */
+#define DEVICE_ID       "FA661234A511"
 #define JSON_KEY_MAX_LEN             10U
 #define JSON_VAL_MAX_LEN             20U    
 #define JSON_MAX_STR_LEN            100U
@@ -106,8 +108,11 @@ struct {
 #define ESP_AP_GATEWAY  "192.168.2.1"
 #define ESP_AP_SUBNET   "255.255.255.0"
 
+// == CLIENT
+#define CLIENT_TX_BUFF_SIZE     200U
 
-
+#define GET_SW1_VALUE()             ( SW1_GetValue() ) 
+#define GET_SW2_VALUE()             ( SW2_GetValue() ) 
 
 /*********************************** A ***********************************/
 #endif	/* CONFIG_H */
