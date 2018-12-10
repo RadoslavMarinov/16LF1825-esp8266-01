@@ -128,6 +128,7 @@ static uint8_t dispatchEv_evDo(void){
 
 static client_Code updateServer(void){
     char size[20];
+    uint16_t bodySize, headerSize;
     
     static struct{
         enum{
@@ -139,11 +140,17 @@ static client_Code updateServer(void){
     }self = {.once = 1};
     
     if(self.once){
-        strcpy(__txBuff, COMMAND_POST_SERVER_UPDATE_HEADER);
+        strcpy(__txBuff, COMMAND_POST_SERVER_UPDATE_ST_LINE);
+        
         self.size = strlen(__txBuff);
         
-        composePostUpdateBody( ((char*)__txBuff) + self.size);
-        self.size = strlen(__txBuff) - 1 ;
+        bodySize = composePostUpdateBody( ((char*)__bodyBuff));
+        
+        headerSize = composePostUpdateHeader(__txBuff, bodySize);
+        
+        strcat(__txBuff, __bodyBuff);
+        
+        self.size =  headerSize + bodySize;
     }
     
     switch(self.state){
@@ -184,7 +191,9 @@ static void enterSt_updateServer(void){
 }
 
 /*************************** OTHERS ***************************/
-static uint8_t composePostUpdateBody(char* startAddr){
+
+
+static uint16_t composePostUpdateBody(char* startAddr){
     char * cur = startAddr;
     // DEVICE ID
     strcpy(cur, "{\"id\":\""DEVICE_ID"\"");
@@ -200,6 +209,21 @@ static uint8_t composePostUpdateBody(char* startAddr){
     strcat(cur, GET_SW2_VALUE() ? "\"on\"": "\"off\"");
     //
     strcat(cur, "}\r\n\r\n");
-    return 1;
+    return strlen(cur);
 }
 
+static uint16_t composePostUpdateHeader(char * stAddr, uint16_t bodySize){
+    char bodySizeStr[6];
+    strcpy(stAddr, COMMAND_POST_SERVER_UPDATE_ST_LINE);
+    // Content Type
+    strcat(stAddr, "Content-Type: application/json\r\n");
+    // Content Length
+    sprintf(bodySizeStr, "%u", bodySize);
+    strcat(stAddr, "Content-Length: ");
+    strcat(stAddr, bodySizeStr);
+    
+    
+    strcat(stAddr, "\r\n\r\n");
+    
+    return strlen(stAddr);
+}

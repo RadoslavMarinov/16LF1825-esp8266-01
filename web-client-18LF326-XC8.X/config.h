@@ -109,7 +109,8 @@ struct {
 #define ESP_AP_SUBNET   "255.255.255.0"
 
 // == CLIENT
-#define CLIENT_TX_BUFF_SIZE     200U
+#define CLIENT_HEADER_MAX_SIZE      100U
+#define CLIENT_BODY_MAX_SIZE        100U
 
 #define GET_SW1_VALUE()             ( SW1_GetValue() ) 
 #define GET_SW2_VALUE()             ( SW2_GetValue() ) 

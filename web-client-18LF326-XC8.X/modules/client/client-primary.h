@@ -11,9 +11,14 @@
 #include "../../config.h"
 #include "client.h"
 
-#ifndef CLIENT_TX_BUFF_SIZE
-#error "Missing required CLIENT_TX_BUFF_SIZE"
+#ifndef CLIENT_HEADER_MAX_SIZE
+#error "Missing required CLIENT_HEADER_MAX_SIZE"
 #endif
+
+#ifndef CLIENT_BODY_MAX_SIZE
+#error "Missing required CLIENT_BODY_MAX_SIZE"
+#endif
+
 
 #ifndef GET_SW1_VALUE
 #error "Missing required GET_SW1_VALUE()"
@@ -56,7 +61,8 @@ typedef struct {
     client_Events events; 
     client_State state;
     client_Errors errors;
-    char txBuff[CLIENT_TX_BUFF_SIZE];
+    char txBuff[CLIENT_HEADER_MAX_SIZE + CLIENT_BODY_MAX_SIZE];
+    char bodyBuff[CLIENT_BODY_MAX_SIZE];
 }client_Self;
 
 // == EVENTS
@@ -77,7 +83,8 @@ typedef struct {
 // == TX BUFFER
 #define __txBuff                        (client_self.txBuff)
 
-
+// == BODY BUFF
+#define __bodyBuff                      (client_self.bodyBuff)
 
 //  == EVENT DSPATCHERS
 
@@ -90,12 +97,14 @@ static void enterSt_updateServer(void);
 
 //  == OTHERS
 static client_Code updateServer(void);
-static uint8_t composePostUpdateBody(char* startAddr);
+static uint16_t composePostUpdateBody(char* startAddr);
+static uint16_t composePostUpdateHeader(char * stAddr, uint16_t bodySize);
 
 #define HEADER_POST_UPDATE_SIZE "AT+CIPSEND=19\r\n"
 
-static const char COMMAND_POST_SERVER_UPDATE_HEADER[] = 
-    "POST "CONF_SERVER_UPDATE_ROUTE" HTTP/1.1\r\nHost: "CONF_SERVER_HOST"\r\n\r\n";
+static const char COMMAND_POST_SERVER_UPDATE_ST_LINE[] = 
+"POST "CONF_SERVER_UPDATE_ROUTE" HTTP/1.1\r\nHost: "CONF_SERVER_HOST"\r\n";
+
 
 
 
