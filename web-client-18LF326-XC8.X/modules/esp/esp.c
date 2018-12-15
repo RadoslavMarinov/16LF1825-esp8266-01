@@ -26,7 +26,6 @@ void esp_reset(Timner_Ticks ticks, void(*cb)(void)) {
         __setTimerNumber(timer);
         ESP_RESET_ENABLE();
 //        receiver_stop();
-//        receiver_resetCircBuff();
 //        receiver_resetFrBuff();
     }
 }

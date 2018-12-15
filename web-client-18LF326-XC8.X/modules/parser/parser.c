@@ -14,6 +14,39 @@
 parser_Self parser_self;
 
 /* Detects if frame is terminat*/
+
+Parser_Codes parser_httpClient(char * frameStAddr, uint16_t len) {
+    char * cur = (char *)( frameStAddr + (len - 1) ); /*  "curr"should point to '\0'
+                                                        * which is the end of the string/frame
+                                                        */  
+
+    char * strStart = NULL;
+    Parser_Codes code = parserCode_Unknown;
+    strStart = cur = getStartOfStr(cur, len);
+    
+    
+    if(*cur == '{'){
+        if(jsonParser_analyse(cur) == jsonParser_codeInvalidJson){
+            
+        }
+    }
+    else if(strcmp("upd", cur) == 0){
+        client_raiseEventMsgOk();
+    } else if(strcmp("OK", cur) == 0){
+        client_raiseEventMsgOk();
+    }else if(strcmp("SEND OK", cur) == 0){
+        client_raiseEventMsgOk();
+    }else if(strcmp("ack", cur) == 0){
+//        code =  parserCode_serverAck;
+    }
+    receiver_resetFrBuff();
+//    else if()
+    
+    return code;
+    
+  
+}
+
 Parser_Codes parser_analyse(char * frameStAddr, uint16_t len) {
 
     char * curr = (char *)( frameStAddr + (len - 1) ); /*  "curr"should point to '\0'
@@ -141,27 +174,7 @@ Parser_Codes parser_httpServer(char * frameStAddr, uint16_t len) {
     return code;   
 }
 
-Parser_Codes parser_httpClient(char * frameStAddr, uint16_t len) {
-    char * cur = (char *)( frameStAddr + (len - 1) ); /*  "curr"should point to '\0'
-                                                        * which is the end of the string/frame
-                                                        */  
 
-    char * strStart = NULL;
-    Parser_Codes code = parserCode_Unknown;
-    strStart = cur = getStartOfStr(cur, len);
-    
-    
-    
-    if(strcmp("OK", cur) == 0){
-        client_raiseEventMsgOk();
-        
-    }
-//    else if()
-    
-    return code;
-    
-  
-}
 
 
 

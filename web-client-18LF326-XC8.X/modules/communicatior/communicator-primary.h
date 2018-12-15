@@ -23,6 +23,10 @@
     #define __addGlobalError()   
 #endif
 
+#ifndef CONF_SERVER_HOST
+#error "Missing required CONF_SERVER_HOST"
+#endif 
+
 #ifndef ESP_AP_SSID
 #error "Missing required ESP_AP_SSID"
 #endif 
@@ -179,6 +183,8 @@ static void enterState_confServer(const char *portStr);
 static void enterState_httpServer(void);
 static void enterState_connectServer(void);
 static void enterState_httpClient(void);
+// TIMER CALLBACKS
+static void raiseServerEvStart(void);
 
 
 /******************** OTHERS ********************/
@@ -188,7 +194,7 @@ static const char COMMAND_RESET[] = "AT+RST\r\n";
 static const char COMMAND_TURN_OFF_ECHO[] = "ATE0\r\n";
 static const char COMMAND_SET_MODE_STATION[] = "AT+CWMODE=1\r\n";
 static const char COMMAND_SET_MODE_ACCESS_POINT[] = "AT+CWMODE=2\r\n";
-static const char COMMAND_CONNECT_SERVER[] = "AT+CIPSTART=\"TCP\",\"electricity-manager1.herokuapp.com\",80\r\n";
+static const char COMMAND_CONNECT_SERVER[] = "AT+CIPSTART=\"TCP\",\"" CONF_SERVER_HOST" \",80\r\n";
 static const char COMMAND_SET_AP[]  = 
     "AT+CWSAP=\""ESP_AP_SSID"\",\""ESP_AP_PWD"\","ESP_AP_CH","ESP_AP_ENC"\r\n";
 //"AT+CWSAP=\"esp_123\",\"1234test\",5,3\r\n";

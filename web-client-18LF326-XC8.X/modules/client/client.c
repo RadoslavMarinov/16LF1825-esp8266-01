@@ -39,6 +39,10 @@ uint8_t client_raiseEvStart(void){
        __raiseEv(evStart); 
        return true;
     } else {
+        #ifdef UNDER_TEST
+        __raiseErr(erEvevStartRaisedInWrongState);
+        CONFIG_stopHere();
+        #endif
         return false;
     }
 }
@@ -76,6 +80,7 @@ static uint8_t dispatchEv_evMsgOk(void){
                     return true;
                 }
                 case code_done:{
+                    enterSt_idle();
                     return true;
                 } case code_didNothing:{
                     return false;
@@ -97,17 +102,26 @@ static uint8_t dispatchEv_evStart(void){
         case stIdle:{
             enterSt_updateServer();
             client_raiseEv_do();
+            return 1;
             break;
         }
-        default:{}
+        default:{
+            #ifdef UNDER_TEST
+            __raiseErr(erEventStartRaisedInWrongState);
+            CONFIG_stopHere();
+            #endif
+        }
     }
-    return 1;
+    return 0;
 }
 
 static uint8_t dispatchEv_evDo(void){
     switch(__state){
         case stUpdateServer:{
             switch(updateServer()){
+                case code_didNothing:{
+                    return false;
+                }
                 case code_didSomeWork:{
                     return true;
                 }
@@ -123,7 +137,7 @@ static uint8_t dispatchEv_evDo(void){
             
         }
     }
-    return 1;
+    return 0;
 }
 
 static client_Code updateServer(void){
@@ -132,8 +146,9 @@ static client_Code updateServer(void){
     
     static struct{
         enum{
-          stSendSize,
-          stSendPkg,
+            stIdle,
+            stSendSize,
+            stSendPkg,
         }state;
         uint16_t size;
         unsigned int once:1;
@@ -151,12 +166,12 @@ static client_Code updateServer(void){
         strcat(__txBuff, __bodyBuff);
         
         self.size =  headerSize + bodySize;
+        
+        self.once = 0;
     }
     
     switch(self.state){
-        case stSendSize:{
-            
-            
+        case stIdle:{
             
             strcpy(size, "AT+CIPSEND=");
             sprintf(size + 11, "%u", self.size);
@@ -166,16 +181,20 @@ static client_Code updateServer(void){
             
             
             if(transmitter_send((uint8_t*)size, strlen(size))){
-                self.state = stSendPkg;
+                self.state = stSendSize;
                 return code_didSomeWork;
             }
             break;
         }
-        case stSendPkg:{
+        case stSendSize:{
             if(transmitter_send((uint8_t*)__txBuff, self.size)){
                 self.state = stSendPkg;
                 return code_didSomeWork;
             }
+        }case stSendPkg:{
+            self.state = stIdle;
+            self.once = 1;
+            return code_done;
         }
         default:{
             
@@ -189,6 +208,15 @@ static client_Code updateServer(void){
 static void enterSt_updateServer(void){
     __setSt(stUpdateServer);
 }
+//
+//static void exitSt_updateServer(void){
+//    
+//}
+
+static void enterSt_idle(void){
+    __clearAllEvs();
+    __setSt(stIdle);
+}
 
 /*************************** OTHERS ***************************/
 
@@ -199,16 +227,19 @@ static uint16_t composePostUpdateBody(char* startAddr){
     strcpy(cur, "{\"id\":\""DEVICE_ID"\"");
     //
     strcat(cur, ",");
+    // endpoints
+    strcat(cur, "\"endpoints\":");
+    //SW1
+    strcat(cur, "[{\"sw1\":{\"state\":");
+    strcat(cur, GET_SW1_VALUE() ? "1": "0");
+    strcat(cur, "}},");
+    //SW2
+    strcat(cur, "{\"sw2\":{\"state\":");
     // SWITCH 1 STATE
-    strcat(cur, "\"rsw1s\":");
-    strcat(cur, GET_SW1_VALUE() ? "\"on\"": "\"off\"");
+    strcat(cur, GET_SW2_VALUE() ? "1": "0");
+    strcat(cur, "}}]}");
     //
-    strcat(cur, ",");
-    // SWITCH 1 STATE
-    strcat(cur, "\"rsw2s\":");
-    strcat(cur, GET_SW2_VALUE() ? "\"on\"": "\"off\"");
-    //
-    strcat(cur, "}\r\n\r\n");
+    strcat(cur, "\r\n\r\n");
     return strlen(cur);
 }
 

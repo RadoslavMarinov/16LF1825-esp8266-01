@@ -71,7 +71,10 @@ void receiver_stop(void){
 }
 
 void receiver_resetCircBuff(void){
+    uint8_t GIEBitValue = INTCONbits.GIE;
+    INTCONbits.GIE = 0;     // Disable interrupts
     cBuffTail = cBuffHead  = 0;
+    INTCONbits.GIE = GIEBitValue; 
 }
 
 void receiver_resetFrBuff(void){

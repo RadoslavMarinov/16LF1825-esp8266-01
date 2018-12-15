@@ -1,5 +1,6 @@
 #include "../../config.h"
 #include "../eeprom/eeprom.h"
+#include "../timer/timer.h"
 #include "communicator-primary.h"
 #include "communicator.h"
 #include "../receiver/receiver.h"
@@ -62,21 +63,6 @@ static uint8_t dispatchEvInitEsp(void){
     enterSt_turnOffEcho();
     return true;
 }
-
-
-//static uint8_t dispatchEventWaitReceiver(void) {
-//    switch (__state) {
-//        case stUpdateServer:{
-//            return enterSt_updateServer();
-//        }
-//        default:{
-//        #ifdef UNDER_TEST
-//        __raiseErr(errEvWaitReceiverRaisedInWrongState);
-//        CONFIG_stopHere();
-//        #endif
-//        }
-//    }
-//}
 
 static uint8_t dispatchMsgOk(void) {
     switch(__state){
@@ -329,18 +315,23 @@ static void enterState_httpClient(void){
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
     
     switch(code){
-        /***************** CODE ********************/
+        /***************** CODE OK ********************/
         case parserCode_Ok:{
             dispatchMsgOk();
             break;
         }
-        /***************** CODE ********************/
+        /***************** CODE SERVER ACL ********************/
+        case parserCode_serverAck:{
+            timer_start(timer_getTicksFromSeconds(5), raiseServerEvStart);
+            break;
+        }
+        /***************** CODE READY ********************/
         case parserCode_Ready:{
             __clearAllEvents();
             enterSt_turnOffEcho();
             break;
         }
-        /***************** CODE ********************/
+        /***************** CODE  ERROR ********************/
         case parserCode_Error:{
             __raiseErr(errEspErrorMessage);
             break;
@@ -351,5 +342,10 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
     }
     
     receiver_resetFrBuff();
+}
 
+
+// TIMER CALLBACKS
+static void raiseServerEvStart(void){
+    enterState_httpClient();
 }

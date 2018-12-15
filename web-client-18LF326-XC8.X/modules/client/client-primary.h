@@ -47,14 +47,16 @@ typedef struct {
 }client_Events;
 
 typedef enum {
-    stIdle,
+    stIdle = 0,
     stUpdateServer,
 }client_State;
 
 typedef struct {
     unsigned int erEvDoRaiseOvrfl;
     unsigned int erEvevMsgOkRaiseOvrfl;
+    unsigned int erEvevStartRaisedInWrongState;
     unsigned int erEvevMsgOkRaisedInWrongState;
+    unsigned int erEventStartRaisedInWrongState;
 }client_Errors;
 
 typedef struct {
@@ -70,6 +72,7 @@ typedef struct {
 #define __raiseEv(ev)                     do{  __events.ev  = 1; }while(0)
 #define __clearEv(ev)                     do{  __events.ev  = 0; }while(0)
 #define __isRaisedEv(ev)                ( __events.ev == 1 ? true : false  )
+#define __clearAllEvs()                 do{ __events.evCont = 0; }while(0)
 
 // == STATE
 #define __state                         ( client_self.state )
@@ -94,6 +97,7 @@ static uint8_t dispatchEv_evMsgOk(void);
 
 //  == STATE TRANZITION 
 static void enterSt_updateServer(void);
+static void enterSt_idle(void);
 
 //  == OTHERS
 static client_Code updateServer(void);
