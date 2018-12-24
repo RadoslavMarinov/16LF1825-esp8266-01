@@ -2,23 +2,40 @@
 #include "../../config.h"
 #include "client-primary.h"
 #include "client.h"
+#include "../timer/timer.h"
 #include "../transmitter/transmitter.h"
 
 static client_Self client_self;
 
 uint8_t client_task(void){
 
-    if(__isRaisedEv(evDo)){
-    
-        if(dispatchEv_evDo()){
-            __clearEv(evDo);
-            return true;
-        }
-    }
+
     
     if(__isRaisedEv(evMsgOk)){
         if( dispatchEv_evMsgOk() ){
             __clearEv(evMsgOk);
+            return true;
+        }
+    }
+    
+    if(__isRaisedEv(evUpdateServer)){
+        if( dispatchEv_updateServer() ){
+            __clearEv(evUpdateServer);
+            return true;
+        }
+    }
+    
+    if(__isRaisedEv(evError)){
+        if( dispatchEv_error() ){
+            __clearEv(evError);
+            return true;
+        }
+    }
+    
+    if(__isRaisedEv(evAck)){
+    
+        if(dispatchEv_evAck()){
+            __clearEv(evAck);
             return true;
         }
     }
@@ -33,7 +50,38 @@ uint8_t client_task(void){
     return false;
 }
 
+uint8_t client_raiseEventAck(void){
+    if(__inSt(stIdle)){
+        __raiseEv(evAck);
+        return true;
+    } else {
+        #ifdef UNDER_TEST
+        __raiseErr(erEvevUpdateServerInWrongState);
+        CONFIG_stopHere();
+        #endif
+        return false;
+    }  
+}
 
+ uint8_t client_raiseEvenUpdateServer(void){
+    if(__inSt(stIdle)){
+        __raiseEv(evUpdateServer);
+        
+        return true;
+    } else {
+        #ifdef UNDER_TEST
+        __raiseErr(erEvevUpdateServerInWrongState);
+        CONFIG_stopHere();
+        #endif
+        return false;
+    }
+}
+
+uint8_t client_raiseEventError(void){
+    __raiseEv(evError);
+    return 1;
+}
+ 
 uint8_t client_raiseEvStart(void){
     if(__inSt(stIdle) ){
        __raiseEv(evStart); 
@@ -47,16 +95,6 @@ uint8_t client_raiseEvStart(void){
     }
 }
 
-uint8_t client_raiseEv_do(void){
-#ifdef UNDER_TEST 
-    if(__isRaisedEv(evDo)){
-        __raiseErr(erEvDoRaiseOvrfl);
-        CONFIG_stopHere();
-    }
-#endif
-    __raiseEv(evDo);
-    return true;
-}
 
 uint8_t client_raiseEventMsgOk(void){
 #ifdef UNDER_TEST 
@@ -71,9 +109,70 @@ uint8_t client_raiseEventMsgOk(void){
 }
 
 /*************************** EVENT DISPATCHERS ***************************/
+static uint8_t dispatchEv_evAck(void){
+    switch (__state){
+        case stIdle:{
+            timer_stop(__serverAckTimer);
+            return 1;
+        }
+        default :{
+            #ifdef UNDER_TEST
+            CONFIG_stopHere();
+            #endif
+        }
+    }
+    return false;
+}
+
+
+static uint8_t dispatchEv_error(void){
+    switch (__state){
+        case stClosingTcpConnection:{
+            enterSt_connectServer();
+            return true;
+            break;
+        } 
+        case stConnectServer:{
+            SYSTEM_softReset();
+        }
+        default:{
+            #ifdef UNDER_TEST
+            __raiseErr(erEvErrorAtWrongState);
+            CONFIG_stopHere();
+            return false;
+            #endif
+        }
+    }
+}
+
+static uint8_t dispatchEv_updateServer(void){
+    switch (__state){
+        case stIdle:{
+            timer_stop(__serverUpdTimer);
+            __serverAckTimer = timer_start(timer_getTicksFromMS(SERVER_ACK_TIMEOUT_MS), onServerAckTimeout);
+            __serverUpdTimer = timer_start(timer_getTicksFromMS(SERVER_UPD_TIMEOUT_MS), onServerUpdTimeout);
+            return handleEv_updateServer();
+            break;
+        } default:{
+            #ifdef UNDER_TEST 
+            __raiseErr(erEvevUpdateServerRaisedInWrongState);
+            CONFIG_stopHere();
+            #endif
+        }
+    }
+    return false;
+}
 
 static uint8_t dispatchEv_evMsgOk(void){
     switch(__state){
+        case stClosingTcpConnection:{
+            enterSt_connectServer();
+            break;
+        }
+        case stConnectServer:{
+            enterSt_updateServer();
+            break;
+        }
         case stUpdateServer:{
             switch(updateServer()){
                 case code_didSomeWork:{
@@ -100,8 +199,8 @@ static uint8_t dispatchEv_evMsgOk(void){
 static uint8_t dispatchEv_evStart(void){
     switch(__state){
         case stIdle:{
-            enterSt_updateServer();
-            client_raiseEv_do();
+//            enterSt_connectServer();
+            client_raiseEvenUpdateServer();
             return 1;
             break;
         }
@@ -115,31 +214,17 @@ static uint8_t dispatchEv_evStart(void){
     return 0;
 }
 
-static uint8_t dispatchEv_evDo(void){
-    switch(__state){
-        case stUpdateServer:{
-            switch(updateServer()){
-                case code_didNothing:{
-                    return false;
-                }
-                case code_didSomeWork:{
-                    return true;
-                }
-                case code_done:{
-                    return true;
-                } default:{
-                    
-                }
-            }
-            break;
-        } 
-        default:{
-            
-        }
+
+/****************************** EVENT HANDLERS ****************************** */
+static uint8_t handleEv_updateServer(void){
+    if(transmitter_send((uint8_t*)COMMAND_CLOSE_TCP, sizeof(COMMAND_CLOSE_TCP))){
+        enterSt_closingTcpConnection();
+        return true;
     }
-    return 0;
+    return false;
 }
 
+/****************************** OTHERS ****************************** */
 static client_Code updateServer(void){
     char size[20];
     uint16_t bodySize, headerSize;
@@ -205,8 +290,40 @@ static client_Code updateServer(void){
 }
 
 /*************************** STATE TRANZITION ***************************/
-static void enterSt_updateServer(void){
+
+static uint8_t enterSt_connectServer(void){
+    if(transmitter_send((uint8_t*)COMMAND_CONNECT_SERVER, sizeof(COMMAND_CONNECT_SERVER) - 1 ) ){
+        __setSt(stConnectServer);
+        return true;
+    } else {
+        #ifdef UNDER_TEST
+        __raiseErr(erTrBusy);
+        CONFIG_stopHere();
+        #endif
+        return false;
+    }
+    
+}
+
+static void enterSt_closingTcpConnection(void){
+    __setSt(stClosingTcpConnection);
+}
+static uint8_t enterSt_updateServer(void){
     __setSt(stUpdateServer);
+    switch(updateServer()){
+        case code_didNothing:{
+            return false;
+        }
+        case code_didSomeWork:{
+            return true;
+        }
+        case code_done:{
+            enterSt_idle();
+            return true;
+        } default:{
+
+        }
+    }
 }
 //
 //static void exitSt_updateServer(void){
@@ -258,3 +375,24 @@ static uint16_t composePostUpdateHeader(char * stAddr, uint16_t bodySize){
     
     return strlen(stAddr);
 }
+
+// == CALBACKS ====================================
+static void  onServerAckTimeout(void){
+#ifdef UNDER_TEST
+//    CONFIG_stopHere();
+#endif
+    CONF_raiseNvErrBit(conf_nvErrClent_AckTimeOut);
+    __raiseErr(clientAckTimeout);
+    SYSTEM_softReset();
+}
+
+static void  onServerUpdTimeout(void){
+#ifdef UNDER_TEST
+    __raiseErr(clientUpdTimeout);
+//    CONFIG_stopHere();
+#endif
+    CONF_raiseNvErrBit(conf_nvErrClent_UpdTimeOut);
+    SYSTEM_softReset();
+}
+
+

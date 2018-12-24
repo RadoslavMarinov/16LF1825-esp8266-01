@@ -22,31 +22,47 @@
  * 
  * 013DC
  */ 
+  
 
 void main(void)
 {
 
+
     main_init();
     ESP_ENABLE();
 
-    esp_reset(timer_getTicksFromMS(ESP_RESET_TIME_MS), onEspReset);
 
-    
+    if(ESP_MODE_PIN()){
+        eeprom_clearAllErrors();
+    }
+//    DATAEE_WriteByte(__getAddr(eeIdx), data );
+   
+   
+
+//    eeprom_readMem(0xE0, buff, 32);
+
+
+    esp_reset(timer_getTicksFromMS(ESP_RESET_TIME_MS), onEspReset);
     while (1)
     {
         if(receiver_task()){
             continue;
         }
+
+        LED_RED_ON();
         if(communicator_task()){
             continue;
         }
+        LED_RED_OFF();
         if(timer_task()){
             continue;
         }
+        LED_RED_ON();
         if(client_task())
         {
             continue;
         }
+        LED_RED_OFF();
         if(server_task()){
             continue;
         }
@@ -94,28 +110,10 @@ void config_dummyFunc(void){
     }
 }
 
+
 /**
  End of File
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits

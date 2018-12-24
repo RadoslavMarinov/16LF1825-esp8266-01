@@ -37,6 +37,7 @@ typedef struct {
   
     unsigned int errCallBackNULL :1;
     unsigned int errTimerFull :1;
+    unsigned int errTryingToRestartDisabledTimer :1;
     
 }Errors;
 

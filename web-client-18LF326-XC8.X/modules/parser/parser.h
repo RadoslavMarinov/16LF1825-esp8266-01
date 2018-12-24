@@ -15,6 +15,7 @@
 
 
 typedef enum {
+    parserCode_fail = -2,
     parserCode_Error = -1,
     parserCode_Ok = 0,
     parserCode_Json = 1,

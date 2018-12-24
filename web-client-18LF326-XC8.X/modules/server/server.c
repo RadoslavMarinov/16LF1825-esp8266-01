@@ -51,10 +51,10 @@ void server_raiseEventMsgOk(void){
     __raiseEv(evMsgOk);
 }
 
-void server_raiseEventCloseTcpOk(void){
-    enterSt_closinTcpConnection();
-    __raiseEv(evMsgOk);
-}
+//void server_raiseEventCloseTcpOk(void){
+//    enterSt_closinTcpConnection();
+//    __raiseEv(evMsgOk);
+//}
 
 
 /**************************EVENT DISPATCHERS **************************/

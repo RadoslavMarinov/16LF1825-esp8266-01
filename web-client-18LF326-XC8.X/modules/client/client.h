@@ -12,6 +12,9 @@ uint8_t client_task(void);
 uint8_t client_raiseEvStart(void);
 uint8_t client_raiseEv_do(void);
 uint8_t client_raiseEventMsgOk(void);
+uint8_t client_raiseEvenUpdateServer(void);
+uint8_t client_raiseEventError(void);
+uint8_t client_raiseEventAck(void);
 
 #endif	/* CLIENT_H */
 

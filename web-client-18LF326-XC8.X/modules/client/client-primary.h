@@ -10,6 +10,7 @@
 
 #include "../../config.h"
 #include "client.h"
+#include "../timer/timer.h"
 
 #ifndef CLIENT_HEADER_MAX_SIZE
 #error "Missing required CLIENT_HEADER_MAX_SIZE"
@@ -39,8 +40,10 @@ typedef struct {
     union {
         struct{
             unsigned int evStart;
-            unsigned int evDo;
             unsigned int evMsgOk;
+            unsigned int evUpdateServer;
+            unsigned int evAck;
+            unsigned int evError;
         };
         uint16_t evCont;
     };
@@ -48,21 +51,39 @@ typedef struct {
 
 typedef enum {
     stIdle = 0,
+    stConnectServer,
+    stClosingTcpConnection,
     stUpdateServer,
 }client_State;
 
 typedef struct {
-    unsigned int erEvDoRaiseOvrfl;
-    unsigned int erEvevMsgOkRaiseOvrfl;
-    unsigned int erEvevStartRaisedInWrongState;
-    unsigned int erEvevMsgOkRaisedInWrongState;
-    unsigned int erEventStartRaisedInWrongState;
+    union{
+        struct {
+            unsigned int erEvDoRaiseOvrfl : 1;
+            unsigned int erEvErrorAtWrongState : 1;
+            unsigned int erEvevMsgOkRaiseOvrfl : 1;
+            unsigned int erEvevStartRaisedInWrongState : 1;
+            unsigned int erEvevMsgOkRaisedInWrongState : 1;
+            unsigned int erEventStartRaisedInWrongState : 1;
+            unsigned int erEvevUpdateServerRaisedInWrongState : 1;
+            unsigned int erEvevUpdateServerInWrongState : 1;
+            unsigned int erTrBusy : 1; //8
+            unsigned int clientAckTimeout : 1; //9
+            unsigned int clientUpdTimeout : 1; //10
+            
+        };
+        uint16_t errCont;
+    };
 }client_Errors;
+
+
 
 typedef struct {
     client_Events events; 
     client_State state;
     client_Errors errors;
+    timer_Hook serverAckTimer;
+    timer_Hook serverUpdTimer;
     char txBuff[CLIENT_HEADER_MAX_SIZE + CLIENT_BODY_MAX_SIZE];
     char bodyBuff[CLIENT_BODY_MAX_SIZE];
 }client_Self;
@@ -81,7 +102,15 @@ typedef struct {
 
 // == ERRORS
 #define __errors                        ( client_self.errors )
-#define __raiseErr(err)                 do{ __errors.err = 1; CONFIG_raiseError(client); }while(0)
+#define __raiseErr(err)                 do{__errors.err = 1;}while(0)
+
+// == SERVER DEATH TIMEOUT
+#define __serverAckTimer              ( client_self.serverAckTimer )
+#define __setServerAckTimer(tmr)      do{__serverAckTimer = (tmr);}while(0)                  
+
+// == SERVER UPDATE TIMEOUT
+#define __serverUpdTimer              ( client_self.serverUpdTimer )
+
 
 // == TX BUFFER
 #define __txBuff                        (client_self.txBuff)
@@ -90,14 +119,26 @@ typedef struct {
 #define __bodyBuff                      (client_self.bodyBuff)
 
 //  == EVENT DSPATCHERS
-
+static uint8_t dispatchEv_updateServer(void);
 static uint8_t dispatchEv_evStart(void);
 static uint8_t dispatchEv_evDo(void);
 static uint8_t dispatchEv_evMsgOk(void);
+static uint8_t dispatchEv_error(void);
+static uint8_t dispatchEv_evAck(void);
+
+// == EVENT HANDLERS
+static uint8_t handleEv_updateServer(void);
 
 //  == STATE TRANZITION 
-static void enterSt_updateServer(void);
 static void enterSt_idle(void);
+static uint8_t enterSt_connectServer(void);
+static uint8_t enterSt_updateServer(void);
+static void enterSt_closingTcpConnection(void);
+
+
+// == CALBACKS ====================================
+static void  onServerAckTimeout(void);
+static void  onServerUpdTimeout(void);
 
 //  == OTHERS
 static client_Code updateServer(void);

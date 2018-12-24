@@ -18,6 +18,9 @@
 // 
 #include "mcc_generated_files/tmr1.h"
 #include "mcc_generated_files/pin_manager.h"
+#include "modules/eeprom/eeprom.h"
+
+//#define TSHOOTING
 
 /******************************** APPLICATION ERROR MONITOR *******************************/
 
@@ -35,13 +38,20 @@ struct {
     unsigned int client:1;
 }config_appErrors;
 
+
+
+//#define CONF_raiseErr(module, err)  do{ module##_self.errors.err = 1 }while(0)
+
+
+
 #define CONFIG_raiseError(err)          do{config_appErrors.err = 1;}while(0)
 #define CONFIG_clearError(err)          do{config_appErrors.err = 0;}while(0)
+//#define CONF_saveErrNvMem(err)          do{ eeprom_writeNextError(#err); }while(0)
 
 
 /********************************* CONDITIONAL COMPILATION *********************************/
 #define UNDER_TEST
-#define CONFIG_stopHere()  do{ ; }while(1)
+#define CONFIG_stopHere()  do{ ; }while(conf_one)
 
 /* APPLICATION CONFIGURATION */
 #define DEVICE_ID       "FA661234A511"
@@ -51,7 +61,11 @@ struct {
 //COMANDER
 
 /*********************************** Interfaces ***********************************/
-// Main
+
+//  == SYSTEM ===========================
+#define SYSTEM_softReset()                  do{ RESET(); }while(0)
+
+//  ==  Main ===========================
 //The time taken to hold the ESP  in reset (viaRESET_PIN low)
 #define ESP_RESET_TIME_MS           (300U)
 /*
@@ -66,13 +80,18 @@ struct {
  */
 #define ESP_RESET_MSG_TIME_MS       (500U)
 
-//Timer
+
+//  ==  EEPROM ===========================
+#define EE_DIAG_ERRS                0xE0U //224 dec
+#define EE_DIAG_ERRS_LEN            32U   // 0x20 hex
+    
+//  ==  Timer ===========================
 #define Timner_Ticks                TimerTicks    
 #define TIMER_COUNT                 5
 #define SYSTEM_TIMER_getTicks()     ( timer1_getTicks() )
 #define TICKS_FREQ                  100LU
 
-// GPIO
+//  ==  GPIO ===========================
 #define SWITCH1_ON()                do{ SW1_SetHigh(); }while(0)
 #define SWITCH1_OFF()               do{ SW1_SetLow(); }while(0)
 
@@ -92,9 +111,14 @@ struct {
 #define ESP_DISABLE()               do{ CH_PD_SetLow(); }while(0)
 
 #define ESP_MODE_PIN()              ( SERVER_EN_H_GetValue() )
+
+//  == CLIETN ===========================
+#define SERVER_ACK_TIMEOUT_MS     35000U        
+#define SERVER_UPD_TIMEOUT_MS     60000U  
+
 /* SERVER DATA */
-#define CONF_SERVER_HOST                "192.168.0.101"
-//#define CONF_SERVER_HOST                "electricity-manager1.herokuapp.com"
+//#define CONF_SERVER_HOST                "192.168.0.101"
+#define CONF_SERVER_HOST                "electricity-manager1.herokuapp.com"
 #define CONF_SERVER_PORT                "80"
 #define CONF_SERVER_UPDATE_ROUTE        "/enddev"
 
@@ -116,6 +140,33 @@ struct {
 
 #define GET_SW1_VALUE()             ( SW1_GetValue() ) 
 #define GET_SW2_VALUE()             ( SW2_GetValue() ) 
+
+
+/****************** GLOBAL ERRORS *******************/
+
+// == NV ERRORS ====================
+enum {
+    conf_nvErrCmtr_joinApFailed = 0,
+    conf_nvErrCmtr_espErrMsg,
+    conf_nvErrClent_UpdTimeOut,         
+    conf_nvErrClent_AckTimeOut,         
+    conf_testBit,
+}CONF_NvErrBits;
+
+#define CONF_getErrBitAddr(bit)             ( ( bit / 8 ) + EE_DIAG_ERRS )
+#define CONF_getErrBitPossition(bit)        ( bit % 8 )
+
+#define CONF_raiseNvErrBit(bit) \
+        do{eeprom_raiseBit( CONF_getErrBitAddr(bit), CONF_getErrBitPossition(bit)); }while(0)
+
+// == NV ERRORS ====================
+
+#ifndef GLOBAL_VARS
+    #define GLOBAL_VARS
+
+    const char COMMAND_CLOSE_TCP[] = "AT+CIPCLOSE\r\n";
+    const char COMMAND_CONNECT_SERVER[] = "AT+CIPSTART=\"TCP\",\"" CONF_SERVER_HOST"\","CONF_SERVER_PORT"\r\n";
+#endif
 
 /*********************************** A ***********************************/
 #endif	/* CONFIG_H */

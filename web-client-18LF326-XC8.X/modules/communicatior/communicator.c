@@ -121,14 +121,14 @@ static uint8_t dispatchMsgOk(void) {
 
         //------------ STATE
         case stJoinAp:{
-            enterState_connectServer();
-            break;
-        }
-        //------------ STATE
-        case stConnectServer:{
             enterState_httpClient();
             break;
         }
+        //------------ STATE
+//        case stConnectServer:{
+//            enterState_httpClient();
+//            break;
+//        }
         //------------ STATE
         default:
             break;
@@ -292,16 +292,6 @@ static void enterState_httpServer(void){
     receiver_setOnFrameCb(parser_httpServer);
 }
 
-static void enterState_connectServer(){
-    __setState(stConnectServer);
-    if( false == __trSend(COMMAND_CONNECT_SERVER, sizeof(COMMAND_CONNECT_SERVER) - 1 ) ){
-        #ifdef UNDER_TEST
-        __raiseErr(errTrBusy);
-        CONFIG_stopHere();
-        #endif
-    }
-}
-
 static void enterState_httpClient(void){
     __setState(stHttpClient);
     receiver_setOnFrameCb(parser_httpClient);
@@ -333,7 +323,13 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
         }
         /***************** CODE  ERROR ********************/
         case parserCode_Error:{
+            CONF_raiseNvErrBit(conf_nvErrCmtr_espErrMsg);
             __raiseErr(errEspErrorMessage);
+            break;
+        }
+        /***************** CODE  FAIL ********************/
+        case parserCode_fail:{
+            handle_parserCodeFail();
             break;
         }
         default:{
@@ -344,6 +340,20 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
     receiver_resetFrBuff();
 }
 
+
+// HADLERS -----------------
+static void handle_parserCodeFail(void){
+    switch (__state){
+        case stJoinAp:{
+            CONF_raiseNvErrBit(conf_nvErrCmtr_joinApFailed);
+            SYSTEM_softReset();
+            break;
+        }
+        default:{
+        
+        }
+    }
+}
 
 // TIMER CALLBACKS
 static void raiseServerEvStart(void){

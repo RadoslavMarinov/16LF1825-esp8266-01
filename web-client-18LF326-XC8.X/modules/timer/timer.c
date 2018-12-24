@@ -40,8 +40,8 @@ void timer_init(void){
     }
 }
 
-int16_t timer_start(Timner_Ticks after, Timer_CallBack cb){
-    int16_t timer;
+timer_Hook timer_start(Timner_Ticks after, Timer_CallBack cb){
+    timer_Hook timer;
     for(timer = 0; timer < TIMER_COUNT; timer++) {
         if(!__isEnabledTimer(timer)){
             runTimer(timer, after, cb);
@@ -56,7 +56,7 @@ int16_t timer_start(Timner_Ticks after, Timer_CallBack cb){
 }
 
 
-int8_t timer_stop(uint16_t timer){
+int8_t timer_stop(timer_Hook timer){
     if(__isEnabledTimer(timer)){
         __setTimerCb(timer, NULL);
         __disableTimer(timer);
@@ -64,6 +64,20 @@ int8_t timer_stop(uint16_t timer){
     }
     return -1;
 }
+
+//timer_Code timer_restart(timer_Hook timer){
+//    if(!__isEnabledTimer(timer)){
+//        #ifdef UNDER_TEST
+//        __setError(errTryingToRestartDisabledTimer);
+//        CONFIG_stopHere();
+//        #endif
+//        return timer_codeNotEnabled;
+//    } else {
+//        runTimer(timer, __getTimerExpTime(timer), __getTimerCb(timer));
+//        return timer_codeSuccess;
+//    }
+//}
+
 
 static void runTimer(uint16_t timer, Timner_Ticks after, Timer_CallBack cb){
     __setTimerCb(timer, cb);

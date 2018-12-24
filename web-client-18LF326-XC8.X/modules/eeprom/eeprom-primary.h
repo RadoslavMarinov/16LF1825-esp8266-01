@@ -10,6 +10,15 @@
 
 #include "eeprom.h"
 
+
+#ifndef EE_DIAG_ERRS // NV memory diagnostig errors start address
+#error "Missing required EE_DIAG_ERRS"
+#endif
+
+#ifndef EE_DIAG_ERRS_LEN // NV memory diagnostig errors Length in bytes
+#error "Missing required EE_DIAG_ERRS_LEN"
+#endif
+
 #define MODULE_NAME eeprom
 
 /******************************************************************************* 
@@ -30,13 +39,15 @@
 /******************************************************************************* 
  * CONFIGURATION
  ******************************************************************************/
+// SERVER SSID - START 0 end 15
 #define EE_IDX_WIFI_SSID            0U    
 #define EE_WIFI_SSID_MAX_LEN        16U
-
+// SERVER SSID - START 16 end 31
 #define EE_IDX_WIFI_PWD             ( EE_IDX_WIFI_SSID + EE_WIFI_SSID_MAX_LEN )
-#define EE_WIFI_PWD_MAX_LEN        16U
+#define EE_WIFI_PWD_MAX_LEN         16U
+// ERRORS - START 200 end 255
 
-
+#define EE_DIAG_ERRS_END            (EE_DIAG_ERRS + (EE_DIAG_ERRS_LEN))
 /******************************************************************************* 
  * EEPROM LAYOUT 
  ******************************************************************************/
@@ -49,7 +60,7 @@
  * TYPEDEFS
  ******************************************************************************/
 typedef struct {
-    unsigned int errWriteAtWrongAddr;
+    unsigned int errWriteAtBeyondEepromAddrSpace;
     unsigned int errReadAtWrongAddr;
     unsigned int errTooLongWifiSsid;
 }Errors;

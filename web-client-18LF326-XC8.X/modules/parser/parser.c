@@ -27,17 +27,21 @@ Parser_Codes parser_httpClient(char * frameStAddr, uint16_t len) {
     
     if(*cur == '{'){
         if(jsonParser_analyse(cur) == jsonParser_codeInvalidJson){
-            
+            #ifdef UNDER_TEST
+            CONFIG_stopHere();
+            #endif
         }
     }
     else if(strcmp("upd", cur) == 0){
-        client_raiseEventMsgOk();
+        client_raiseEvenUpdateServer();
     } else if(strcmp("OK", cur) == 0){
         client_raiseEventMsgOk();
     }else if(strcmp("SEND OK", cur) == 0){
         client_raiseEventMsgOk();
     }else if(strcmp("ack", cur) == 0){
-//        code =  parserCode_serverAck;
+        client_raiseEventAck();
+    } else if(strcmp("ERROR", cur) == 0){
+        client_raiseEventError();
     }
     receiver_resetFrBuff();
 //    else if()
@@ -63,6 +67,8 @@ Parser_Codes parser_analyse(char * frameStAddr, uint16_t len) {
         code = parserCode_Error;
     } else if(strcmp(curr, "ready") == 0 ){
         code = parserCode_Ready;
+    }else if(strcmp(curr, "FAIL") == 0 ){
+        code = parserCode_fail;
     } else {
         return parserCode_Unknown;
     }
@@ -193,13 +199,13 @@ static char * getStartOfStr(char * endCh, uint16_t len){
 
 //if number is greater than 9 - return 255
 //startOfLine should point to the begginnig of the the "+IPD" line
-uint8_t parser_getTcpConNum(char * startOfLine){
-    
-    do{
-        startOfLine++;
-    }while(*startOfLine != ',');
-    if( *(startOfLine+1) != ','){
-        return 0xFF;
-    }
-    return (*startOfLine) - 48;
-}
+//uint8_t parser_getTcpConNum(char * startOfLine){
+//    
+//    do{
+//        startOfLine++;
+//    }while(*startOfLine != ',');
+//    if( *(startOfLine+1) != ','){
+//        return 0xFF;
+//    }
+//    return (*startOfLine) - 48;
+//}
