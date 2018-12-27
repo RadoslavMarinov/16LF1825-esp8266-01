@@ -56,6 +56,18 @@ timer_Hook timer_start(Timner_Ticks after, Timer_CallBack cb){
     return -1;
 }
 
+timer_Code timer_restart(timer_Hook timer){
+    if(__isEnabledTimer(timer)){
+        __setTimerStartTime(timer, SYSTEM_TIMER_getTicks());
+    } else {
+        return timer_codeNotEnabled;
+    }
+    return timer_codeSuccess;
+}
+
+
+
+
 //timer_Hook timer_startReapeatMode(Timner_Ticks after, Timer_CallBack eachCycleCb, uint16_t repeat,  timer_RepeatEndCallBack endCb){
 //
 //    return 15;
