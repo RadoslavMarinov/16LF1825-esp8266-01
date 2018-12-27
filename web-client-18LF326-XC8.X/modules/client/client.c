@@ -112,12 +112,12 @@ uint8_t client_raiseEventMsgOk(void){
 static uint8_t dispatchEv_evAck(void){
     switch (__state){
         case stIdle:{
-            timer_stop(__serverAckTimer);
             return 1;
         }
         default :{
+            CONF_raiseNvErrBit(conf_nvErr_client_evAckRaisedInNonIdle);
             #ifdef UNDER_TEST
-            CONFIG_stopHere();
+//            CONFIG_stopHere();
             #endif
         }
     }
@@ -148,9 +148,6 @@ static uint8_t dispatchEv_error(void){
 static uint8_t dispatchEv_updateServer(void){
     switch (__state){
         case stIdle:{
-            timer_stop(__serverUpdTimer);
-            __serverAckTimer = timer_start(timer_getTicksFromMS(SERVER_ACK_TIMEOUT_MS), onServerAckTimeout);
-            __serverUpdTimer = timer_start(timer_getTicksFromMS(SERVER_UPD_TIMEOUT_MS), onServerUpdTimeout);
             return handleEv_updateServer();
             break;
         } default:{
@@ -377,22 +374,22 @@ static uint16_t composePostUpdateHeader(char * stAddr, uint16_t bodySize){
 }
 
 // == CALBACKS ====================================
-static void  onServerAckTimeout(void){
-#ifdef UNDER_TEST
-//    CONFIG_stopHere();
-#endif
-    CONF_raiseNvErrBit(conf_nvErrClent_AckTimeOut);
-    __raiseErr(clientAckTimeout);
-    SYSTEM_softReset();
-}
-
-static void  onServerUpdTimeout(void){
-#ifdef UNDER_TEST
-    __raiseErr(clientUpdTimeout);
-//    CONFIG_stopHere();
-#endif
-    CONF_raiseNvErrBit(conf_nvErrClent_UpdTimeOut);
-    SYSTEM_softReset();
-}
+//static void  onServerAckTimeout(void){
+//#ifdef UNDER_TEST
+////    CONFIG_stopHere();
+//#endif
+//    CONF_raiseNvErrBit(conf_nvErrClent_AckTimeOut);
+//    __raiseErr(clientAckTimeout);
+//    SYSTEM_softReset();
+//}
+//
+//static void  onServerUpdTimeout(void){
+//#ifdef UNDER_TEST
+//    __raiseErr(clientUpdTimeout);
+////    CONFIG_stopHere();
+//#endif
+//    CONF_raiseNvErrBit(conf_nvErrClent_UpdTimeOut);
+//    SYSTEM_softReset();
+//}
 
 

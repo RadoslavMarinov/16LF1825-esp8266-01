@@ -152,8 +152,7 @@ struct {
 enum {
     conf_nvErrCmtr_joinApFailed = 0,
     conf_nvErrCmtr_espErrMsg,
-    conf_nvErrClent_UpdTimeOut,         
-    conf_nvErrClent_AckTimeOut, 
+    conf_nvErr_client_evAckRaisedInNonIdle,
     conf_nvErr_timer_callBackNULL,
     conf_testBit,
 }CONF_NvErrBits;
