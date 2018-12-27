@@ -45,7 +45,7 @@ typedef struct {
 }Errors;
 
 typedef struct {
-    Timner_Ticks expTicks;
+    Timner_Ticks expTicks; //expire after this amount of ticks, not at this ticks
     Timner_Ticks startTics;
     Timer_CallBack callBack;
     timer_RepeatEndCallBack repeatEndCb;
@@ -74,7 +74,7 @@ typedef struct {
 #define __setError(err)                     do{ __errors.err = 1; __addGlobalError();}while(0)
 #define __isRaisedError(err)                (__errors.err == 1 ? true : false )
 
-// Expiration Time in Ticks
+// Expiration Time after Ticks
 #define __setTimerExpTime(timer, time)    do{ __timers[timer].expTicks = (time); }while(0)
 #define __getTimerExpTime(timer)          (__timers[timer].expTicks)
 // Start Time Stamp in Ticks
