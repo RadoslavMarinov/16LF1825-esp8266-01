@@ -41,24 +41,20 @@ void main(void)
         if(receiver_task()){
             continue;
         }
-
-        LED_RED_ON();
         if(communicator_task()){
             continue;
         }
-        LED_RED_OFF();
         if(timer_task()){
             continue;
         }
-        LED_RED_ON();
         if(client_task())
         {
             continue;
         }
-        LED_RED_OFF();
         if(server_task()){
             continue;
         }
+        LED_GREEN_TOGGLE();
 //        if(SYSTEM_TIMER_getTicks() > timer_getTicksFromSeconds(650) && !once){
 //            timer_start(timer_getTicksFromSeconds(10), enableEsp);
 //            once = 1;
