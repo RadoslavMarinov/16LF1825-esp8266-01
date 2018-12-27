@@ -106,17 +106,17 @@ void eeprom_writeByte(uint16_t eeIdx, uint8_t data){
     DATAEE_WriteByte(__getAddr(eeIdx), data );
 }
 
-void eeprom_readMem(uint16_t eeIdx, uint8_t * dest, uint16_t size){
-    uint16_t cur;
-    uint8_t data;
-    while( eeIdx < EE_SIZE && (size > 0) ){
-        data = eeprom_readByte(eeIdx);
-        *dest = data;
-        dest++;
-        size--;
-        eeIdx++;
-    }
-}
+//void eeprom_readMem(uint16_t eeIdx, uint8_t * dest, uint16_t size){
+//    uint16_t cur;
+//    uint8_t data;
+//    while( eeIdx < EE_SIZE && (size > 0) ){
+//        data = eeprom_readByte(eeIdx);
+//        *dest = data;
+//        dest++;
+//        size--;
+//        eeIdx++;
+//    }
+//}
 
 char * eeprom_readStr(char * dest, uint16_t eeStartIdx){ 
     uint16_t idx = 0;
@@ -148,9 +148,9 @@ uint8_t eeprom_readByte(uint16_t eeIdx){
  * !!! NOT TESTED
  "from"  "to"  inclusive 
  */
-void eeprom_erase(uint16_t from, uint16_t to){
-    eeprom_memset(from, to, 0xFF);
-}
+//void eeprom_erase(uint16_t from, uint16_t to){
+//    eeprom_memset(from, to, 0xFF);
+//}
 
 void eeprom_memset(uint16_t from, uint16_t to, uint8_t data){
     uint16_t cur = from;

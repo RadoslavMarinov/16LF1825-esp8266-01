@@ -11,7 +11,7 @@ uint8_t timer_task(void){
 
     uint8_t didSomeWork = false;
     uint16_t timer;
-    for(timer = 0; timer < TIMER_COUNT; timer++) {
+    for(timer = 0; (__timerCont >> timer) > 0; timer++) {
         if(__isEnabledTimer(timer) && __hasExpiredTimer(timer)){
             if( __getTimerCb(timer) != NULL ){
                 __runTimerCb(timer);
@@ -19,6 +19,7 @@ uint8_t timer_task(void){
                 didSomeWork = true;
             } else {
                 __setError(errCallBackNULL);
+                CONF_raiseNvErrBit(conf_nvErr_timer_callBackNULL);
             }
         }
     }
@@ -36,8 +37,8 @@ void timer_init(void){
     // Disable all timers
     for(timer = 0; timer < TIMER_COUNT; timer++) {
         __setTimerCb(timer, NULL);
-        __disableTimer(timer);
     }
+    __timerCont = 0;
 }
 
 timer_Hook timer_start(Timner_Ticks after, Timer_CallBack cb){
@@ -54,6 +55,12 @@ timer_Hook timer_start(Timner_Ticks after, Timer_CallBack cb){
 #endif
     return -1;
 }
+
+//timer_Hook timer_startReapeatMode(Timner_Ticks after, Timer_CallBack eachCycleCb, uint16_t repeat,  timer_RepeatEndCallBack endCb){
+//
+//    return 15;
+//    
+//}
 
 
 int8_t timer_stop(timer_Hook timer){

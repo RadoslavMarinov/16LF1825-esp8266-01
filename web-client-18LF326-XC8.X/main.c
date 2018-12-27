@@ -24,24 +24,17 @@
  */ 
   
 
+
 void main(void)
 {
 
 
     main_init();
     ESP_ENABLE();
-
-
     if(ESP_MODE_PIN()){
         eeprom_clearAllErrors();
     }
-//    DATAEE_WriteByte(__getAddr(eeIdx), data );
    
-   
-
-//    eeprom_readMem(0xE0, buff, 32);
-
-
     esp_reset(timer_getTicksFromMS(ESP_RESET_TIME_MS), onEspReset);
     while (1)
     {

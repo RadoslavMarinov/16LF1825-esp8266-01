@@ -87,7 +87,9 @@ struct {
     
 //  ==  Timer ===========================
 #define Timner_Ticks                TimerTicks    
-#define TIMER_COUNT                 5
+//!!
+#define TIMER_COUNT                 5 //Max 16 timer allowed
+
 #define SYSTEM_TIMER_getTicks()     ( timer1_getTicks() )
 #define TICKS_FREQ                  100LU
 
@@ -100,9 +102,11 @@ struct {
 
 #define LED_RED_ON()                do{ LED2_SetLow(); }while(0)
 #define LED_RED_OFF()               do{ LED2_SetHigh(); }while(0)
+#define LED_RED_TOGGLE()            do{ LED2_Toggle();}while(0)
 
 #define LED_GREEN_ON()              do{ LED1_SetLow(); }while(0)
 #define LED_GREEN_OFF()             do{ LED1_SetHigh(); }while(0)
+#define LED_GREEN_TOGGLE()          do{ LED1_Toggle();}while(0)
 
 #define ESP_RESET_ENABLE()          do{ CH_RESET_SetLow(); }while(0)
 #define ESP_RESET_DISABLE()         do{ CH_RESET_SetHigh(); }while(0)
@@ -149,7 +153,8 @@ enum {
     conf_nvErrCmtr_joinApFailed = 0,
     conf_nvErrCmtr_espErrMsg,
     conf_nvErrClent_UpdTimeOut,         
-    conf_nvErrClent_AckTimeOut,         
+    conf_nvErrClent_AckTimeOut, 
+    conf_nvErr_timer_callBackNULL,
     conf_testBit,
 }CONF_NvErrBits;
 
@@ -167,6 +172,7 @@ enum {
     const char COMMAND_CLOSE_TCP[] = "AT+CIPCLOSE\r\n";
     const char COMMAND_CONNECT_SERVER[] = "AT+CIPSTART=\"TCP\",\"" CONF_SERVER_HOST"\","CONF_SERVER_PORT"\r\n";
 #endif
+    
 
 /*********************************** A ***********************************/
 #endif	/* CONFIG_H */

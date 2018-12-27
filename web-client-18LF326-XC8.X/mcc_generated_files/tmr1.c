@@ -62,7 +62,7 @@ void (*TMR1_InterruptHandler)(void);
   Section: TMR1 APIs
 */
 
-static uint16_t ticks; 
+static volatile uint16_t ticks; 
 
 uint16_t timer1_getTicks(void){
     return ticks;
