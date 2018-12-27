@@ -51,7 +51,7 @@ struct {
 
 /********************************* CONDITIONAL COMPILATION *********************************/
 #define UNDER_TEST
-#define CONFIG_stopHere()  do{ ; }while(conf_one)
+#define CONFIG_stopHere()  do{ ; }while(1)
 
 /* APPLICATION CONFIGURATION */
 #define DEVICE_ID       "FA661234A511"
