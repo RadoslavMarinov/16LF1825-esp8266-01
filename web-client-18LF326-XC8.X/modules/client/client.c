@@ -9,8 +9,6 @@ static client_Self client_self;
 
 uint8_t client_task(void){
 
-
-    
     if(__isRaisedEv(evMsgOk)){
         if( dispatchEv_evMsgOk() ){
             __clearEv(evMsgOk);
