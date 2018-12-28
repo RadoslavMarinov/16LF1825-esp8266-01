@@ -41,7 +41,7 @@ timer_Hook timer_start(Timner_Ticks after, Timer_CallBack cb);
  */
 int8_t timer_stop(timer_Hook timer);
 
-timer_Code timer_restart(timer_Hook timer);
+timer_Code timer_reset(timer_Hook timer);
 
 void timer_init(void);
 #endif	/* TIMER_H */

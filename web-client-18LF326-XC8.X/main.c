@@ -22,13 +22,9 @@
  * 
  * 013DC
  */ 
-  
-
 
 void main(void)
 {
-
-
     main_init();
     ESP_ENABLE();
     if(ESP_MODE_PIN()){

@@ -56,7 +56,7 @@ timer_Hook timer_start(Timner_Ticks after, Timer_CallBack cb){
     return -1;
 }
 
-timer_Code timer_restart(timer_Hook timer){
+timer_Code timer_reset(timer_Hook timer){
     if(__isEnabledTimer(timer)){
         __setTimerStartTime(timer, SYSTEM_TIMER_getTicks());
     } else {
