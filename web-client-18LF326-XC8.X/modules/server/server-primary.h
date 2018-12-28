@@ -67,6 +67,7 @@ typedef struct {
 #define __hasPendingEv()                    (!!__evCont)
 #define __raiseEv(ev)                       do{ __events.ev = 1; }while(0);
 #define __clearEv(ev)                       do{ __events.ev = 0; }while(0);
+#define __clearAllEvs()                     do{ __evCont = 0; }while(0);
 //== STATE
 #define __state                             (server_self.state)
 #define __setSt(st)                         do{ __state = (st); }while(0)

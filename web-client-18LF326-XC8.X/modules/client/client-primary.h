@@ -82,8 +82,7 @@ typedef struct {
     client_Events events; 
     client_State state;
     client_Errors errors;
-    timer_Hook serverAckTimer;
-    timer_Hook serverUpdTimer;
+//    timer_Hook serverAckTimer;
     char txBuff[CLIENT_HEADER_MAX_SIZE + CLIENT_BODY_MAX_SIZE];
     char bodyBuff[CLIENT_BODY_MAX_SIZE];
 }client_Self;
@@ -103,13 +102,6 @@ typedef struct {
 // == ERRORS
 #define __errors                        ( client_self.errors )
 #define __raiseErr(err)                 do{__errors.err = 1;}while(0)
-
-// == SERVER DEATH TIMEOUT
-#define __serverAckTimer              ( client_self.serverAckTimer )
-#define __setServerAckTimer(tmr)      do{__serverAckTimer = (tmr);}while(0)                  
-
-// == SERVER UPDATE TIMEOUT
-#define __serverUpdTimer              ( client_self.serverUpdTimer )
 
 
 // == TX BUFFER

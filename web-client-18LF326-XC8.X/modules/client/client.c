@@ -48,6 +48,14 @@ uint8_t client_task(void){
     return false;
 }
 
+/****************************** INITS ******************************/
+void client_init(void){
+    __clearAllEvs();
+    __setSt(stIdle);
+}
+
+
+/****************************** EVENT RAISERS ******************************/
 uint8_t client_raiseEventAck(void){
     if(__inSt(stIdle)){
         __raiseEv(evAck);

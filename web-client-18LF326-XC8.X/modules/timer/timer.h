@@ -15,7 +15,7 @@
 #define timer_getTicksFromSeconds(secs)   ( (secs) * TICKS_FREQ )
 #define timer_getTicksFromMS(ms)          ( (ms) / ( 1000 / TICKS_FREQ ) )
 
-typedef uint16_t timer_Hook;
+typedef int16_t timer_Hook;
 typedef uint16_t timer_Container;
 
 typedef void (*Timer_CallBack)(void);

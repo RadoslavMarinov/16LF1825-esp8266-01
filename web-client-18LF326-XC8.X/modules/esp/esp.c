@@ -21,6 +21,7 @@ void esp_reset(Timner_Ticks ticks, void(*cb)(void)) {
     int16_t timer = timer_start(ticks, releaseEspFromReset);
     if( timer < 0 ){
         __raiseError(errUnavailableTimer);
+        CONF_raiseNvErrBit(conf_nvErr_esp_timerNotAvail);
     } else {
         __setAfterReset(cb);
         __setTimerNumber(timer);

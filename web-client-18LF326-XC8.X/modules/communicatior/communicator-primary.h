@@ -91,7 +91,6 @@ typedef struct{
     union {
     struct{
         unsigned int evInitEsp : 1;
-        unsigned int evWaitReceiver : 1;
     };
     uint8_t evsCont;
     };

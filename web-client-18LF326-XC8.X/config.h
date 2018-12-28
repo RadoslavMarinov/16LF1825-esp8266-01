@@ -150,11 +150,16 @@ struct {
 
 // == NV ERRORS ====================
 enum {
-    conf_nvErrCmtr_joinApFailed = 0,
-    conf_nvErrCmtr_espErrMsg,
+    // CLIENT
     conf_nvErr_client_evAckRaisedInNonIdle,
+    //COMMUNICATOR
+    conf_nvErr_communicator_joinApFailed,
+    conf_nvErr_communicator_espErrMsg,
+    // ESP
+    conf_nvErr_esp_timerNotAvail,
+    // TIMER
     conf_nvErr_timer_callBackNULL,
-    conf_testBit,
+    conf_nvErr_timer_overflow,
 }CONF_NvErrBits;
 
 #define CONF_getErrBitAddr(bit)             ( ( bit / 8 ) + EE_DIAG_ERRS )

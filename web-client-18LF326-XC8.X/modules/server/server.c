@@ -29,6 +29,13 @@ uint8_t server_task(void){
     
 }
 
+void server_init(void){
+    __clearAllEvs();
+    __setSt(__stIdle);
+   __setRoute( server_routeInvalid);
+   __setHttpMethod( server_httpMethodInvalid);
+}
+
 /************************** PUBLIC METHODS **************************/
 void server_raiseEventSendData(server_Routes route,  server_HttpMethod httpMeth){
     

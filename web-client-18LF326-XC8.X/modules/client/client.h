@@ -8,6 +8,7 @@
 #ifndef CLIENT_H
 #define	CLIENT_H
 
+void client_init(void);
 uint8_t client_task(void);
 uint8_t client_raiseEvStart(void);
 uint8_t client_raiseEv_do(void);

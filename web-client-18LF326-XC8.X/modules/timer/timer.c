@@ -51,7 +51,7 @@ timer_Hook timer_start(Timner_Ticks after, Timer_CallBack cb){
     }
 #ifdef UNDER_TEST
     __setError(errTimerFull);
-    CONFIG_stopHere();
+    CONF_raiseNvErrBit(conf_nvErr_timer_overflow);
 #endif
     return -1;
 }

@@ -8,6 +8,7 @@
 #include "../parser/parser.h"
 #include "../parser/json-parser/json-parser.h"
 #include "../client/client.h"
+#include "../server/server.h"
 
 Self comm_self;
 
@@ -27,15 +28,23 @@ uint8_t communicator_task(void){
 }
 
 
-void communicator_init(uint8_t start, communicator_EspMode espMode){
+void communicator_init(uint8_t startReceiver, communicator_EspMode espMode){
+    
     __setEspMode(espMode);
     communicator_initSelf();
-    receiver_init(parser_analyse, handleMessage, false);
-    transmitter_init(NULL);
-    
-//    parser_init(handleMessage);
-    if(start){
-//        __raiseEv(evReset);
+    receiver_init(parser_analyse, handleMessage, startReceiver);
+    transmitter_init(NULL);   
+    switch(espMode){
+        case communicator_espModeStation:{
+            client_init();
+            break;
+        }
+        case communicator_espModeAccessPoint:{
+            server_init();
+            break;
+        } default :{
+            
+        }
     }
 }
 
@@ -53,7 +62,6 @@ static void communicator_initSelf(void){
     __setState(stOff);
 
 }
-
 
 
 /************************************************************************
@@ -323,7 +331,7 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
         }
         /***************** CODE  ERROR ********************/
         case parserCode_Error:{
-            CONF_raiseNvErrBit(conf_nvErrCmtr_espErrMsg);
+            CONF_raiseNvErrBit(conf_nvErr_communicator_espErrMsg);
             __raiseErr(errEspErrorMessage);
             break;
         }
@@ -345,7 +353,7 @@ static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
 static void handle_parserCodeFail(void){
     switch (__state){
         case stJoinAp:{
-            CONF_raiseNvErrBit(conf_nvErrCmtr_joinApFailed);
+            CONF_raiseNvErrBit(conf_nvErr_communicator_joinApFailed);
             SYSTEM_softReset();
             break;
         }
