@@ -30,6 +30,8 @@
 #endif
 
 
+
+
 typedef enum{
     code_didSomeWork,
     code_didNothing,
@@ -76,13 +78,22 @@ typedef struct {
     };
 }client_Errors;
 
+typedef enum {
+    client_tmrServerAliveTimeout,
+    client_tmrsNumber,
+}client_Timers;
 
+typedef struct {
+    timer_Hook hook;
+    unsigned int active:1;
+}client_Timer;
 
 typedef struct {
     client_Events events; 
     client_State state;
     client_Errors errors;
-//    timer_Hook serverAckTimer;
+    client_Timer timers[client_tmrsNumber];
+    client_OnError onErr;
     char txBuff[CLIENT_HEADER_MAX_SIZE + CLIENT_BODY_MAX_SIZE];
     char bodyBuff[CLIENT_BODY_MAX_SIZE];
 }client_Self;
@@ -103,6 +114,19 @@ typedef struct {
 #define __errors                        ( client_self.errors )
 #define __raiseErr(err)                 do{__errors.err = 1;}while(0)
 
+// == TIMERS
+#define __timers                        (client_self.timers)
+#define __timerEnable(tmr, tmrHook)     \
+    do{ __timers[tmr].hook = (tmrHook); __timers[tmr].active = 1; }while(0)
+#define __timerDisable(tmr)             do{ __timers[tmr].active = 0; }while(0)
+#define __timerEnabled(tmr)             ( __timers[tmr].active ? true : false )
+#define __timerGetHook(tmr)             ( __timers[tmr].hook )
+
+// == ON ERROR - Callback function invoked by client when error happens
+#define __onError                       (client_self.onErr)
+#define __setOnErr(cb)                  do{ __onError = (cb); }while(0)
+#define __callOnErr(errMsg)             do{ __onError(errMsg);  }while(0)
+void __onErrDummy(const char * bla){}
 
 // == TX BUFFER
 #define __txBuff                        (client_self.txBuff)
@@ -129,8 +153,7 @@ static void enterSt_closingTcpConnection(void);
 
 
 // == CALBACKS ====================================
-static void  onServerAckTimeout(void);
-static void  onServerUpdTimeout(void);
+static void onServerAliveTimeout(void);
 
 //  == OTHERS
 static client_Code updateServer(void);

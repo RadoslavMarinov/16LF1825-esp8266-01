@@ -49,9 +49,12 @@ uint8_t client_task(void){
 }
 
 /****************************** INITS ******************************/
-void client_init(void){
+
+void client_init(client_OnError onErr){
     __clearAllEvs();
     __setSt(stIdle);
+    __setOnErr(__onErrDummy); // in case param "onErr" is NULL - fucking compiler trick
+    __setOnErr(onErr);
 }
 
 
@@ -158,8 +161,9 @@ static uint8_t dispatchEv_updateServer(void){
             break;
         } default:{
             #ifdef UNDER_TEST 
+            CONF_raiseNvErrBit(conf_nvErr_client_evUpdServStErr);
             __raiseErr(erEvevUpdateServerRaisedInWrongState);
-            CONFIG_stopHere();
+//            CONFIG_stopHere();
             #endif
         }
     }
@@ -220,6 +224,14 @@ static uint8_t dispatchEv_evStart(void){
 
 /****************************** EVENT HANDLERS ****************************** */
 static uint8_t handleEv_updateServer(void){
+    timer_Hook hook;
+    if( __timerEnabled(client_tmrServerAliveTimeout) ){
+        timer_reset(__timerGetHook(client_tmrServerAliveTimeout));
+    } else {
+        hook = timer_start(timer_getTicksFromSeconds(50), onServerAliveTimeout);
+        __timerEnable(client_tmrServerAliveTimeout, hook);
+    }
+    
     if(transmitter_send((uint8_t*)COMMAND_CLOSE_TCP, sizeof(COMMAND_CLOSE_TCP))){
         enterSt_closingTcpConnection();
         return true;
@@ -380,6 +392,20 @@ static uint16_t composePostUpdateHeader(char * stAddr, uint16_t bodySize){
 }
 
 // == CALBACKS ====================================
+
+
+static void onServerAliveTimeout(void){
+    __timerDisable(client_tmrServerAliveTimeout);
+//    config_dummyFunc();
+    if(__onError != NULL ){
+        __onError("Server Not Available!");
+    } else {
+        CONF_raiseNvErrBit(conf_nvErr_client_OnErrCallBackNull);
+    }
+    //    communicator_init(false, communicator_espModeStation);
+//    esp_reset(timer_getTicksFromMS(ESP_RESET_TIME_MS), receiver_start())
+}
+
 //static void  onServerAckTimeout(void){
 //#ifdef UNDER_TEST
 ////    CONFIG_stopHere();

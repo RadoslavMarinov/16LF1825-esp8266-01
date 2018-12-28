@@ -91,6 +91,7 @@ typedef struct{
     union {
     struct{
         unsigned int evInitEsp : 1;
+        unsigned int evReinit : 1;
     };
     uint8_t evsCont;
     };
@@ -168,6 +169,7 @@ typedef struct {
 static uint8_t dispatchEvInitEsp(void);
 //static uint8_t dispatchEventWaitReceiver(void);
 static uint8_t dispatchMsgOk(void);
+static uint8_t dispatchEveReinit(void);
 /******************** HANDLERS ********************/
 static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len);
 /******************** TRAMSITIONS ********************/
@@ -184,8 +186,13 @@ static void enterState_connectServer(void);
 static void enterState_httpClient(void);
 
 static void handle_parserCodeFail(void);
-// TIMER CALLBACKS
+// TIMER 
 static void raiseServerEvStart(void);
+
+//CALLBACKS
+static void onClientError(const char * err);
+static void onEspOn(void);
+static void onEspInitMsgPast(void);
 
 
 /******************** OTHERS ********************/

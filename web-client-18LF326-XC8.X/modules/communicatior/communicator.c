@@ -1,14 +1,15 @@
 #include "../../config.h"
-#include "../eeprom/eeprom.h"
-#include "../timer/timer.h"
 #include "communicator-primary.h"
 #include "communicator.h"
+#include "../eeprom/eeprom.h"
+#include "../timer/timer.h"
 #include "../receiver/receiver.h"
 #include "../transmitter/transmitter.h"
 #include "../parser/parser.h"
 #include "../parser/json-parser/json-parser.h"
 #include "../client/client.h"
 #include "../server/server.h"
+#include "../esp/esp.h"
 
 Self comm_self;
 
@@ -23,6 +24,10 @@ uint8_t communicator_task(void){
             __clearEv(evInitEsp);
             didWork = dispatchEvInitEsp();
         }
+        if( __isRaisedEv(evReinit) ){
+            __clearEv(evReinit);
+            didWork = dispatchEveReinit();
+        }
     }
     return didWork;
 }
@@ -36,7 +41,7 @@ void communicator_init(uint8_t startReceiver, communicator_EspMode espMode){
     transmitter_init(NULL);   
     switch(espMode){
         case communicator_espModeStation:{
-            client_init();
+            client_init(onClientError);
             break;
         }
         case communicator_espModeAccessPoint:{
@@ -46,27 +51,32 @@ void communicator_init(uint8_t startReceiver, communicator_EspMode espMode){
             
         }
     }
+    esp_reset(onEspOn);
 }
 
-void communicator_initEsp(void){
+uint8_t communicator_raiseEvReinit(){
+    __raiseEv(evReinit);
+    return true;
+}
+
+
+uint8_t communicator_raiseEvInitEsp(void){
     __raiseEv(evInitEsp);
+    return true;
 }
 
 
 
-/************************************************************************
- * STATIC METHODS
- ***********************************************************************/
-static void communicator_initSelf(void){
-    __clearAllEvents();
-    __setState(stOff);
-
-}
 
 
 /************************************************************************
  * STATIC EVENT DISPATCHERS
  ***********************************************************************/
+static uint8_t dispatchEveReinit(void){
+    communicator_init(false, __espMode);
+    return true;
+}
+
 static uint8_t dispatchEvInitEsp(void){
     enterSt_turnOffEcho();
     return true;
@@ -132,11 +142,7 @@ static uint8_t dispatchMsgOk(void) {
             enterState_httpClient();
             break;
         }
-        //------------ STATE
-//        case stConnectServer:{
-//            enterState_httpClient();
-//            break;
-//        }
+
         //------------ STATE
         default:
             break;
@@ -363,7 +369,28 @@ static void handle_parserCodeFail(void){
     }
 }
 
-// TIMER CALLBACKS
 static void raiseServerEvStart(void){
     enterState_httpClient();
+}
+
+static void onEspOn(void){
+    timer_start(timer_getTicksFromMS(ESP_RESET_MSG_TIME_MS), onEspInitMsgPast); 
+}
+
+static void onEspInitMsgPast(void){
+    receiver_start();
+    communicator_raiseEvInitEsp();
+}
+
+static void onClientError(const char * err){
+    communicator_raiseEvReinit();
+}
+
+/************************************************************************
+ * HELPERS
+ ***********************************************************************/
+static void communicator_initSelf(void){
+    __clearAllEvents();
+    __setState(stOff);
+
 }

@@ -8,7 +8,7 @@
 #ifndef ESP_H
 #define	ESP_H
 
-void esp_reset(Timner_Ticks ticks,void(*cb)(void));
+void esp_reset(void(*cb)(void));
 
 #endif	/* ESP_H */
 

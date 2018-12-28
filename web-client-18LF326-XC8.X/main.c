@@ -22,6 +22,8 @@
  * 
  * 013DC
  */ 
+main_Self main_self;
+
 
 void main(void)
 {
@@ -31,7 +33,6 @@ void main(void)
         eeprom_clearAllErrors();
     }
    
-    esp_reset(timer_getTicksFromMS(ESP_RESET_TIME_MS), onEspReset);
     while (1)
     {
         if(receiver_task()){
@@ -79,14 +80,6 @@ void gpio_init(void){
     ESP_DISABLE(); 
 }
 
-static void onEspReset(void){
-    timer_start(timer_getTicksFromMS(ESP_RESET_MSG_TIME_MS) , start_communication);
-}
-
-static void start_communication(void){
-    receiver_start();
-    communicator_initEsp();
-}
 
 void config_dummyFunc(void){
     volatile int a = 7;

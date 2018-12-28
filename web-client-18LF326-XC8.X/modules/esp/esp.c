@@ -17,8 +17,16 @@ static void releaseEspFromReset(void){
     }
 }
 
-void esp_reset(Timner_Ticks ticks, void(*cb)(void)) {
-    int16_t timer = timer_start(ticks, releaseEspFromReset);
+
+/*
+ * Description: 
+ *      Holds the enable-pin in disable state for time specified bu "ticks" parameter. 
+ * Params:Disables ESP module by changing enable-Pin state.
+ *      cb: callback function to be called when reset time expire.
+ *      ticks: how much time in system ticks to hold the eps-enable pin in disable state.
+ */
+void esp_reset(void(*cb)(void)) {
+    int16_t timer = timer_start(timer_getTicksFromMS(ESP_RESET_TIME_MS), releaseEspFromReset);
     if( timer < 0 ){
         __raiseError(errUnavailableTimer);
         CONF_raiseNvErrBit(conf_nvErr_esp_timerNotAvail);

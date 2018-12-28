@@ -8,7 +8,9 @@
 #ifndef CLIENT_H
 #define	CLIENT_H
 
-void client_init(void);
+typedef void (*client_OnError)(const char * err);
+
+void client_init(client_OnError onErr);
 uint8_t client_task(void);
 uint8_t client_raiseEvStart(void);
 uint8_t client_raiseEv_do(void);

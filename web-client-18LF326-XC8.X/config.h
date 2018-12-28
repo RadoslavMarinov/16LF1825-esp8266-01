@@ -24,30 +24,12 @@
 
 /******************************** APPLICATION ERROR MONITOR *******************************/
 
-struct {
-    unsigned int comander:1;
-    unsigned int communicator:1;
-    unsigned int eeprom:1;
-    unsigned int esp:1;
-    unsigned int parser:1;
-    unsigned int json_parser:1;
-    unsigned int receiver:1;
-    unsigned int timer:1;
-    unsigned int transmitter:1;
-    unsigned int server:1;
-    unsigned int client:1;
-}config_appErrors;
-
-
-
 //#define CONF_raiseErr(module, err)  do{ module##_self.errors.err = 1 }while(0)
 
 
 
-#define CONFIG_raiseError(err)          do{config_appErrors.err = 1;}while(0)
-#define CONFIG_clearError(err)          do{config_appErrors.err = 0;}while(0)
-//#define CONF_saveErrNvMem(err)          do{ eeprom_writeNextError(#err); }while(0)
-
+#define CONFIG_raiseError(err)          do{main_self.appErrs.err = 1;}while(0)
+#define CONFIG_clearError(err)          do{main_self.appErrs.err = 0;}while(0)
 
 /********************************* CONDITIONAL COMPILATION *********************************/
 #define UNDER_TEST
@@ -152,6 +134,8 @@ struct {
 enum {
     // CLIENT
     conf_nvErr_client_evAckRaisedInNonIdle,
+    conf_nvErr_client_evUpdServStErr,
+    conf_nvErr_client_OnErrCallBackNull,
     //COMMUNICATOR
     conf_nvErr_communicator_joinApFailed,
     conf_nvErr_communicator_espErrMsg,
@@ -160,6 +144,8 @@ enum {
     // TIMER
     conf_nvErr_timer_callBackNULL,
     conf_nvErr_timer_overflow,
+    // TRANSMITTER
+    conf_nvErr_transmitter_sendWhileBusy,
 }CONF_NvErrBits;
 
 #define CONF_getErrBitAddr(bit)             ( ( bit / 8 ) + EE_DIAG_ERRS )

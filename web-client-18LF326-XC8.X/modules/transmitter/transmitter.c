@@ -28,6 +28,7 @@ uint8_t transmitter_send(uint8_t * data, uint16_t length){
         SET_CurIdx(0);
         return transmitter_sendNext();
     } else {
+        CONF_raiseNvErrBit(conf_nvErr_transmitter_sendWhileBusy);
         return false;
     }
 }
