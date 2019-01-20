@@ -2,15 +2,16 @@
 #include "main.h"
 #include "main-primary.h"
 #include "mcc_generated_files/mcc.h"
-#include "modules/receiver/receiver.h"
-#include "modules/transmitter/transmitter.h"
-#include "modules/communicatior/communicator.h"
+#include "modules/endpoints/binary-switch/binary-switch.h"
 #include "modules/transmitter/transmitter-primary.h"
+#include "modules/communicatior/communicator.h"
+#include "modules/transmitter/transmitter.h"
+#include "modules/receiver/receiver.h"
 #include "modules/eeprom/eeprom.h"
-#include "modules/timer/timer.h"
-#include "modules/esp/esp.h"
 #include "modules/server/server.h"
+#include "modules/timer/timer.h"
 #include "modules/client/client.h"
+#include "modules/esp/esp.h"
 
 /*
  *  TODO:
@@ -27,6 +28,7 @@ main_Self main_self;
 
 void main(void)
 {
+
     main_init();
     ESP_ENABLE();
     if(ESP_MODE_PIN()){
@@ -51,7 +53,7 @@ void main(void)
         if(server_task()){
             continue;
         }
-        LED_GREEN_TOGGLE();
+//        LED_GREEN_TOGGLE();
 //        if(SYSTEM_TIMER_getTicks() > timer_getTicksFromSeconds(650) && !once){
 //            timer_start(timer_getTicksFromSeconds(10), enableEsp);
 //            once = 1;
@@ -77,7 +79,8 @@ void gpio_init(void){
     LED_RED_OFF();
     LED_GREEN_OFF();
     ESP_RESET_ENABLE(); 
-    ESP_DISABLE(); 
+    ESP_DISABLE();
+    binarySwitch_init(eeprom_readByte(EE_SW1_LEV_ADDR), eeprom_readByte(EE_SW2_LEV_ADDR));
 }
 
 

@@ -19,6 +19,12 @@
 
 typedef void (*Commander_fp)(void *);
 
+typedef enum {
+    commander_codeOk,
+    commander_codeCommandNotFound,
+    commander_codeCallBackNull,
+}commander_Code;
+
 typedef struct {
     char command[COMMAND_STR_MAX_LEN];
     Commander_fp fp;
@@ -29,8 +35,7 @@ typedef struct {
     Comander_commandUnit commander_commands[COMMANDER_COMMAND_COUNT];
 }Commander_commandMap;
 
-
-uint8_t commander_execute(char *command, void * value);
+commander_Code commander_execute(char *command, void * value);
 
 
 #endif	/* COMANDER_H */

@@ -8,36 +8,36 @@ static Self jsonParser_self;
 
 jsonParser_Code jsonParser_analyse(char * startAddr){ //Should point to '{' character
     char * data;
+    commander_Code commander_code;
+//    jsonParser_Code jsonParser_code = jsonParser_codeInvalidJson;
+
+    
     if(*startAddr != '{'){
         return jsonParser_codeInvalidJson;
     } else {
         data = startAddr;
     }
-    
-    
-//#ifdef UNDER_TEST
-//    uint16_t jsonStrLen = 0; 
-//#endif
-//    data = lastAddr;
-////    TODO: check if json is too long!
-//    while( (*data) != '{' ){
-//#ifdef UNDER_TEST
-//        if( jsonStrLen++ > JSON_MAX_STR_LEN ){
-//            __raiseErr(jsonStrTooLong);
-//            CONFIG_stopHere();
-//        }
-//#endif
-//        data--;
-//    }
-
+      
     while((*data) != '}' ){
         data++;
         // data now points to key open quote
         data = jsonParser_parse(data); //Data is now in Self data
         /* Data now points either to closing '"' , or at the last character of 
          the number */
-            NOP();
-        commander_execute(__keyArr, __valArr);
+        
+        commander_code = commander_execute(__keyArr, __valArr);
+        // == Dispatch commander, command execution code
+        switch(commander_code){
+            case commander_codeCallBackNull:
+            case commander_codeOk:{
+                break;
+            }
+            case commander_codeCommandNotFound:
+            default:{
+                return jsonParser_codeInvalidJson;
+            }
+        }
+        // ==
         data ++;
         // data now points to key open quote
     }

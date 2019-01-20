@@ -57,6 +57,15 @@
           <itemPath>modules/eeprom/eeprom.c</itemPath>
           <itemPath>modules/eeprom/eeprom.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="endpoints" displayName="endpoints" projectFiles="true">
+          <logicalFolder name="binary-switch"
+                         displayName="binary-switch"
+                         projectFiles="true">
+            <itemPath>modules/endpoints/binary-switch/binary-switch-primary.h</itemPath>
+            <itemPath>modules/endpoints/binary-switch/binary-switch.c</itemPath>
+            <itemPath>modules/endpoints/binary-switch/binary-switch.h</itemPath>
+          </logicalFolder>
+        </logicalFolder>
         <logicalFolder name="esp" displayName="esp" projectFiles="true">
           <itemPath>modules/esp/esp.c</itemPath>
           <itemPath>modules/esp/esp-primary.h</itemPath>

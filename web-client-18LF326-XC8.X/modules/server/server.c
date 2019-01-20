@@ -23,7 +23,7 @@ uint8_t server_task(void){
                 __clearEv(evMsgOk);
             }
         }         
-    }
+        }
     
     return didSomeWork;
     

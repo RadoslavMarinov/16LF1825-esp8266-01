@@ -97,13 +97,35 @@ void eeprom_writeStr(char * data, uint16_t offset){
     eeprom_writeByte(offset, '\0');
 }
 
+void halEeprom_WriteByte(uint16_t bAdd, uint8_t bData)
+{
+    uint8_t GIEBitValue = INTCONbits.GIE;
+
+    NVMADRH = ((bAdd >> 8) & 0xFF);
+    NVMADRL = (bAdd & 0xFF);
+    NVMDATL = bData;    
+    NVMCON1bits.NVMREGS = 1;
+    NVMCON1bits.WREN = 1;
+//    INTCONbits.GIE = 0;     // Disable interrupts
+    NVMCON2 = 0x55;
+    NVMCON2 = 0xAA;
+    NVMCON1bits.WR = 1;
+    // Wait for write to complete
+    while (NVMCON1bits.WR)
+    {
+    }
+
+    NVMCON1bits.WREN = 0;
+//    INTCONbits.GIE = GIEBitValue;   // restore interrupt enable
+}
+
 void eeprom_writeByte(uint16_t eeIdx, uint8_t data){
     
     if(eeIdx >= EE_SIZE){
         __raiseErr(errWriteAtBeyondEepromAddrSpace);
         return;
     }
-    DATAEE_WriteByte(__getAddr(eeIdx), data );
+    halEeprom_WriteByte(__getAddr(eeIdx), data );
 }
 
 //void eeprom_readMem(uint16_t eeIdx, uint8_t * dest, uint16_t size){
@@ -131,6 +153,7 @@ char * eeprom_readStr(char * dest, uint16_t eeStartIdx){
     return dest;
 }
 
+// eeIdx is relative address. It is the offset from the EEPROM start address
 uint8_t eeprom_readByte(uint16_t eeIdx){
     
     if( eeIdx >= EE_SIZE ){

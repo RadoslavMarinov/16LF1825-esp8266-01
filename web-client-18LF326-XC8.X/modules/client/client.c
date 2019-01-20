@@ -80,7 +80,7 @@ uint8_t client_raiseEventAck(void){
     } else {
         #ifdef UNDER_TEST
         __raiseErr(erEvevUpdateServerInWrongState);
-        CONFIG_stopHere();
+        CONF_raiseNvErrBit(conf_nvErr_client_evUpdServStErr);
         #endif
         return false;
     }
@@ -160,11 +160,7 @@ static uint8_t dispatchEv_updateServer(void){
             return handleEv_updateServer();
             break;
         } default:{
-            #ifdef UNDER_TEST 
-            CONF_raiseNvErrBit(conf_nvErr_client_evUpdServStErr);
-            __raiseErr(erEvevUpdateServerRaisedInWrongState);
-//            CONFIG_stopHere();
-            #endif
+
         }
     }
     return false;
@@ -228,7 +224,7 @@ static uint8_t handleEv_updateServer(void){
     if( __timerEnabled(client_tmrServerAliveTimeout) ){
         timer_reset(__timerGetHook(client_tmrServerAliveTimeout));
     } else {
-        hook = timer_start(timer_getTicksFromSeconds(50), onServerAliveTimeout);
+        hook = timer_start(timer_getTicksFromSeconds(SERVER_UPD_TIMEOUT_S), onServerAliveTimeout);
         __timerEnable(client_tmrServerAliveTimeout, hook);
     }
     
@@ -362,13 +358,13 @@ static uint16_t composePostUpdateBody(char* startAddr){
     // endpoints
     strcat(cur, "\"endpoints\":");
     //SW1
-    strcat(cur, "[{\"sw1\":{\"state\":");
-    strcat(cur, GET_SW1_VALUE() ? "1": "0");
+    strcat(cur, "[{\"bs1\":{\"state\":");
+    strcat(cur, SWITCH1_GET_VALUE() ? "1": "0");
     strcat(cur, "}},");
     //SW2
-    strcat(cur, "{\"sw2\":{\"state\":");
+    strcat(cur, "{\"bs2\":{\"state\":");
     // SWITCH 1 STATE
-    strcat(cur, GET_SW2_VALUE() ? "1": "0");
+    strcat(cur, SWITCH2_GET_VALUE() ? "1": "0");
     strcat(cur, "}}]}");
     //
     strcat(cur, "\r\n\r\n");

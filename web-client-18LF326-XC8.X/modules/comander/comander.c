@@ -1,40 +1,39 @@
 
 #include "../../config.h"
-#include "../eeprom/eeprom.h"
 #include "comander.h"
 #include "comander-primary.h"
+#include "../eeprom/eeprom.h"
+#include "../endpoints/binary-switch/binary-switch.h"
 
 const Commander_commandMap commandMap = { .commander_commands={
-    {"a1", NULL},                           //0
-    {"a2", NULL},                           
-    {"b1", NULL},                           
-    {"b11", NULL},
-    {"c1", NULL},
-    {"so", NULL},                          
+    {"bs1s", binarySwitch_setInst1Level},             //binary switch 1 set value depend on the argument                      
+    {"bs2s", binarySwitch_setInst2Level},             //binary switch 2 set value depend on the argument                     
     {"swfid", eeprom_writeWiFiSsid},        
     {"swfpwd", eeprom_writeWiFiPwd},                          
-    {"z22", NULL},
-    {"z22", NULL},                          //9  
+    {"z22", NULL},                         
 } };
 
-uint8_t commander_execute(char *command, void * value) {
+commander_Code commander_execute(char *command, void * value) {
     int16_t mapIdx;
     mapIdx = commander_find(command);
     
     /* If mapIdx is lower than 0 the string is not found.
-     * If the callback at the coresponding unit index is NULL,
+     * If the callback at the corresponding unit index is NULL,
      * then there is no action to perform for the given command.
      */
     
-    if( mapIdx >=0 && __getCallBack(mapIdx) != NULL ){
+    if( mapIdx >=0 ){
+        if(__getCallBack(mapIdx) == NULL){
+            CONF_raiseNvErrBit(conf_nvErr_commander_callBackNull);
+            return commander_codeCallBackNull;
+        }
         __runMapCallBack(mapIdx, value);
+        return commander_codeOk;
     } else {
-        return 1; 
+        CONF_raiseNvErrBit(conf_nvErr_commander_commandNotFound);
+        return commander_codeCommandNotFound; 
     }
-    
-    return 0;
-}
-
+}                                                                                                                                     
 /* Returns the index of the string(the command) if it is found.
  * If not found, returns -1.
  */

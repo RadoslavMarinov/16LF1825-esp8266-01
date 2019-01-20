@@ -21,12 +21,12 @@
 #endif
 
 
-#ifndef GET_SW1_VALUE
-#error "Missing required GET_SW1_VALUE()"
+#ifndef SWITCH1_GET_VALUE
+#error "Missing required SWITCH1_GET_VALUE()"
 #endif
 
-#ifndef GET_SW2_VALUE
-#error "Missing required GET_SW2_VALUE()"
+#ifndef SWITCH2_GET_VALUE
+#error "Missing required SWITCH2_GET_VALUE()"
 #endif
 
 

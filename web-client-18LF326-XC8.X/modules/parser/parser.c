@@ -27,9 +27,9 @@ Parser_Codes parser_httpClient(char * frameStAddr, uint16_t len) {
     
     if(*cur == '{'){
         if(jsonParser_analyse(cur) == jsonParser_codeInvalidJson){
-            #ifdef UNDER_TEST
-            CONFIG_stopHere();
-            #endif
+           CONF_raiseNvErrBit(conf_nvErr_parser_msgStartsWithOpenBracketButNotJSON);
+        } else {
+            client_raiseEvenUpdateServer();
         }
     }
     else if(strcmp("upd", cur) == 0){

@@ -66,6 +66,9 @@
 //  ==  EEPROM ===========================
 #define EE_DIAG_ERRS                0xE0U //224 dec
 #define EE_DIAG_ERRS_LEN            32U   // 0x20 hex
+// ENDPOINTS NV VALUES
+#define EE_SW1_LEV_ADDR             0x40           
+#define EE_SW2_LEV_ADDR             0x41           
     
 //  ==  Timer ===========================
 #define Timner_Ticks                TimerTicks    
@@ -78,9 +81,11 @@
 //  ==  GPIO ===========================
 #define SWITCH1_ON()                do{ SW1_SetHigh(); }while(0)
 #define SWITCH1_OFF()               do{ SW1_SetLow(); }while(0)
+#define SWITCH1_GET_VALUE()         ( SW1_GetValue() ) 
 
 #define SWITCH2_ON()                do{ SW2_SetHigh(); }while(0)
-#define SWITCH2_OFF()               do{ SW1_SetLow(); }while(0)
+#define SWITCH2_OFF()               do{ SW2_SetLow(); }while(0)
+#define SWITCH2_GET_VALUE()         ( SW2_GetValue() ) 
 
 #define LED_RED_ON()                do{ LED2_SetLow(); }while(0)
 #define LED_RED_OFF()               do{ LED2_SetHigh(); }while(0)
@@ -100,7 +105,7 @@
 
 //  == CLIETN ===========================
 #define SERVER_ACK_TIMEOUT_MS     35000U        
-#define SERVER_UPD_TIMEOUT_MS     60000U  
+#define SERVER_UPD_TIMEOUT_S        15U  
 
 /* SERVER DATA */
 //#define CONF_SERVER_HOST                "192.168.0.101"
@@ -124,8 +129,6 @@
 #define CLIENT_HEADER_MAX_SIZE      100U
 #define CLIENT_BODY_MAX_SIZE        100U
 
-#define GET_SW1_VALUE()             ( SW1_GetValue() ) 
-#define GET_SW2_VALUE()             ( SW2_GetValue() ) 
 
 
 /****************** GLOBAL ERRORS *******************/
@@ -136,10 +139,15 @@ enum {
     conf_nvErr_client_evAckRaisedInNonIdle,
     conf_nvErr_client_evUpdServStErr,
     conf_nvErr_client_OnErrCallBackNull,
+    // COMMANDER
+    conf_nvErr_commander_callBackNull,
+    conf_nvErr_commander_commandNotFound,
     //COMMUNICATOR
     conf_nvErr_communicator_joinApFailed,
     conf_nvErr_communicator_espErrMsg,
     // ESP
+    // PARSER
+    conf_nvErr_parser_msgStartsWithOpenBracketButNotJSON,
     conf_nvErr_esp_timerNotAvail,
     // TIMER
     conf_nvErr_timer_callBackNULL,
