@@ -142,7 +142,11 @@ static uint8_t dispatchEv_error(void){
             break;
         } 
         case stConnectServer:{
-            SYSTEM_softReset();
+            timer_stop(__timerGetHook(client_tmrServerAliveTimeout));
+            clearTimerHooks();
+            __callOnErr(NULL);
+            return true;
+            //            SYSTEM_softReset();
         }
         default:{
             #ifdef UNDER_TEST
@@ -152,6 +156,7 @@ static uint8_t dispatchEv_error(void){
             #endif
         }
     }
+    
 }
 
 static uint8_t dispatchEv_updateServer(void){
@@ -385,6 +390,13 @@ static uint16_t composePostUpdateHeader(char * stAddr, uint16_t bodySize){
     strcat(stAddr, "\r\n\r\n");
     
     return strlen(stAddr);
+}
+
+static void clearTimerHooks(void){
+    uint8_t i;
+    for(i=0; i < client_tmrsNumber; i++){
+        __timerDisable(i);
+    }
 }
 
 // == CALBACKS ====================================

@@ -28,8 +28,18 @@ main_Self main_self;
 
 void main(void)
 {
-
+   
     main_init();
+        /**/
+    volatile uint32_t c = 0;
+    config_dummyFunc();
+    LED_RED_ON();
+    while(c < 500000){
+        c++;
+        CLRWDT();
+    }
+    LED_RED_OFF();
+    /**/ 
     ESP_ENABLE();
     if(ESP_MODE_PIN()){
         eeprom_clearAllErrors();
@@ -53,6 +63,8 @@ void main(void)
         if(server_task()){
             continue;
         }
+        CLRWDT();
+
 //        LED_GREEN_TOGGLE();
 //        if(SYSTEM_TIMER_getTicks() > timer_getTicksFromSeconds(650) && !once){
 //            timer_start(timer_getTicksFromSeconds(10), enableEsp);

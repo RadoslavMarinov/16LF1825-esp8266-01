@@ -79,8 +79,8 @@ typedef struct {
 }client_Errors;
 
 typedef enum {
-    client_tmrServerAliveTimeout,
-    client_tmrsNumber,
+    client_tmrServerAliveTimeout = 0,//First must be 0
+    client_tmrsNumber,//Designates the number of the timers being used by the module
 }client_Timers;
 
 typedef struct {
@@ -122,6 +122,8 @@ typedef struct {
 #define __timerEnabled(tmr)             ( __timers[tmr].active ? true : false )
 #define __timerGetHook(tmr)             ( __timers[tmr].hook )
 
+
+
 // == ON ERROR - Callback function invoked by client when error happens
 #define __onError                       (client_self.onErr)
 #define __setOnErr(cb)                  do{ __onError = (cb); }while(0)
@@ -159,6 +161,7 @@ static void onServerAliveTimeout(void);
 static client_Code updateServer(void);
 static uint16_t composePostUpdateBody(char* startAddr);
 static uint16_t composePostUpdateHeader(char * stAddr, uint16_t bodySize);
+static void clearTimerHooks(void);
 
 #define HEADER_POST_UPDATE_SIZE "AT+CIPSEND=19\r\n"
 

@@ -179,27 +179,27 @@ void FLASH_EraseBlock(uint16_t startAddr)
   Section: Data EEPROM Module APIs
 */
 
-void DATAEE_WriteByte(uint16_t bAdd, uint8_t bData)
-{
-    uint8_t GIEBitValue = INTCONbits.GIE;
-
-    NVMADRH = ((bAdd >> 8) & 0xFF);
-    NVMADRL = (bAdd & 0xFF);
-    NVMDATL = bData;    
-    NVMCON1bits.NVMREGS = 1;
-    NVMCON1bits.WREN = 1;
-    INTCONbits.GIE = 0;     // Disable interrupts
-    NVMCON2 = 0x55;
-    NVMCON2 = 0xAA;
-    NVMCON1bits.WR = 1;
-    // Wait for write to complete
-    while (NVMCON1bits.WR)
-    {
-    }
-
-    NVMCON1bits.WREN = 0;
-    INTCONbits.GIE = GIEBitValue;   // restore interrupt enable
-}
+//void DATAEE_WriteByte(uint16_t bAdd, uint8_t bData)
+//{
+//    uint8_t GIEBitValue = INTCONbits.GIE;
+//
+//    NVMADRH = ((bAdd >> 8) & 0xFF);
+//    NVMADRL = (bAdd & 0xFF);
+//    NVMDATL = bData;    
+//    NVMCON1bits.NVMREGS = 1;
+//    NVMCON1bits.WREN = 1;
+//    INTCONbits.GIE = 0;     // Disable interrupts
+//    NVMCON2 = 0x55;
+//    NVMCON2 = 0xAA;
+//    NVMCON1bits.WR = 1;
+//    // Wait for write to complete
+//    while (NVMCON1bits.WR)
+//    {
+//    }
+//
+//    NVMCON1bits.WREN = 0;
+//    INTCONbits.GIE = GIEBitValue;   // restore interrupt enable
+//}
 
 uint8_t DATAEE_ReadByte(uint16_t bAdd)
 {

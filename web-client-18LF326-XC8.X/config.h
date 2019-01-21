@@ -108,8 +108,8 @@
 #define SERVER_UPD_TIMEOUT_S        15U  
 
 /* SERVER DATA */
-//#define CONF_SERVER_HOST                "192.168.0.101"
-#define CONF_SERVER_HOST                "electricity-manager1.herokuapp.com"
+#define CONF_SERVER_HOST                "192.168.0.101"
+//#define CONF_SERVER_HOST                "electricity-manager1.herokuapp.com"
 #define CONF_SERVER_PORT                "80"
 #define CONF_SERVER_UPDATE_ROUTE        "/enddev"
 
