@@ -51,6 +51,7 @@ Parser_Codes parser_httpClient(char * frameStAddr, uint16_t len) {
   
 }
 
+/* PARSER INIT PHASE */
 Parser_Codes parser_analyse(char * frameStAddr, uint16_t len) {
 
     char * curr = (char *)( frameStAddr + (len - 1) ); /*  "curr"should point to '\0'

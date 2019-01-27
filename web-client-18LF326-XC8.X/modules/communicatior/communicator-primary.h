@@ -171,7 +171,7 @@ static uint8_t dispatchEvInitEsp(void);
 static uint8_t dispatchMsgOk(void);
 static uint8_t dispatchEveReinit(void);
 /******************** HANDLERS ********************/
-static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len);
+static void handleMessage(Parser_Codes code);
 /******************** TRAMSITIONS ********************/
 static void enterSt_turnOffEcho(void);
 static void enterSt_setWifiMode(communicator_EspMode espMode);

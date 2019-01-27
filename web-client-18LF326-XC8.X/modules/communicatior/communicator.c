@@ -38,7 +38,8 @@ void communicator_init(uint8_t startReceiver, communicator_EspMode espMode){
     __setEspMode(espMode);
     communicator_initSelf();
     receiver_init(parser_analyse, handleMessage, startReceiver);
-    transmitter_init(NULL);   
+    transmitter_init(NULL); 
+    timer_init();
     switch(espMode){
         case communicator_espModeStation:{
             client_init(onClientError);
@@ -315,8 +316,7 @@ static void enterState_httpClient(void){
 /************************************************************************
  * STATIC CALL BACKS
  ***********************************************************************/
-//Parser_OnMsg
-static void handleMessage(Parser_Codes code, uint8_t * data, uint16_t len) {
+static void handleMessage(Parser_Codes code) {
     
     switch(code){
         /***************** CODE OK ********************/
@@ -360,7 +360,7 @@ static void handle_parserCodeFail(void){
     switch (__state){
         case stJoinAp:{
             CONF_raiseNvErrBit(conf_nvErr_communicator_joinApFailed);
-            SYSTEM_softReset();
+            communicator_raiseEvReinit();
             break;
         }
         default:{
@@ -383,6 +383,8 @@ static void onEspInitMsgPast(void){
 }
 
 static void onClientError(const char * err){
+    LED_RED_ON();
+    LED_GREEN_OFF();
     communicator_raiseEvReinit();
 }
 

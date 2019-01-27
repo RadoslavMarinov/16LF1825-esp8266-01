@@ -65,8 +65,7 @@ uint8_t client_raiseEventAck(void){
         return true;
     } else {
         #ifdef UNDER_TEST
-        __raiseErr(erEvevUpdateServerInWrongState);
-        CONFIG_stopHere();
+        CONF_raiseNvErrBit(conf_nvErr_client_evUpdServerInWrongState);
         #endif
         return false;
     }  
@@ -97,8 +96,7 @@ uint8_t client_raiseEvStart(void){
        return true;
     } else {
         #ifdef UNDER_TEST
-        __raiseErr(erEvevStartRaisedInWrongState);
-        CONFIG_stopHere();
+        CONF_raiseNvErrBit(conf_nvErr_client_evStartRaisedInWrongState);
         #endif
         return false;
     }
@@ -108,8 +106,7 @@ uint8_t client_raiseEvStart(void){
 uint8_t client_raiseEventMsgOk(void){
 #ifdef UNDER_TEST 
     if(__isRaisedEv(evMsgOk)){
-        __raiseErr(erEvevMsgOkRaiseOvrfl);
-        CONFIG_stopHere();
+       CONF_raiseNvErrBit(conf_nvErr_client_evMsgOkRaiseOvrfl);
     }
 #endif
     __raiseEv(evMsgOk);
@@ -121,6 +118,8 @@ uint8_t client_raiseEventMsgOk(void){
 static uint8_t dispatchEv_evAck(void){
     switch (__state){
         case stIdle:{
+            LED_GREEN_ON();
+            LED_RED_OFF();
             return 1;
         }
         default :{
@@ -130,7 +129,7 @@ static uint8_t dispatchEv_evAck(void){
             #endif
         }
     }
-    return false;
+    return 0;
 }
 
 
@@ -151,7 +150,8 @@ static uint8_t dispatchEv_error(void){
         default:{
             #ifdef UNDER_TEST
             __raiseErr(erEvErrorAtWrongState);
-            CONFIG_stopHere();
+            CONF_raiseNvErrBit(conf_nvErr_client_clErrInUndefinedState);
+//            CONFIG_stopHere();
             return false;
             #endif
         }
@@ -410,6 +410,7 @@ static void onServerAliveTimeout(void){
     } else {
         CONF_raiseNvErrBit(conf_nvErr_client_OnErrCallBackNull);
     }
+    LED_GREEN_OFF();
     //    communicator_init(false, communicator_espModeStation);
 //    esp_reset(timer_getTicksFromMS(ESP_RESET_TIME_MS), receiver_start())
 }

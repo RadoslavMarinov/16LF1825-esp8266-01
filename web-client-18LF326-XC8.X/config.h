@@ -105,11 +105,11 @@
 
 //  == CLIETN ===========================
 #define SERVER_ACK_TIMEOUT_MS     35000U        
-#define SERVER_UPD_TIMEOUT_S        15U  
+#define SERVER_UPD_TIMEOUT_S        60U  
 
 /* SERVER DATA */
-#define CONF_SERVER_HOST                "192.168.0.101"
-//#define CONF_SERVER_HOST                "electricity-manager1.herokuapp.com"
+//#define CONF_SERVER_HOST                "192.168.0.101"
+#define CONF_SERVER_HOST                "electricity-manager1.herokuapp.com"
 #define CONF_SERVER_PORT                "80"
 #define CONF_SERVER_UPDATE_ROUTE        "/enddev"
 
@@ -133,27 +133,27 @@
 
 /****************** GLOBAL ERRORS *******************/
 
+
 // == NV ERRORS ====================
 enum {
-    // CLIENT
-    conf_nvErr_client_evAckRaisedInNonIdle,
+   
+    conf_nvErr_client_evAckRaisedInNonIdle,             // CLIENT
     conf_nvErr_client_evUpdServStErr,
     conf_nvErr_client_OnErrCallBackNull,
-    // COMMANDER
-    conf_nvErr_commander_callBackNull,
-    conf_nvErr_commander_commandNotFound,
-    //COMMUNICATOR
-    conf_nvErr_communicator_joinApFailed,
+    conf_nvErr_client_erEvevMsgOkRaiseOvrfl,
+    conf_nvErr_client_evUpdServerInWrongState,
+    conf_nvErr_client_evStartRaisedInWrongState,
+    conf_nvErr_client_clErrInUndefinedState,
+    conf_nvErr_client_evMsgOkRaiseOvrfl,
+    conf_nvErr_commander_callBackNull,                  // COMMANDER
+    conf_nvErr_commander_commandNotFound, 
+    conf_nvErr_communicator_joinApFailed, //10              //COMMUNICATOR
     conf_nvErr_communicator_espErrMsg,
-    // ESP
-    // PARSER
-    conf_nvErr_parser_msgStartsWithOpenBracketButNotJSON,
+    conf_nvErr_parser_msgStartsWithOpenBracketButNotJSON,// PARSER
     conf_nvErr_esp_timerNotAvail,
-    // TIMER
-    conf_nvErr_timer_callBackNULL,
+    conf_nvErr_timer_callBackNULL,                      // TIMER 
     conf_nvErr_timer_overflow,
-    // TRANSMITTER
-    conf_nvErr_transmitter_sendWhileBusy,
+    conf_nvErr_transmitter_sendWhileBusy,               // TRANSMITTER
 }CONF_NvErrBits;
 
 #define CONF_getErrBitAddr(bit)             ( ( bit / 8 ) + EE_DIAG_ERRS )

@@ -12,7 +12,7 @@
 #include "../parser/parser.h"
 #include <stdint.h>
 
-typedef void(*Receiver_OnMsg)(Parser_Codes code, uint8_t * data, uint16_t len);
+typedef void(*Receiver_OnMsg)(Parser_Codes code);
 typedef Parser_Codes (*receiver_OnFrame)(char * data, uint16_t len);
 
 

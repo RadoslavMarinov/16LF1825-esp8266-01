@@ -67,7 +67,7 @@ typedef struct {
     CircBuff cb;
     FrameBuff frBuff;
     receiver_OnFrame onFrame;
-    void * onMessage;
+    Receiver_OnMsg onMessage;
 }SelfData;
 
 /* Circular Buffer */

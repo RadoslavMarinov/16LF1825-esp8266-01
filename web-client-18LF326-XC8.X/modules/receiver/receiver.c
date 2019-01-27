@@ -21,7 +21,7 @@ uint8_t receiver_task(void){
                 p_code =  __onFrame((char*)frBuffData,  frBuffSize) ;
                 if( p_code != parserCode_Unknown ) {
                     //Resets frame buffer, starts to fill from 0
-                    ((Parser_OnMsg)__onMessage)(p_code, (uint8_t*)frBuffData, frBuffSize);
+                    ((Receiver_OnMsg)__onMessage)(p_code);
                      
                 }
                 frStarted  = 0;

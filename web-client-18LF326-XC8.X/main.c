@@ -3,7 +3,7 @@
 #include "main-primary.h"
 #include "mcc_generated_files/mcc.h"
 #include "modules/endpoints/binary-switch/binary-switch.h"
-#include "modules/transmitter/transmitter-primary.h"
+//#include "modules/transmitter/transmitter-primary.h"
 #include "modules/communicatior/communicator.h"
 #include "modules/transmitter/transmitter.h"
 #include "modules/receiver/receiver.h"
@@ -30,16 +30,11 @@ void main(void)
 {
    
     main_init();
-        /**/
-    volatile uint32_t c = 0;
-    config_dummyFunc();
-    LED_RED_ON();
-    while(c < 500000){
-        c++;
-        CLRWDT();
-    }
-    LED_RED_OFF();
-    /**/ 
+
+#ifdef UNDER_TEST
+    main_reportNvErrors();
+#endif
+    
     ESP_ENABLE();
     if(ESP_MODE_PIN()){
         eeprom_clearAllErrors();
@@ -86,13 +81,13 @@ void main_init(void){
 
 void gpio_init(void){
     
-    SWITCH1_ON();
-    SWITCH2_ON();
-    LED_RED_OFF();
+//    SWITCH1_ON();
+//    SWITCH2_ON();
+    binarySwitch_init(eeprom_readByte(EE_SW1_LEV_ADDR), eeprom_readByte(EE_SW2_LEV_ADDR));
+    LED_RED_ON();
     LED_GREEN_OFF();
     ESP_RESET_ENABLE(); 
     ESP_DISABLE();
-    binarySwitch_init(eeprom_readByte(EE_SW1_LEV_ADDR), eeprom_readByte(EE_SW2_LEV_ADDR));
 }
 
 
@@ -102,8 +97,30 @@ void config_dummyFunc(void){
         a=0;
     }
 }
-
-
+#ifdef UNDER_TEST
+static void main_reportNvErrors(void){
+    
+    uint8_t i, eebyte, eebit;
+    char msg[20];
+    for(i= 0; i < 16; i++){
+        eebyte = eeprom_readByte(EE_DIAG_ERRS + i);
+        if(eebyte > 0){
+            for(eebit=0; eebit<8; eebit++){
+                if(eebyte & (1 << eebit)){
+                    while(transmitter_isBusy()){
+                        ;
+                    }
+                    sprintf(msg, "\r\n\r\nbit %u\r\n\r\n", (i*8) +  eebit);
+                    transmitter_send((uint8_t *)msg, strlen(msg));
+                    while(transmitter_isBusy()){
+                        ;
+                    }
+                }
+            }
+        }
+    }
+}
+#endif
 /**
  End of File
 */
